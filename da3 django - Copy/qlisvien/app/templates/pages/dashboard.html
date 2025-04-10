@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Quản lý sinh viên</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    {% block add_css %}{% endblock %}
+</head>
+<body>
+    {% if show_notification %}
+    <div class="notification">
+        <i class="fas fa-user-circle"></i> Chào mừng, {{ username }}!
+    </div>
+    {% endif %}
+
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <img src="logotmu.png" alt="University Logo" class="university-logo">
+            </div>
+            <div class="profile-card">
+                <div class="avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="info">
+                    <strong>Nguyễn Văn A</strong><br>
+                    <span>MSV/Mã</span><br>
+                    <p>Vai trò</p>
+                </div>
+            </div>                   
+            <nav class="sidebar-nav">
+                <a href="#"><i class="fas fa-user-plus"></i> Đăng ký ghi danh</a>
+                <a href="#"><i class="fas fa-book-open"></i> Đăng ký học phần</a>
+                <a href="#"><i class="fas fa-tasks"></i> Quản lý học phần</a>
+                <a href="#"><i class="fas fa-history"></i> Lịch sử đăng ký</a>
+                <a href="#"><i class="fas fa-clock"></i> Hẹn giờ đăng ký</a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main">
+            <!-- Top Bar -->
+            <div class="topbar">
+                <div class="toggle-menu">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                {% block content %}
+                <!-- Stats Cards -->
+                <div class="stats-cards">
+                    <div class="stat-card">
+                        <i class="fas fa-user-graduate"></i>
+                        <div class="stat-info">
+                            <h3>1,234</h3>
+                            <p>Sinh viên</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-chalkboard-teacher"></i>
+                        <div class="stat-info">
+                            <h3>42</h3>
+                            <p>Giảng viên</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-book"></i>
+                        <div class="stat-info">
+                            <h3>156</h3>
+                            <p>Khóa học</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-clock"></i>
+                        <div class="stat-info">
+                            <h3>89%</h3>
+                            <p>Tỷ lệ đậu</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="recent-activity">
+                    <h2>Hoạt động gần đây</h2>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <i class="fas fa-user-plus"></i>
+                            <div class="activity-info">
+                                <p>Thêm sinh viên mới: Nguyễn Văn A</p>
+                                <span>2 phút trước</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <i class="fas fa-edit"></i>
+                            <div class="activity-info">
+                                <p>Cập nhật điểm: Lớp CS101</p>
+                                <span>15 phút trước</span>
+                            </div>
+                        </div>
+                        <div class="activity-item">
+                            <i class="fas fa-file-alt"></i>
+                            <div class="activity-info">
+                                <p>Báo cáo mới: Kết quả học kỳ</p>
+                                <span>1 giờ trước</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static 'js/dashboard.js' %}"></script>
+    {% block add_js %}{% endblock %}
+</body>
+</html>

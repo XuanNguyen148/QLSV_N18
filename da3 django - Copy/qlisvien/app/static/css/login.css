@@ -1,0 +1,394 @@
+/* CSS cho trang đăng nhập */
+/* thiet lap dac tinh cho cls ben html: .ten_class [ten thanh phan (h1/h2/p/...)] */
+/* chon theo id thi ben thay . thanh # */
+/* truoc do ben html can tao id. vd <h1 id="ten id">... */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container {
+    width: 100%;
+    padding: 20px;
+}
+
+.login-card {
+    background: white;
+    max-width: 400px;
+    margin: 0 auto;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.brand {
+    text-align: center;
+    padding: 30px 20px;
+    background: #f8f9fa;
+}
+
+.brand img.logo {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 15px;
+}
+
+.brand h1 {
+    font-size: 24px;
+    color: #2d3436;
+    font-weight: 600;
+}
+
+.login-content {
+    padding: 30px;
+}
+
+.login-content h2 {
+    color: #2d3436;
+    font-size: 20px;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    font-size: 15px;
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #4a90e2;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.1);
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 25px;
+    font-size: 14px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #636e72;
+}
+
+.form-options a {
+    color: #4a90e2;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+button[type="submit"] {
+    width: 100%;
+    padding: 12px;
+    background: #4a90e2;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button[type="submit"]:hover {
+    background: #357abd;
+}
+
+.error-message {
+    background: #fff3f3;
+    color: #dc3545;
+    padding: 12px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 25px;
+    color: #636e72;
+    font-size: 14px;
+}
+
+.register-link a {
+    color: #4a90e2;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+@media (max-width: 480px) {
+    .login-card {
+        margin: 10px;
+    }
+    
+    .login-content {
+        padding: 20px;
+    }
+}
+
+.login-container {
+    display: flex;
+    /* truc ngang phan tu con */
+    justify-content: center;
+    /* truc doc phan tu con */
+    align-items: stretch;
+    /* flex dung khi co display flex, flex 1 = flex 1 1 0%; tu mo rong, tu thu nho, kich co ban dau */
+    flex: 1;
+    background: linear-gradient(135deg, #a1c4fd, #c2e9fb); /* Giữ background gradient cho login */
+    /* tao khoang cach voi cac thu ngoai vat the: tren, phai, duoi, trai */
+    margin: 20pt 10pt 30pt 30pt;
+    /* tao khoang cach voi cac thu trong vat the */    
+    padding: 50pt;
+}
+
+.login-box {
+    background: white;
+    /* do day va mau sac cua vien, neu khong co solid hoac thuoc tinh thay the border se khong hien thi */
+    border: 1px solid #e0e0e0;
+    /* do bo goc */
+    border-radius: 100px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    /* 100% so voi phan tu cha (khong dung duoc khi co display: inline */
+    width: 100%;
+    max-width: auto;
+    max-height: 500pt;
+    /* tuy chon bo cuc: xep cac phan tu tren cung mot hang */
+    display: flex;
+    /* dieu chinh khi noi dung bi tran ra ngoai */
+    overflow: scroll;
+}
+
+.login-form {
+    padding: 40px;
+    width: 50%;
+}
+
+.login-form h2 {
+    color: #88c6fc;
+    font-size: 1.5em;
+    margin-bottom: 20px;
+    /* muc do in dam: 100, 200, ..., 900 */
+    font-weight: 600;
+}
+
+.login-form form {
+    display: flex;
+    /* huong sap xep cac phan tu */
+    flex-direction: column;
+    /* k/c giua cac phan tu */
+    gap: 15pt;
+}
+
+.login-form label {
+    color: #666;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+/* doi mau khi khong cham vao o nhap */
+.login-form input[type="text"],
+.login-form input[type="password"] {
+    padding: 12px;
+    /* mau vien truoc khi transition */
+    /* border nam o giua vien, chiem nhieu dien tich hon outline */
+    border: 10px solid #db1111;
+    border-radius: 5px;
+    font-size: 0.95em;
+    /* mau nen sau khi nhap */
+    background: #9ba8d8;
+    /* doi mau lai nhu cu hoac doi mau ve khi cham sau 3s, neu khong co se doi ngay lap tuc */
+    transition: border-color 3s ease;
+}
+
+/* focus = hanh dong khi click, khac voi hover */
+.login-form input[type="text"]:focus,
+.login-form input[type="password"]:focus {
+    border-color: #007bff;
+    /* outline nam o ngoai vien, khac voi border */
+    outline: 10px solid #11ff2d;
+}
+
+.options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    color: #666;
+    font-size: 0.9em;
+}
+
+.remember-me input {
+    margin-right: 5px;
+}
+
+.forgot-password {
+    color: #007bff;
+    /* mac dinh la underline, nen chinh ve none */
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+/* hover = hanh dong khi cham vao */
+.forgot-password:hover {
+    text-decoration: underline;
+}
+
+/* cau truc thay doi khi co hanh dong: */
+/* tao dinh dang vung can hanh dong ".login-form button", kem theo transition o cuoi */
+/* tao ket qua khi hanh dong ".login-form button:hover" */
+.login-form button {
+    padding: 12px;
+    /* background la mau nen, color la mau chu */
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 1em;
+    font-weight: 500;
+    /* chinh hinhf dang con tro khi cham vao: pointer, text, move, not-allowed, default, url(...) */
+    cursor: not-allowed;
+    transition: background 3s ease;
+}
+
+.login-form button:hover {
+    background: #0056b3;
+}
+
+.login-form p.error {
+    color: #e74c3c;
+    font-size: 0.9em;
+    margin: 10px 0 0;
+}
+
+.login-form p a {
+    color: #007bff;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.login-form p a:hover {
+    text-decoration: underline;
+}
+/* Thêm vào cuối file styles.css */
+.dashboard-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+    text-align: center;
+}
+
+.dashboard-container h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.logout-button {
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background 0.3s ease;
+}
+
+.logout-button:hover {
+    background: #0056b3;
+}
+
+.debug-table {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    padding: 15px;
+    border-radius: 5px;
+    font-family: monospace;
+    max-width: 400px;
+    z-index: 9999;
+}
+
+.debug-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.debug-table th,
+.debug-table td {
+    padding: 8px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.debug-table th {
+    color: #00ff00;
+    width: 120px;
+}
+
+.user-table {
+    margin-top: 20px;
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.user-table h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+    color: #333;
+}
+
+.user-table table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.user-table th, .user-table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.user-table th {
+    background: #f1f1f1;
+    font-weight: bold;
+}
+
+.user-table tr:nth-child(even) {
+    background: #f9f9f9;
+}
