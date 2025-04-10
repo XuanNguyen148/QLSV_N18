@@ -1,6 +1,6 @@
 :root {
     --sidebar-bg: #800000;
-    --main-bg: #800000;
+    --main-bg: white;
     --card-bg: #ffffff;
     --text-primary: #1e293b;
     --text-secondary: #64748b;
@@ -14,22 +14,37 @@
 
 body {
     font-family: 'Inter', sans-serif;
-    background:white
+    background: white;
     color: var(--text-primary);
 }
 
 .header-bar {
-    width: 100%;
-    background-color: #800000 !important; /* Màu đỏ rượu */
+    display: flex;
+    justify-content: center; /* Căn giữa nội dung trong header */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    background-color: #800000; /* Màu đỏ rượu */
     color: white;
-    text-align: center;
-    padding: 15px 0;
-    font-size: 24px;
-    font-weight: bold;
-    text-transform: uppercase;
+    padding: 15px 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative; /* Để định vị avatar2 */
 }
 
+.header-bar h1 {
+    margin: 0;
+    font-size: 30px;
+    font-weight: bold;
+    text-transform: uppercase;
+    flex: 1; /* Để chữ chiếm không gian giữa */
+    text-align: center; /* Căn giữa chữ */
+}
+
+.avatar2 {
+    font-size: 24px;
+    color: white;
+    cursor: pointer;
+    position: absolute; /* Định vị avatar2 */
+    right: 20px; /* Đẩy avatar2 sang phải */
+}
 /* Sidebar */
 .sidebar {
     width: 280px;
@@ -37,7 +52,8 @@ body {
     color: white;
     padding: 24px 0;
     position: fixed;
-    height: 100px;
+    top: 0px;  /* đúng bằng chiều cao header-bar */
+    height: 100%;
 }
 
 .sidebar-header {
@@ -50,14 +66,14 @@ body {
 }
 
 .university-logo {
-    width: 10px; /* Tăng kích thước logo nếu cần */
-    height: 10px;
+    width: 130px !important; 
+    height: 130px !important;
     border-radius: 50%;
     object-fit: cover;
 }
 
 .profile-card {
-    background-color: var(--card-bg);
+    background-color: orange;
     border-radius: 8px;
     padding: 16px;
     color: black;
@@ -112,4 +128,54 @@ body {
 
 .sidebar-nav a i {
     font-size: 1.2rem;
+}
+
+.logout-button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    background-color: #f4a533; /* Màu cam */
+    color: black; /* Chữ đen */
+    text-align: center;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 8px;
+    width: 50%; /* Đặt chiều rộng nút */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #e0951e; /* Màu cam đậm hơn khi hover */
+}
+
+/* Dropdown menu */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    z-index: 1000;
+}
+
+/* Nút "Đổi mật khẩu" */
+.btn-change-password {
+    background-color: #800000; /* Màu đỏ rượu */
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    width: 100%;
+    text-align: center;
+}
+
+.btn-change-password:hover {
+    background-color: #660000; /* Màu đỏ rượu đậm hơn khi hover */
 }

@@ -1,0 +1,88 @@
+.table-hocphan {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Inter', sans-serif;
+    margin-top: 20px;
+    margin-bottom: 60px; /* Tạo khoảng cách lớn hơn giữa bảng table-hocphan và phần tiếp theo */
+}
+
+.table-hocphan th, .table-hocphan td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.table-hocphan th {
+    background-color: #800000; /* Màu đỏ rượu cho tiêu đề bảng */
+    color: white;
+}
+
+.table-hocphan tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.table-hocphan tbody tr:hover {
+    background-color: #ffecec;
+}
+
+.btn-action {
+    background-color: #800000; /* Màu đỏ rượu cho nút */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-action:hover {
+    background-color: #660000; /* Màu đỏ rượu đậm hơn khi hover */
+}
+
+/* Đảm bảo nội dung chính nằm gọn trong phần còn lại của body */
+.ghidanh-box {
+    margin-left: 280px; /* Đẩy nội dung sang phải để né sidebar (sidebar rộng 280px) */
+    margin-top: 60px; /* Đẩy nội dung xuống dưới để né header (header cao 60px) */
+    padding: 20px;
+    background-color: #ffffff; /* Màu nền trắng cho nội dung */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng đổ bóng nhẹ */
+    border-radius: 8px; /* Bo góc cho nội dung */
+}
+
+.ghidanh-box h2 {
+    margin-bottom: 10px; /* Giữ chữ "Kết quả đăng ký" gần bảng table-ketqua */
+    font-size: 20px;
+    color: #800000; /* Màu đỏ rượu cho tiêu đề */
+}
+
+.table-ketqua {
+    margin-top: 0; /* Đảm bảo bảng không có khoảng cách thừa phía trên */
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-ketqua th, .table-ketqua td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+.table-ketqua th {
+    background-color: #800000; /* Màu đỏ rượu cho tiêu đề bảng */
+    color: white;
+}
+
+.btn-cancel {
+    background-color: #800000; /* Màu đỏ rượu */
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-size: 14px;
+}
+
+.btn-cancel:hover {
+    background-color: #660000; /* Màu đỏ rượu đậm hơn khi hover */
+}

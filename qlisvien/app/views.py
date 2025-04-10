@@ -83,14 +83,5 @@ def logout_view(request):
     request.session.flush()
     return redirect('login')
 
-def student_list(request):
-    # Kiểm tra session
-    if not request.session.get('user_id'):
-        return redirect('login')
-        
-    students = Student.objects.all()
-    context = {
-        'username': request.session.get('username'),
-        'students': students
-    }
-    return render(request, 'pages/student_list.html', context)
+def ghi_danh(request):
+    return render(request, 'pages/ghi_danh.html')

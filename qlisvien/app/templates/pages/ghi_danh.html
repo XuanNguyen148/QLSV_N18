@@ -1,0 +1,79 @@
+{% extends 'pages/dashboard.html' %}
+{% load static %}
+
+{% block add_css %}
+    <title>Đăng ký ghi danh</title>
+    <link rel="stylesheet" href="{% static 'css/ghi_danh.css' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="ghidanh-box">
+        <h2>Đăng ký ghi danh</h2>
+        <table class="table-hocphan">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Loại</th>
+                    <th>Mã học phần</th>
+                    <th>Tên học phần</th>
+                    <th>STC</th>
+                    <th></th> <!-- Cột không tên -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Bắt buộc</td>
+                    <td>HP001</td>
+                    <td>Nhập môn lập trình</td>
+                    <td>3</td>
+                    <td><button class="btn-action">Chọn</button></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Tự chọn</td>
+                    <td>HP002</td>
+                    <td>Thiết kế web</td>
+                    <td>2</td>
+                    <td><button class="btn-action">Chọn</button></td>
+                </tr>
+                <!-- Thêm dòng khác nếu cần -->
+            </tbody>
+        </table>    
+    
+        <h2>Kết quả đăng ký</h2>
+        <table class="table-ketqua">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Loại</th>
+                    <th>Mã học phần</th>
+                    <th>Tên học phần</th>
+                    <th>STC</th>
+                    <th></th> <!-- Cột không tên -->
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Bắt buộc</td>
+                    <td>HP001</td>
+                    <td>Nhập môn lập trình</td>
+                    <td>3</td>
+                    <td><button class="btn-cancel">Hủy</button></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Tự chọn</td>
+                    <td>HP002</td>
+                    <td>Thiết kế web</td>
+                    <td>2</td>
+                    <td><button class="btn-cancel">Hủy</button></td>
+                </tr>
+                <!-- Thêm dòng khác nếu cần -->
+            </tbody>
+        </table>   
+    </div>
+    </div>
+{% endblock %}
+
