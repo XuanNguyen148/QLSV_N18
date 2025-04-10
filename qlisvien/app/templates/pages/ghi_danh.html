@@ -17,32 +17,26 @@
                     <th>Mã học phần</th>
                     <th>Tên học phần</th>
                     <th>STC</th>
-                    <th></th> <!-- Cột không tên -->
+                    <th>Thao tác</th> <!-- Cột không tên -->
                 </tr>
             </thead>
             <tbody>
+                {% for hp in hp %}
                 <tr>
-                    <td>1</td>
-                    <td>Bắt buộc</td>
-                    <td>HP001</td>
-                    <td>Nhập môn lập trình</td>
-                    <td>3</td>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ hp.mahp }}</td>
+                    <td>{{ hp.tenhp }}</td>
+                    <td>{{ hp.sotc }}</td>
                     <td><button class="btn-action">Chọn</button></td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Tự chọn</td>
-                    <td>HP002</td>
-                    <td>Thiết kế web</td>
-                    <td>2</td>
-                    <td><button class="btn-action">Chọn</button></td>
-                </tr>
+                {% endfor %}
                 <!-- Thêm dòng khác nếu cần -->
             </tbody>
         </table>    
     
         <h2>Kết quả đăng ký</h2>
-        <table class="table-ketqua">
+        <table class="table-hocphan">
             <thead>
                 <tr>
                     <th>STT</th>
@@ -50,26 +44,21 @@
                     <th>Mã học phần</th>
                     <th>Tên học phần</th>
                     <th>STC</th>
-                    <th></th> <!-- Cột không tên -->
+                    <th>Thao tác</th> <!-- Cột không tên -->
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    <td>1</td>
-                    <td>Bắt buộc</td>
-                    <td>HP001</td>
-                    <td>Nhập môn lập trình</td>
-                    <td>3</td>
-                    <td><button class="btn-cancel">Hủy</button></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Tự chọn</td>
-                    <td>HP002</td>
-                    <td>Thiết kế web</td>
-                    <td>2</td>
-                    <td><button class="btn-cancel">Hủy</button></td>
-                </tr>
+                    {% for hp in hp %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ hp.mahp }}</td>
+                        <td>{{ hp.tenhp }}</td>
+                        <td>{{ hp.sotc }}</td>
+                        <td><button class="btn-action">Hủy</button></td>
+                    </tr>
+                    {% endfor %}
                 <!-- Thêm dòng khác nếu cần -->
             </tbody>
         </table>   

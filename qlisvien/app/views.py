@@ -1,10 +1,17 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from .models import CustomUser
-from .models import Student
+from . import models
 
 # Create your views here.
+def ghi_danh(request):
+    hp = models.HP.objects.all()
+    context = {
+        'hp': hp
+    }
+
+    return render(request, 'pages/ghi_danh.html', context)
+
 def index(request):
     return render(request, 'pages/login.html')
     # response = HttpResponse()
@@ -36,7 +43,7 @@ def login_view(request):
     }
     
     # Lấy danh sách users
-    all_users = CustomUser.objects.all()
+    all_users = models.CustomUser.objects.all()
     
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -49,7 +56,7 @@ def login_view(request):
         }
         
         try:
-            user = CustomUser.objects.get(username=username, password=password)
+            user = models.CustomUser.objects.get(username=username, password=password)
             # Lưu kết quả truy vấn để debug
             debug_info['found_users'] = [{
                 'id': user.id,
@@ -63,7 +70,7 @@ def login_view(request):
             
             return redirect('dashboard')
             
-        except CustomUser.DoesNotExist:
+        except models.CustomUser.DoesNotExist:
             debug_info['last_query'] = "Không tìm thấy tài khoản"
             messages.error(request, 'Tài khoản hoặc mật khẩu không chính xác')
         except Exception as e:
@@ -83,5 +90,36 @@ def logout_view(request):
     request.session.flush()
     return redirect('login')
 
-def ghi_danh(request):
-    return render(request, 'pages/ghi_danh.html')
+def change_password(request):
+    if not request.session.get('user_id'):
+        return redirect('login')
+        
+    if request.method == 'POST':
+        current_password = request.POST.get('current_password')
+        new_password = request.POST.get('new_password')
+        confirm_password = request.POST.get('confirm_password')
+        
+        try:
+            # Kiểm tra mật khẩu hiện tại
+            user = models.CustomUser.objects.get(
+                id=request.session.get('user_id'),
+                password=current_password
+            )
+            
+            # Kiểm tra mật khẩu mới và xác nhận
+            if new_password != confirm_password:
+                messages.error(request, 'Mật khẩu mới và xác nhận mật khẩu không khớp')
+                return redirect('change_password')
+            
+            # Cập nhật mật khẩu mới
+            user.password = new_password
+            user.save()
+            
+            messages.success(request, 'Đổi mật khẩu thành công')
+            
+        except models.CustomUser.DoesNotExist:
+            messages.error(request, 'Mật khẩu hiện tại không đúng')
+        except Exception as e:
+            messages.error(request, f'Có lỗi xảy ra: {str(e)}')
+    
+    return render(request, 'pages/change_password.html')

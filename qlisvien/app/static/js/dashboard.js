@@ -1,4 +1,21 @@
 document.addEventListener('DOMContentLoaded', function() {
+// Toggle dropdown menu
+    const avatar = document.querySelector('.avatar2');
+    const dropdown = document.getElementById('dropdownMenu');
+
+    if (avatar && dropdown) {
+        avatar.addEventListener('click', function() {
+            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!dropdown.contains(event.target) && !avatar.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
+    }
+
     // Toggle sidebar on mobile
     const toggleBtn = document.querySelector('.toggle-menu');
     const sidebar = document.querySelector('.sidebar');

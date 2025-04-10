@@ -16,14 +16,25 @@ class CustomUser(models.Model):
     def __str__(self):
         return self.username
 
-class Student(models.Model):
-    id = models.CharField(max_length=10, db_column='masinhvien', primary_key=True)  # map với cột 'masinhvien' trong DB
-    hoten = models.CharField(max_length=100)
-    noio = models.CharField(max_length=255)
-    diemhocphan = models.FloatField()
-    lophocphan = models.CharField(max_length=50)
+class Students(models.Model):
+    masv = models.CharField(max_length=10, primary_key=True)  # map với cột 'masinhvien' trong DB
+    hoten = models.CharField(max_length=50)
+    sdt = models.CharField(max_length=10)
+    ngaysinh = models.DateField()
+    nganhhoc = models.CharField(max_length=50)
+    lop = models.CharField(max_length=10)
 
 
     class Meta:
         db_table = 'sinhvien'
+        managed = False  # Django không quản lý bảng này
+
+class HP(models.Model):
+    mahp = models.CharField(max_length=12, primary_key=True)
+    tenhp = models.CharField(max_length=50)
+    sotc = models.IntegerField()
+
+
+    class Meta:
+        db_table = 'hocphan'
         managed = False  # Django không quản lý bảng này

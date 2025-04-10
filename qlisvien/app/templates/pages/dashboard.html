@@ -17,8 +17,11 @@
         <div class="avatar2">
             <i class="fas fa-user-circle"></i>
         </div>
-        <div class="dropdown-menu" id="dropdownMenu">
-            <button class="btn-change-password">Đổi mật khẩu</button>
+        <div class="dropdown-content" id="dropdownMenu">
+            <a href="#"><i class="fas fa-user"></i> Thông tin cá nhân</a>
+            <a href="{% url 'change_password' %}"><i class="fas fa-key"></i> Đổi mật khẩu</a>
+            <a href="#"><i class="fas fa-cog"></i> Cài đặt</a>
+            <a href="{% url 'logout' %}" class="logout"><i class="fas fa-sign-out-alt"></i> Đăng xuất</a>
         </div>
     </div>
     <div class="sidebar">
@@ -43,28 +46,11 @@
             <a href="#"><i class="fas fa-clock"></i> Hẹn giờ đăng ký</a>
             <a href="#"><i class="fas fa-user-shield"></i> Phân quyền</a> 
         </nav>
-        <a href="#" class="logout-button">Đăng xuất</a>
+        <a href="{% url 'logout' %}" class="logout-button">Đăng xuất</a>
     </div>
     {% block content %}{% endblock %}
     {% endblock %}
     {% block add_js %}{% endblock %}
-
-    <script>
-        function toggleDropdown() {
-            console.log("Avatar clicked"); // Kiểm tra sự kiện click
-            const dropdown = document.getElementById('dropdownMenu');
-            dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-        }
-    
-        // Đóng menu khi nhấn ra ngoài
-        document.addEventListener('click', function (event) {
-            const dropdown = document.getElementById('dropdownMenu');
-            const avatar = document.querySelector('.avatar2');
-            if (!dropdown.contains(event.target) && !avatar.contains(event.target)) {
-                dropdown.style.display = 'none';
-            }
-        });
-    </script>
-
+    <script src="{% static 'js/dashboard.js' %}"></script>
 </body>
 </html>

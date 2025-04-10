@@ -7,4 +7,5 @@ urlpatterns = [
     path('login/', views.login_view, name='login'), 
     path('ghi_danh/', views.ghi_danh, name='ghi_danh'),
     path('logout/', views.logout_view, name='logout'),  # Thêm route logout
+    path('change-password/', views.change_password, name='change_password'),
 ]

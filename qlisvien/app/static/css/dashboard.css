@@ -39,12 +39,14 @@ body {
 }
 
 .avatar2 {
+    cursor: pointer;
+    position: relative;
     font-size: 24px;
     color: white;
-    cursor: pointer;
     position: absolute; /* Định vị avatar2 */
     right: 20px; /* Đẩy avatar2 sang phải */
 }
+
 /* Sidebar */
 .sidebar {
     width: 280px;
@@ -161,6 +163,40 @@ body {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     padding: 10px;
     z-index: 1000;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    right: 20px;
+    top: 60px;
+    background-color: #fff;
+    min-width: 200px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    z-index: 1000;
+}
+
+.dropdown-content a {
+    color: #333;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    transition: background-color 0.3s;
+}
+
+.dropdown-content a:hover {
+    background-color: #f5f5f5;
+}
+
+.dropdown-content a i {
+    margin-right: 10px;
+    width: 20px;
+}
+
+.dropdown-content a.logout {
+    color: #dc3545;
+    border-top: 1px solid #eee;
 }
 
 /* Nút "Đổi mật khẩu" */
