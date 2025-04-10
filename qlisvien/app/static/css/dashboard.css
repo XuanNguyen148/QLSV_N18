@@ -1,0 +1,115 @@
+:root {
+    --sidebar-bg: #800000;
+    --main-bg: #800000;
+    --card-bg: #ffffff;
+    --text-primary: #1e293b;
+    --text-secondary: #64748b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background:white
+    color: var(--text-primary);
+}
+
+.header-bar {
+    width: 100%;
+    background-color: #800000 !important; /* Màu đỏ rượu */
+    color: white;
+    text-align: center;
+    padding: 15px 0;
+    font-size: 24px;
+    font-weight: bold;
+    text-transform: uppercase;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Sidebar */
+.sidebar {
+    width: 280px;
+    background: #800000!important; /* Màu đỏ rượu */
+    color: white;
+    padding: 24px 0;
+    position: fixed;
+    height: 100px;
+}
+
+.sidebar-header {
+    padding: 0 24px;
+    margin-bottom: 40px;
+    display: flex;
+    flex-direction: column; /* Đặt các phần tử theo cột */
+    align-items: center; /* Căn giữa theo chiều ngang */
+    gap: 15px;
+}
+
+.university-logo {
+    width: 10px; /* Tăng kích thước logo nếu cần */
+    height: 10px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.profile-card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    padding: 16px;
+    color: black;
+    display: flex;
+    align-items: center;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.avatar {
+    font-size: 48px;
+    margin-right: 16px;
+    color: white;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.info strong {
+    font-size: 16px;
+}
+
+.info span {
+    font-size: 14px;
+}
+
+.info p {
+    margin-top: 4px;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+}
+
+.sidebar-nav a {
+    color: #e2e8f0;
+    text-decoration: none;
+    padding: 15px 24px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 4px 8px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.sidebar-nav a i {
+    font-size: 1.2rem;
+}

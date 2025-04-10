@@ -1,0 +1,45 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Đăng ký học phần{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}">
+    {% block add_css %}{% endblock %}
+    
+</head>
+<body>
+    {% block sidebar %}
+    <div class="header-bar">
+        <h1>TRƯỜNG ĐẠI HỌC ABC</h1>
+    </div>
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <img src="logotmu.png" alt="University Logo" class="university-logo">
+        </div>
+        <div class="profile-card">
+            <div class="avatar">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="info">
+                <strong>Nguyễn Văn A</strong><br>
+                <span>MSV/Mã</span><br>
+                <p>Vai trò</p>
+            </div>
+        </div>                   
+        <nav class="sidebar-nav">
+            <a href="#"><i class="fas fa-user-plus"></i> Đăng ký ghi danh</a>
+            <a href="#"><i class="fas fa-book-open"></i> Đăng ký học phần</a>
+            <a href="#"><i class="fas fa-tasks"></i> Quản lý học phần</a>
+            <a href="#"><i class="fas fa-history"></i> Lịch sử đăng ký</a>
+            <a href="#"><i class="fas fa-clock"></i> Hẹn giờ đăng ký</a>
+        </nav>
+    </div>
+    {% endblock %}
+
+    {% block content %}{% endblock %}
+    {% block add_js %}{% endblock %}
+</body>
+</html>
