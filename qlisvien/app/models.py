@@ -1,8 +1,9 @@
 from django.db import models
 
 class CustomUser(models.Model):
-    username = models.CharField(max_length=50)
-    password = models.CharField(max_length=100, db_column='pass')  # map với cột 'pass' trong DB
+    id = models.CharField(max_length=10, db_column='matk', primary_key=True)
+    username = models.CharField(max_length=30, db_column='tendangnhap')  # map với cột 'tendangnhap' trong DB
+    password = models.CharField(max_length=255, db_column='matkhau')  # map với cột 'pass' trong DB
 
     # goi db
     class Meta:
