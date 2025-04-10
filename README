@@ -1,0 +1,18 @@
+.
+├── qlisvien /noi chay server, tao app/
+│   ├── qlisvien /noi thiet lap cac cai dat, lien ket/
+│   │   ├── app /noi tao giao dien, thao tac.../
+│   │   │   ├── views.py /xu li yeu cau nguoi dung nhu: hien thi kq/
+│   │   │   ├── urls.py /tao lien ket phai co dieu kien truoc do/
+│   │   │   └── ...
+│   │   ├── __init__.py /tao folder thanh package/
+│   │   ├── setting.py /sua db, sua INSTALLED_APPS, .../
+│   │   ├── urls.py /tao lien ket co the truy cap thu cong, khong mat khau/
+│   │   ├── wsgi.py /de day file len server/
+│   │   └── ...
+│   ├── manage.py /tao admin, chay server ao/
+│   └── README
+├── venv/
+│   └── ...
+├── .evn
+└── test_pgdb.py
