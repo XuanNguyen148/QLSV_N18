@@ -1,0 +1,79 @@
+{% extends 'pages/dashboard.html' %}
+{% load static %}
+
+{% block title %}Lịch sử đăng ký học phần{% endblock %}
+
+{% block add_css %}
+    <link rel="stylesheet" href="{% static 'css/history.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <h1>Lịch sử đăng ký học phần</h1>
+
+    <!-- Box chứa thanh lọc và bảng -->
+    <div class="search-and-table-box">
+        <!-- Thanh lọc -->
+        <div class="search-bar">
+            <select id="yearSelect" class="search-select">
+                <option value="2028-2029">2028-2029</option>
+                <option value="2027-2028">2027-2028</option>
+                <option value="2026-2027">2026-2027</option>
+                <option value="2025-2026">2025-2026</option>
+                <option value="2024-2025" selected>2024-2025</option> <!-- Năm hiện tại được chọn mặc định -->
+                <option value="2023-2024">2023-2024</option>
+                <option value="2022-2023">2022-2023</option>
+                <option value="2021-2022">2021-2022</option>
+            </select>
+            <select id="semesterSelect" class="search-select">
+                <option value="1">Học kỳ 1</option>
+                <option value="2">Học kỳ 2</option>
+                <option value="3">Học kỳ 3</option>
+            </select>
+            <button class="search-btn" onclick="filterData()">Tìm kiếm</button>
+        </div>
+
+        <!-- Bảng lịch sử -->
+        <table class="hocphan-table">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Thao tác</th>
+                    <th>Mã HP</th>
+                    <th>Tên HP</th>
+                    <th>Mã LHP</th>
+                    <th>Số TC</th>
+                    <th>Thao tác bởi</th>
+                    <th>Thời gian</th>
+                </tr>
+            </thead>
+            <tbody id="historyTableBody">
+                <tr style="background-color: #ff6600; color: white;"> <!-- Dòng màu cam -->
+                    <td>1</td>
+                    <td>Hủy đăng ký</td>
+                    <td>242_BMKT3811_08</td>
+                    <td>Hành vi khách hàng</td>
+                    <td>242_BMKT3811_08_32</td> <!-- Mã LHP -->
+                    <td>3</td>
+                    <td>23D190145</td>
+                    <td>2025-01-07 13:38:30</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Đăng ký</td>
+                    <td>242_BMKT3811_08</td>
+                    <td>Hành vi khách hàng</td>
+                    <td>242_BMKT3811_08_32</td> <!-- Mã LHP -->
+                    <td>3</td>
+                    <td>23D190145</td>
+                    <td>2024-12-05 07:42:50</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block add_js %}
+    <script src="{% static 'js/history.js' %}"></script>
+{% endblock %}

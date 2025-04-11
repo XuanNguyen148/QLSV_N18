@@ -123,3 +123,22 @@ def change_password(request):
             messages.error(request, f'Có lỗi xảy ra: {str(e)}')
     
     return render(request, 'pages/change_password.html')
+
+def forgot_password(request):
+    if request.method == 'POST':
+        # handle gửi email
+        pass
+    return render(request, 'pages/forgot_password.html')
+
+def qlihp(request):
+    return render(request, 'pages/qlihp.html')
+
+def history(request):
+    # Lấy dữ liệu lịch sử đăng ký từ database (nếu có)
+    history_data = []  # Thay bằng truy vấn thực tế nếu cần
+
+    context = {
+        'history_data': history_data
+    }
+
+    return render(request, 'pages/history.html', context)

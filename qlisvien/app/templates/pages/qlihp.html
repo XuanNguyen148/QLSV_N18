@@ -1,0 +1,78 @@
+{% extends 'pages/dashboard.html' %}
+{% load static %}
+
+{% block title %}Quản lý học phần{% endblock %}
+
+{% block add_css %}
+    <link rel="stylesheet" href="{% static 'css/qlihp.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <!-- Box chứa cả thanh tìm kiếm và bảng -->
+    <div class="search-and-table-box">
+        <!-- Thanh tìm kiếm -->
+        <div class="search-bar">
+            <select id="searchType" class="search-select">
+                <option value="ma_hp">Mã học phần</option>
+                <option value="ten_hp">Tên học phần</option>
+                <option value="giang_vien">Giảng viên</option>
+            </select>
+            <input type="text" id="searchInput" class="search-input" placeholder="Nhập thông tin học phần...">
+            <button class="search-btn">Tìm kiếm</button>
+            <button class="add-btn">Thêm học phần</button>
+        </div>
+
+        <!-- Bảng tra cứu học phần -->
+        <table class="hocphan-table">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Mã HP</th>
+                    <th>Lớp HP</th>
+                    <th>STC</th>
+                    <th>Loại</th>
+                    <th>Giảng viên</th>
+                    <th>Thông tin</th>
+                    <th>Học phần tương đương</th> <!-- Thêm cột mới -->
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody id="hocphanTableBody">
+                <tr>
+                    <td>1</td>
+                    <td>HP001</td>
+                    <td>LHP001</td>
+                    <td>3</td>
+                    <td>Bắt buộc</td>
+                    <td>Nguyễn Văn A</td>
+                    <td>Học phần cơ bản</td>
+                    <td>HP101</td> <!-- Dữ liệu mẫu cho cột mới -->
+                    <td>
+                        <button class="edit-btn">Sửa</button>
+                        <button class="delete-btn">Xóa</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>HP002</td>
+                    <td>LHP002</td>
+                    <td>2</td>
+                    <td>Tự chọn</td>
+                    <td>Trần Thị B</td>
+                    <td>Học phần nâng cao</td>
+                    <td>HP102</td> <!-- Dữ liệu mẫu cho cột mới -->
+                    <td>
+                        <button class="edit-btn">Sửa</button>
+                        <button class="delete-btn">Xóa</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
+
+{% block add_js %}
+    <script src="{% static 'js/qlihp.js' %}"></script>
+{% endblock %}

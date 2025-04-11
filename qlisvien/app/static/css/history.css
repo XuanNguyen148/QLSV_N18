@@ -1,0 +1,100 @@
+/* Tiêu đề */
+.content h1 {
+    font-size: 28px; /* Tăng kích thước chữ */
+    font-weight: bold; /* Chữ đậm */
+    color: #800000; /* Màu đỏ rượu */
+    text-align: left; /* Căn chữ sát lề trái */
+    margin-bottom: 20px; /* Giảm khoảng cách dưới */
+    margin-left: 0; /* Sát lề trái */
+}
+
+/* Box chứa thanh lọc và bảng */
+.search-and-table-box {
+    background-color: #ffffff; /* Màu nền trắng */
+    border-radius: 12px; /* Bo góc */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Hiệu ứng đổ bóng */
+    padding: 30px; /* Tăng khoảng cách bên trong */
+    margin: 10px auto; /* Giảm khoảng cách phía trên và căn giữa theo chiều ngang */
+    max-width: 1200px; /* Tăng chiều rộng tối đa để ngang với box Tra cứu học phần */
+}
+
+/* Thanh lọc */
+.search-bar {
+    display: flex;
+    justify-content: flex-start; /* Căn các phần tử về phía trái */
+    align-items: center;
+    gap: 15px; /* Khoảng cách giữa các phần tử */
+    margin-bottom: 25px; /* Khoảng cách dưới */
+    flex-wrap: wrap; /* Đưa các phần tử xuống dòng nếu không đủ không gian */
+}
+
+.search-select {
+    padding: 12px 16px; /* Tăng kích thước padding */
+    border-radius: 8px; /* Bo góc */
+    border: 1px solid #ccc; /* Viền mặc định */
+    font-size: 16px; /* Tăng kích thước chữ */
+    min-width: 180px; /* Tăng chiều rộng tối thiểu */
+    background-color: #fff; /* Màu nền trắng */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease; /* Hiệu ứng khi focus */
+}
+
+.search-select:focus {
+    border-color: #800000; /* Viền màu đỏ rượu khi focus */
+    box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.2); /* Hiệu ứng ánh sáng khi focus */
+    outline: none; /* Loại bỏ viền mặc định */
+}
+
+.search-btn {
+    padding: 12px 24px; /* Tăng kích thước nút */
+    background-color: #800000; /* Màu đỏ rượu */
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px; /* Tăng kích thước chữ */
+    transition: background-color 0.3s ease;
+}
+
+.search-btn:hover {
+    background-color: #660000; /* Màu đỏ rượu đậm hơn khi hover */
+}
+
+/* Bảng lịch sử */
+.hocphan-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px; /* Tăng khoảng cách trên */
+    background-color: #fff; /* Màu nền trắng */
+    border: 1px solid #ccc; /* Viền bảng */
+    border-radius: 8px; /* Bo góc */
+    overflow: hidden; /* Ẩn góc thừa */
+}
+
+.hocphan-table th, .hocphan-table td {
+    border: 1px solid #ddd; /* Viền ô */
+    padding: 12px; /* Tăng khoảng cách bên trong ô */
+    text-align: center;
+    font-size: 14px; /* Giảm kích thước chữ */
+}
+
+.hocphan-table th {
+    background-color: #800000; /* Màu đỏ rượu */
+    color: white; /* Màu chữ */
+    text-transform: uppercase;
+}
+
+.hocphan-table tbody tr:nth-child(even) {
+    background-color: #f9f9f9; /* Màu nền cho hàng chẵn */
+}
+
+.hocphan-table tbody tr:hover {
+    background-color: #ffe6e6; /* Màu nền khi hover */
+}
+
+/* Căn chỉnh toàn bộ nội dung */
+.content {
+    margin-left: calc(250px + 20px); /* Né thanh sidebar (250px chiều rộng sidebar + 20px khoảng cách) */
+    margin-top: 40px; /* Giảm khoảng cách với headbar */
+    padding: 20px;
+    max-width: calc(100% - 270px); /* Giới hạn chiều rộng tối đa */
+}

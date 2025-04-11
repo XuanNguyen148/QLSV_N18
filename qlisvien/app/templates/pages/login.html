@@ -45,13 +45,11 @@
                         <input type="password" id="password" name="password" 
                                placeholder="Mật khẩu" required>
                     </div>
-
                     <button type="submit" class="login-btn">Đăng nhập</button>
+                    <div class="forgot-password">
+                        <a href="{% url 'forgot_password' %}">Quên mật khẩu?</a>
+                    </div>                   
                 </form>
-
-                <div class="register-link">
-                    Chưa có tài khoản? <a href="register.php">Đăng ký ngay</a>
-                </div>
             </div>
         </div>
     </div>
