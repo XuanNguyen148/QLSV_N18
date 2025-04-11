@@ -1,0 +1,111 @@
+.content h1 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #800000;
+    margin-bottom: 30px;
+}
+
+.author-container {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+    max-width: 1160px; /* Thêm chiều rộng tối đa */
+    margin: 0 50px 0 auto; /* Dịch sang phải */
+}
+
+/* Thanh tìm kiếm */
+.search-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 10px 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.search-btn {
+    padding: 10px 20px;
+    background-color: #800000;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.search-btn:hover {
+    background-color: #660000;
+}
+
+/* Bảng danh sách */
+.users-table {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: #800000;
+    color: white;
+    font-weight: 500;
+}
+
+tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Badge và Select */
+.role-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+}
+
+.role-badge.user {
+    background-color: #2196F3;
+    color: white;
+}
+
+.role-badge.admin {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.role-select {
+    padding: 6px 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 10px;
+    font-size: 14px;
+}
+
+.save-btn {
+    padding: 6px 12px;
+    background-color: #800000;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 15px; /* Thêm khoảng cách bên trái */
+}
+
+.save-btn:hover {
+    background-color: #660000;
+}

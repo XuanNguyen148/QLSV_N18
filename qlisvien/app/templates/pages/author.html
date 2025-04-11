@@ -1,0 +1,83 @@
+{% extends 'pages/dashboard.html' %}
+{% load static %}
+
+{% block title %}Phân quyền{% endblock %}
+
+{% block add_css %}
+    <link rel="stylesheet" href="{% static 'css/author.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <h1>Phân quyền</h1>
+    
+    <div class="author-container">
+        <!-- Thanh tìm kiếm -->
+        <div class="search-box">
+            <input type="text" id="searchInput" class="search-input" placeholder="Tìm kiếm theo tên hoặc mã...">
+            <button class="search-btn"><i class="fas fa-search"></i></button>
+        </div>
+
+        <!-- Bảng danh sách tài khoản -->
+        <div class="users-table">
+            <table>
+                <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Mã</th>
+                        <th>Họ và tên</th>
+                        <th>Tên người dùng</th>
+                        <th>Email</th>
+                        <th>Mật khẩu</th>
+                        <th>Role hiện tại</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>23D190145</td>
+                        <td>Nguyễn Văn A</td>
+                        <td>nguyenvana</td>
+                        <td>nguyenvana@gmail.com</td>
+                        <td>••••••••</td>
+                        <td>
+                            <span class="role-badge user">Người dùng</span>
+                        </td>
+                        <td>
+                            <select class="role-select" onchange="changeRole(this, '23D190145')">
+                                <option value="user">Người dùng</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                            <button class="save-btn" onclick="saveRole('23D190145')">Lưu</button>
+                        </td>
+                    </tr>
+                    <!-- Thêm một dòng mẫu khác -->
+                    <tr>
+                        <td>2</td>
+                        <td>23D190146</td>
+                        <td>Trần Thị B</td>
+                        <td>tranthib</td>
+                        <td>tranthib@gmail.com</td>
+                        <td>••••••••</td>
+                        <td>
+                            <span class="role-badge admin">Admin</span>
+                        </td>
+                        <td>
+                            <select class="role-select" onchange="changeRole(this, '23D190146')">
+                                <option value="user">Người dùng</option>
+                                <option value="admin" selected>Admin</option>
+                            </select>
+                            <button class="save-btn" onclick="saveRole('23D190146')">Lưu</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block add_js %}
+    <script src="{% static 'js/author.js' %}"></script>
+{% endblock %}

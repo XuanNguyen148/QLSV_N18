@@ -59,6 +59,22 @@
     background-color: #660000; /* Màu đỏ rượu đậm hơn khi hover */
 }
 
+.search-input {
+    padding: 8px 12px; /* Giảm kích thước padding để chiều cao bằng ô lọc */
+    border-radius: 8px; /* Bo góc */
+    border: 1px solid #ccc; /* Viền mặc định */
+    font-size: 14px; /* Giảm kích thước chữ */
+    min-width: 100px !important; /* Bắt buộc áp dụng */
+    background-color: #fff; /* Màu nền trắng */
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease; /* Hiệu ứng khi focus */
+}
+
+.search-input:focus {
+    border-color: #800000; /* Viền màu đỏ rượu khi focus */
+    box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.2); /* Hiệu ứng ánh sáng khi focus */
+    outline: none; /* Loại bỏ viền mặc định */
+}
+
 /* Bảng lịch sử */
 .hocphan-table {
     width: 100%;

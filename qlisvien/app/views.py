@@ -142,3 +142,14 @@ def history(request):
     }
 
     return render(request, 'pages/history.html', context)
+
+def register(request):
+    # Xử lý logic cho trang Đăng ký học phần (nếu cần)
+    return render(request, 'pages/register.html')
+
+def timing(request):
+    # Xử lý logic cho trang Hẹn giờ đăng ký (nếu cần)
+    return render(request, 'pages/timing.html')
+
+def author(request):
+    return render(request, 'pages/author.html')

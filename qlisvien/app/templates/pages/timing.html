@@ -1,0 +1,54 @@
+{% extends 'pages/dashboard.html' %}
+{% load static %}
+
+{% block title %}Hẹn giờ đăng ký{% endblock %}
+
+{% block add_css %}
+    <link rel="stylesheet" href="{% static 'css/timing.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <h1>Hẹn giờ đăng ký</h1>
+    
+    <div class="timing-container">
+        <!-- Đăng ký học phần -->
+        <div class="timing-box">
+            <h2>Đăng ký học phần</h2>
+            <div class="timing-controls">
+                <div class="time-input">
+                    <label>Thời gian bắt đầu:</label>
+                    <input type="datetime-local" id="startTimeHP" name="startTimeHP">
+                </div>
+                <div class="time-input">
+                    <label>Thời gian kết thúc:</label>
+                    <input type="datetime-local" id="endTimeHP" name="endTimeHP">
+                </div>
+                <div class="status">
+                    Trạng thái: <span class="status-badge inactive">Chưa kích hoạt</span>
+                </div>
+                <button class="save-btn" onclick="saveTimingHP()">Lưu thay đổi</button>
+            </div>
+        </div>
+
+        <!-- Đăng ký ghi danh -->
+        <div class="timing-box">
+            <h2>Đăng ký ghi danh</h2>
+            <div class="timing-controls">
+                <div class="time-input">
+                    <label>Thời gian bắt đầu:</label>
+                    <input type="datetime-local" id="startTimeGD" name="startTimeGD">
+                </div>
+                <div class="time-input">
+                    <label>Thời gian kết thúc:</label>
+                    <input type="datetime-local" id="endTimeGD" name="endTimeGD">
+                </div>
+                <div class="status">
+                    Trạng thái: <span class="status-badge inactive">Chưa kích hoạt</span>
+                </div>
+                <button class="save-btn" onclick="saveTimingGD()">Lưu thay đổi</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

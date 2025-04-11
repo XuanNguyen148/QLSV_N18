@@ -1,0 +1,93 @@
+{% extends 'pages/dashboard.html' %}
+{% load static %}
+
+{% block title %}Đăng ký học phần{% endblock %}
+
+{% block add_css %}
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="content">
+    <h1>Đăng ký học phần</h1>
+
+    <!-- Bảng 1 -->
+    <div class="table-container">
+        <h2>Tiến độ chuẩn (4.0 năm)</h2>
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Mã học phần</th>
+                    <th>Tên học phần</th>
+                    <th>STC</th>
+                    <th>Số lượng LHP</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>ENT13111</td>
+                    <td>Tiếng Anh nâng cao 1.1</td>
+                    <td>5</td>
+                    <td>1</td>
+                    <td><button class="register-btn">Đăng ký</button></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>GDT0821</td>
+                    <td>Bóng rổ</td>
+                    <td>1</td>
+                    <td>1</td>
+                    <td><button class="register-btn">Đăng ký</button></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Bảng 2 -->
+    <div class="table-container">
+        <h2>Kết quả đăng ký</h2>
+        <table class="custom-table">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Loại</th>
+                    <th>Mã LHP</th>
+                    <th>Tên LHP</th>
+                    <th>STC</th>
+                    <th>GV</th>
+                    <th>Lịch học</th>
+                    <th>Từ ngày</th>
+                    <th>Đến ngày</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Bắt buộc</td>
+                    <td>ENT13111</td>
+                    <td>Tiếng Anh nâng cao 1.1</td>
+                    <td>5</td>
+                    <td>Nguyễn Văn A</td>
+                    <td>Thứ 2, 3</td>
+                    <td>01/01/2025</td>
+                    <td>01/06/2025</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Tự chọn</td>
+                    <td>GDT0821</td>
+                    <td>Bóng rổ</td>
+                    <td>1</td>
+                    <td>Trần Thị B</td>
+                    <td>Thứ 4</td>
+                    <td>01/01/2025</td>
+                    <td>01/06/2025</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,101 @@
+.content h1 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #800000;
+    margin-bottom: 30px;
+}
+
+.timing-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    max-width: 800px;
+    margin: 0 220px 0 auto;
+}
+
+.timing-box {
+    background-color: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 25px;
+}
+
+.timing-box h2 {
+    color: #800000;
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #f0f0f0;
+}
+
+.timing-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.time-input {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.time-input label {
+    min-width: 150px;
+    color: #333;
+    font-weight: 500;
+}
+
+.time-input input {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+    flex-grow: 1;
+}
+
+.time-input input:focus {
+    border-color: #800000;
+    box-shadow: 0 0 0 3px rgba(128, 0, 0, 0.1);
+    outline: none;
+}
+
+.status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 500;
+}
+
+.status-badge {
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: normal;
+}
+
+.status-badge.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.status-badge.inactive {
+    background-color: #f44336;
+    color: white;
+}
+
+.save-btn {
+    background-color: #800000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    align-self: flex-end;
+    transition: background-color 0.3s ease;
+}
+
+.save-btn:hover {
+    background-color: #660000;
+}
