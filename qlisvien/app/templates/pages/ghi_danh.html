@@ -64,7 +64,12 @@
                 <!-- Thêm dòng khác nếu cần -->
             </tbody>
         </table>   
-    </div>
+        <div class="confirm-box">
+            <button class="btn-confirm" onclick="confirmRegistration()">Xác nhận</button>
+        </div>
     </div>
 {% endblock %}
 
+{% block add_js %}
+    <script src="{% static 'js/ghidanh.js' %}"></script>
+{% endblock %}

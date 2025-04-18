@@ -29,6 +29,11 @@
                 <option value="1">Học kỳ 1</option>
                 <option value="2">Học kỳ 2</option>
                 <option value="3">Học kỳ 3</option>
+                <option value="4">Học kỳ 4</option>
+                <option value="5">Học kỳ 5</option>
+                <option value="6">Học kỳ 6</option>
+                <option value="7">Học kỳ 7</option>
+                <option value="8">Học kỳ 8</option>
             </select>
             <input type="text" id="keywordInput" class="search-input" placeholder="Nhập từ khóa (Tên/Mã HP)...">
             <button class="search-btn" onclick="filterData()">Tìm kiếm</button>
@@ -39,7 +44,8 @@
             <thead>
                 <tr>
                     <th>STT</th>
-                    <th>Thao tác</th>
+                    <th>Hành động</th> <!-- Thêm cột "Hành động" -->
+                    <th>Trạng thái</th>
                     <th>Mã HP</th>
                     <th>Tên HP</th>
                     <th>Mã LHP</th>
@@ -51,20 +57,22 @@
             <tbody id="historyTableBody">
                 <tr style="background-color: #ff6600; color: white;"> <!-- Dòng màu cam -->
                     <td>1</td>
+                    <td>Đăng ký</td> <!-- Nội dung cột "Hành động" -->
                     <td>Hủy đăng ký</td>
                     <td>242_BMKT3811_08</td>
                     <td>Hành vi khách hàng</td>
-                    <td>242_BMKT3811_08_32</td> <!-- Mã LHP -->
+                    <td>242_BMKT3811_08_32</td>
                     <td>3</td>
                     <td>23D190145</td>
                     <td>2025-01-07 13:38:30</td>
                 </tr>
                 <tr>
                     <td>2</td>
+                    <td>Ghi danh</td> <!-- Nội dung cột "Hành động" -->
                     <td>Đăng ký</td>
                     <td>242_BMKT3811_08</td>
                     <td>Hành vi khách hàng</td>
-                    <td>242_BMKT3811_08_32</td> <!-- Mã LHP -->
+                    <td>242_BMKT3811_08_32</td>
                     <td>3</td>
                     <td>23D190145</td>
                     <td>2024-12-05 07:42:50</td>

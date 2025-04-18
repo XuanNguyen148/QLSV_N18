@@ -124,12 +124,6 @@ def change_password(request):
     
     return render(request, 'pages/change_password.html')
 
-def forgot_password(request):
-    if request.method == 'POST':
-        # handle gửi email
-        pass
-    return render(request, 'pages/forgot_password.html')
-
 def qlihp(request):
     return render(request, 'pages/qlihp.html')
 
