@@ -176,3 +176,105 @@
     background-color: #a00000;
 }
 
+/* Form thêm mới */
+.add-form-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    z-index: 1000;
+    width: 400px; /* Giới hạn chiều rộng */
+    max-height: 70vh; /* Giới hạn chiều cao */
+    overflow-y: auto; /* Thêm thanh cuộn dọc nếu nội dung vượt quá chiều cao */
+    display: none; /* Ẩn mặc định */
+    opacity: 0; /* Hiển thị mượt mà */
+    transition: opacity 0.3s ease, transform 0.3s ease; /* Hiệu ứng mượt mà */
+}
+
+.add-form-container.show {
+    display: block;
+    opacity: 1; /* Hiển thị form */
+    transform: translate(-50%, -50%) scale(1); /* Hiệu ứng phóng to */
+}
+.add-form h2 {
+    margin-bottom: 20px;
+    color: #800000;
+    text-align: center;
+}
+
+.add-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.add-form input,
+.add-form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.add-form .form-actions {
+    display: flex;
+    justify-content: space-between;
+}
+
+.add-form .cancel-btn {
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-form .save-btn {
+    background-color: #800000;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.add-form .cancel-btn:hover {
+    background-color: #d32f2f;
+}
+
+.add-form .save-btn:hover {
+    background-color: #660000;
+}
+
+/* Form chỉnh sửa */
+.edit-form-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    z-index: 1000;
+    width: 400px;
+    max-height: 70vh;
+    overflow-y: auto;
+    display: none;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.edit-form-container.show {
+    display: block;
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}
+

@@ -86,3 +86,28 @@
 .btn-cancel:hover {
     background-color: #660000; /* Màu đỏ rượu đậm hơn khi hover */
 }
+
+.confirm-box {
+    bottom: 20px;
+    right: 20px;
+    z-index: 1000;
+    text-align: right; /* Căn nút sang phải */
+    margin-top: 20px; /* Thêm khoảng cách phía trên */
+    margin-bottom: 20px; /* Thêm khoảng cách phía dưới */
+}
+
+.btn-confirm {
+    background-color: #800000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+.btn-confirm:hover {
+    background-color: #660000;
+}

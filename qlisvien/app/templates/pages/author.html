@@ -27,7 +27,7 @@
                         <th>Mã</th>
                         <th>Họ và tên</th>
                         <th>Tên người dùng</th>
-                        <th>Email</th>
+                        <!-- Xóa cột Email -->
                         <th>Mật khẩu</th>
                         <th>Role hiện tại</th>
                         <th>Thao tác</th>
@@ -39,7 +39,7 @@
                         <td>23D190145</td>
                         <td>Nguyễn Văn A</td>
                         <td>nguyenvana</td>
-                        <td>nguyenvana@gmail.com</td>
+                        <!-- Xóa nội dung cột Email -->
                         <td>••••••••</td>
                         <td>
                             <span class="role-badge user">Người dùng</span>
@@ -48,17 +48,17 @@
                             <select class="role-select" onchange="changeRole(this, '23D190145')">
                                 <option value="user">Người dùng</option>
                                 <option value="admin">Admin</option>
+                                <option value="unknown">Unknown</option>
                             </select>
                             <button class="save-btn" onclick="saveRole('23D190145')">Lưu</button>
                         </td>
                     </tr>
-                    <!-- Thêm một dòng mẫu khác -->
                     <tr>
                         <td>2</td>
                         <td>23D190146</td>
                         <td>Trần Thị B</td>
                         <td>tranthib</td>
-                        <td>tranthib@gmail.com</td>
+                        <!-- Xóa nội dung cột Email -->
                         <td>••••••••</td>
                         <td>
                             <span class="role-badge admin">Admin</span>
@@ -67,6 +67,7 @@
                             <select class="role-select" onchange="changeRole(this, '23D190146')">
                                 <option value="user">Người dùng</option>
                                 <option value="admin" selected>Admin</option>
+                                <option value="unknown">Unknown</option>
                             </select>
                             <button class="save-btn" onclick="saveRole('23D190146')">Lưu</button>
                         </td>

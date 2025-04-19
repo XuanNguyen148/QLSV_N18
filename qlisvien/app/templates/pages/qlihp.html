@@ -20,7 +20,7 @@
             </select>
             <input type="text" id="searchInput" class="search-input" placeholder="Nhập thông tin học phần...">
             <button class="search-btn">Tìm kiếm</button>
-            <button class="add-btn">Thêm học phần</button>
+            <button class="add-btn" onclick="showAddForm()">Thêm học phần</button>
         </div>
 
         <!-- Bảng tra cứu học phần -->
@@ -28,40 +28,30 @@
             <thead>
                 <tr>
                     <th>STT</th>
+                    <th>Mã ngành</th>
                     <th>Mã HP</th>
                     <th>Lớp HP</th>
                     <th>STC</th>
                     <th>Loại</th>
                     <th>Giảng viên</th>
                     <th>Thông tin</th>
-                    <th>Học phần tương đương</th> <!-- Thêm cột mới -->
                     <th>Hành động</th>
                 </tr>
             </thead>
             <tbody id="hocphanTableBody">
                 <tr>
                     <td>1</td>
+                    <td>CN001</td>
                     <td>HP001</td>
                     <td>LHP001</td>
                     <td>3</td>
                     <td>Bắt buộc</td>
                     <td>Nguyễn Văn A</td>
-                    <td>Học phần cơ bản</td>
-                    <td>HP101</td> <!-- Dữ liệu mẫu cho cột mới -->
                     <td>
-                        <button class="edit-btn">Sửa</button>
-                        <button class="delete-btn">Xóa</button>
+                        Học kỳ: HK01<br>
+                        Lịch học: Thứ 2, Thứ 4<br>
+                        Số SV tối đa: 50
                     </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>HP002</td>
-                    <td>LHP002</td>
-                    <td>2</td>
-                    <td>Tự chọn</td>
-                    <td>Trần Thị B</td>
-                    <td>Học phần nâng cao</td>
-                    <td>HP102</td> <!-- Dữ liệu mẫu cho cột mới -->
                     <td>
                         <button class="edit-btn">Sửa</button>
                         <button class="delete-btn">Xóa</button>
@@ -69,6 +59,88 @@
                 </tr>
             </tbody>
         </table>
+    </div>
+
+    <!-- Form thêm học phần -->
+    <div class="add-form-container" id="addFormContainer" style="display: none;">
+        <form id="addForm" class="add-form">
+            <h2>Thêm học phần</h2>
+            <label for="maNganh">Mã ngành:</label>
+            <input type="text" id="maNganh" name="maNganh" required>
+
+            <label for="maHP">Mã học phần:</label>
+            <input type="text" id="maHP" name="maHP" required>
+
+            <label for="lopHP">Lớp học phần:</label>
+            <input type="text" id="lopHP" name="lopHP" required>
+
+            <label for="stc">Số tín chỉ:</label>
+            <input type="number" id="stc" name="stc" required>
+
+            <label for="loai">Loại:</label>
+            <select id="loai" name="loai" required>
+                <option value="bat_buoc">Bắt buộc</option>
+                <option value="tu_chon">Tự chọn</option>
+            </select>
+
+            <label for="giangVien">Tên giảng viên:</label>
+            <input type="text" id="giangVien" name="giangVien" required>
+
+            <label for="hocKy">Học kỳ:</label>
+            <input type="text" id="hocKy" name="hocKy" required>
+
+            <label for="lichHoc">Lịch học:</label>
+            <input type="text" id="lichHoc" name="lichHoc" required>
+
+            <label for="soSVToiDa">Số sinh viên tối đa:</label>
+            <input type="number" id="soSVToiDa" name="soSVToiDa" required>
+
+            <div class="form-actions">
+                <button type="button" class="cancel-btn" onclick="hideAddForm()">Hủy</button>
+                <button type="submit" class="save-btn">Lưu</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Form sửa học phần -->
+    <div class="edit-form-container" id="editFormContainer" style="display: none;">
+        <form id="editForm" class="add-form">
+            <h2>Sửa học phần</h2>
+            <label for="editMaNganh">Mã ngành:</label>
+            <input type="text" id="editMaNganh" name="maNganh" required>
+
+            <label for="editMaHP">Mã học phần:</label>
+            <input type="text" id="editMaHP" name="maHP" required>
+
+            <label for="editLopHP">Lớp học phần:</label>
+            <input type="text" id="editLopHP" name="lopHP" required>
+
+            <label for="editSTC">Số tín chỉ:</label>
+            <input type="number" id="editSTC" name="stc" required>
+
+            <label for="editLoai">Loại:</label>
+            <select id="editLoai" name="loai" required>
+                <option value="bat_buoc">Bắt buộc</option>
+                <option value="tu_chon">Tự chọn</option>
+            </select>
+
+            <label for="editGiangVien">Tên giảng viên:</label>
+            <input type="text" id="editGiangVien" name="giangVien" required>
+
+            <label for="editHocKy">Học kỳ:</label>
+            <input type="text" id="editHocKy" name="hocKy" required>
+
+            <label for="editLichHoc">Lịch học:</label>
+            <input type="text" id="editLichHoc" name="lichHoc" required>
+
+            <label for="editSoSVToiDa">Số sinh viên tối đa:</label>
+            <input type="number" id="editSoSVToiDa" name="soSVToiDa" required>
+
+            <div class="form-actions">
+                <button type="button" class="cancel-btn" onclick="hideEditForm()">Hủy</button>
+                <button type="submit" class="save-btn">Lưu</button>
+            </div>
+        </form>
     </div>
 </div>
 {% endblock %}

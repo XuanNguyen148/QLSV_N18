@@ -107,10 +107,47 @@
     background-color: #ffe6e6; /* Màu nền khi hover */
 }
 
+/* Đồng bộ màu chữ trong cột "Hành động" ở dòng tiêu đề */
+.hocphan-table th:nth-child(2) {
+    color: white !important; /* Đặt màu chữ trắng */
+    font-weight: bold; /* Chữ đậm */
+    text-align: center; /* Căn giữa nội dung */
+    background-color: #800000; /* Đảm bảo nền màu đỏ rượu */
+    text-transform: uppercase; /* Chữ in hoa */
+}
+
+/* Căn chỉnh nội dung trong cột "Hành động" */
+.hocphan-table td:nth-child(2), .hocphan-table th:nth-child(2) {
+    color: white;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* Đồng bộ màu chữ và kiểu chữ trong cột "Hành động" */
+.hocphan-table td:nth-child(2) {
+    color: inherit; /* Kế thừa màu chữ của dòng */
+    font-weight: normal; /* Đặt kiểu chữ bình thường */
+    text-align: center; /* Căn giữa nội dung */
+}
+
 /* Căn chỉnh toàn bộ nội dung */
 .content {
     margin-left: calc(250px + 20px); /* Né thanh sidebar (250px chiều rộng sidebar + 20px khoảng cách) */
     margin-top: 40px; /* Giảm khoảng cách với headbar */
     padding: 20px;
     max-width: calc(100% - 270px); /* Giới hạn chiều rộng tối đa */
+}
+
+.action-btn {
+    background-color: #800000; /* Màu đỏ rượu */
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.action-btn:hover {
+    background-color: #660000; /* Màu đỏ đậm hơn khi hover */
 }
