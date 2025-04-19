@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Students
 # Register your models here.
-
-admin.site.register(Students)
+class StuAdmin(admin.ModelAdmin):
+    list_display = ['masv', 'nganhhoc', 'lop']
+admin.site.register(Students, StuAdmin)

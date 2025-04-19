@@ -34,7 +34,28 @@ class HP(models.Model):
     tenhp = models.CharField(max_length=50)
     sotc = models.IntegerField()
 
-
     class Meta:
         db_table = 'hocphan'
+        managed = False  # Django không quản lý bảng này
+
+class HPGhiDanh(models.Model):
+    id = models.AutoField(primary_key=True)
+    mahp = models.ForeignKey(HP, on_delete=models.CASCADE, db_column='mahp')
+    tgbdgd = models.DateField()
+    tgktgd = models.DateField()
+
+    class Meta:
+        # tên bảng tương ứng trong cơ sở dữ liệu
+        db_table = 'ds_hpghidanh'
+        managed = False  # Django không quản lý bảng này
+
+class KQGhidanh(models.Model):
+    id = models.AutoField(primary_key=True)
+    mahp = models.ForeignKey(HP, on_delete=models.CASCADE, db_column='mahp')
+    masv = models.ForeignKey(Students, on_delete=models.CASCADE, db_column='masv')
+    thaotac = models.CharField(max_length=4)
+    tgthaotac = models.DateTimeField()
+
+    class Meta:
+        db_table = 'kq_ghidanh'
         managed = False  # Django không quản lý bảng này

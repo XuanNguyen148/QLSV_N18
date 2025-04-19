@@ -63,7 +63,16 @@ CREATE TABLE ChiTietDangKy (
     FOREIGN KEY (MaLHP) REFERENCES LopHocPhan(MaLHP)
 );
 
-
+-- Bảng kết quả ghi danh
+create table kq_ghidanh
+(
+mahp varchar(15) primary key,
+masv varchar(10),
+tggd date,
+thaotac varchar(4),
+foreign key (mahp) references hocphan(mahp),
+foreign key (masv) references sinhvien(masv)
+);
 
 INSERT INTO SinhVien (MaSV, HoTen, SDT, NgaySinh, NganhHoc, Lop)
 VALUES 

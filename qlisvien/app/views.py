@@ -5,9 +5,11 @@ from . import models
 
 # Create your views here.
 def ghi_danh(request):
-    hp = models.HP.objects.all()
+    kqghidanh = models.KQGhidanh.objects.select_related('mahp', 'masv').all()  # Lấy dữ liệu từ bảng liên quan
+    hpghidanh = models.HPGhiDanh.objects.select_related('mahp').all()  # Lấy dữ liệu từ bảng liên quan
     context = {
-        'hp': hp
+        'hpghidanh': hpghidanh,
+        'kqghidanh': kqghidanh
     }
 
     return render(request, 'pages/ghi_danh.html', context)
@@ -133,14 +135,20 @@ def forgot_password(request):
 def qlihp(request):
     return render(request, 'pages/qlihp.html')
 
+###
 def history(request):
-    # Lấy dữ liệu lịch sử đăng ký từ database (nếu có)
-    history_data = []  # Thay bằng truy vấn thực tế nếu cần
-
+    if not request.session.get('user_id'):
+        return redirect('login')
+        
+    # Thêm print để debug
+    kqghidanh = models.KQGhidanh.objects.select_related('mahp', 'masv').all()
+    print(f"Số lượng bản ghi: {kqghidanh.count()}")
+    
     context = {
-        'history_data': history_data
+        'username': request.session.get('username'),
+        'kqghidanh': kqghidanh
     }
-
+    
     return render(request, 'pages/history.html', context)
 
 def register(request):

@@ -23,15 +23,15 @@
                 </tr>
             </thead>
             <tbody>
-                {% for hp in hp %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ hp.mahp }}</td>
-                    <td>{{ hp.tenhp }}</td>
-                    <td>{{ hp.sotc }}</td>
-                    <td><button class="btn-action">Chọn</button></td>
-                </tr>
+                {% for hp in hpghidanh %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ hp.mahp.mahp }}</td>
+            <td>{{ hp.mahp.tenhp }}</td>
+            <td>{{ hp.mahp.sotc }}</td>
+            <td><button class="btn-action">Chọn</button></td>
+        </tr>
                 {% endfor %}
                 <!-- Thêm dòng khác nếu cần -->
             </tbody>
@@ -51,13 +51,13 @@
             </thead>
             <tbody>
                 <tr>
-                    {% for hp in hp %}
+                    {% for kq in kqghidanh %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ hp.mahp }}</td>
-                        <td>{{ hp.tenhp }}</td>
-                        <td>{{ hp.sotc }}</td>
+                        <td>{{ kq.mahp.mahp }}</td>
+                        <td>{{ kq.mahp.tenhp }}</td>
+                        <td>{{ kq.mahp.sotc }}</td>
                         <td><button class="btn-action">Hủy</button></td>
                     </tr>
                     {% endfor %}

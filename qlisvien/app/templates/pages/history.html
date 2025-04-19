@@ -49,26 +49,18 @@
                 </tr>
             </thead>
             <tbody id="historyTableBody">
-                <tr style="background-color: #ff6600; color: white;"> <!-- Dòng màu cam -->
-                    <td>1</td>
-                    <td>Hủy đăng ký</td>
-                    <td>242_BMKT3811_08</td>
-                    <td>Hành vi khách hàng</td>
-                    <td>242_BMKT3811_08_32</td> <!-- Mã LHP -->
-                    <td>3</td>
-                    <td>23D190145</td>
-                    <td>2025-01-07 13:38:30</td>
-                </tr>
+                {% for kq in kqghidanh %}
                 <tr>
-                    <td>2</td>
-                    <td>Đăng ký</td>
-                    <td>242_BMKT3811_08</td>
-                    <td>Hành vi khách hàng</td>
-                    <td>242_BMKT3811_08_32</td> <!-- Mã LHP -->
-                    <td>3</td>
-                    <td>23D190145</td>
-                    <td>2024-12-05 07:42:50</td>
+                    <th>{{ forloop.counter }}</th>
+                    <th>{{ kq.thaotac }}</th>
+                    <th>{{ kq.mahp.mahp }}</th>
+                    <th>{{ kq.mahp.tenhp }}</th>
+                    <th>{{ forloop.counter }}</th>
+                    <th>{{ kq.mahp.sotc }}</th>
+                    <th>{{ kq.masv.masv }}</th>
+                    <th>{{ kq.tgthaotac }}</th>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
