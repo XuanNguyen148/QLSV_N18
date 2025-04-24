@@ -77,10 +77,10 @@ CREATE TABLE lophocphan (
 -- thêm cột id định dạng serial
 -- Tạo bảng tinhtranghoctap
 CREATE TABLE tinhtranghoctap (
+    id serial PRIMARY KEY,
     masv VARCHAR(9),
     mahp VARCHAR(8),
     tinhtrang VARCHAR(20),
-    PRIMARY KEY (masv, mahp),
     FOREIGN KEY (masv) REFERENCES sinhvien(masv),
     FOREIGN KEY (mahp) REFERENCES hocphan(mahp)
 );
@@ -308,3 +308,9 @@ INSERT INTO tinhtranghoctap (masv, mahp, tinhtrang) VALUES
     ('24D190004', 'ECON1011', 'Không qua'),   -- Kinh tế vi mô (BB)
     ('24D190004', 'ENTR1011', 'Qua môn'),     -- Khởi nghiệp kinh doanh (TC)
     ('24D190004', 'LANG1011', 'Qua môn');     -- Kỹ năng giao tiếp (TC)
+
+-- Thêm dữ liệu lịch sử
+INSERT INTO lichsu (mals, hoatdong, masv, mahp, malhp, trangthai, thoigian) VALUES
+('LS0000001', 'Ghi danh', '24D190001', 'ACCT1021', 'ACCT1051_1', 'Thanh cong', '2025-04-24 10:00:00'),
+('LS0000002', 'Ghi danh', '24D190001', 'ACCT1021', 'ACCT1051_2', 'That bai', '2025-04-24 11:00:00'),
+('LS0000003', 'Ghi danh', '24D190001', 'ACCT1051', 'ACCT1051_1', 'Dang cho', '2025-04-24 12:00:00');
