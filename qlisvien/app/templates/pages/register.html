@@ -8,6 +8,7 @@
 {% endblock %}
 
 {% block content %}
+    {% csrf_token %}
 <div class="content">
     <h1>Đăng ký học phần</h1>
 
@@ -29,58 +30,44 @@
                 <tr class="section-header">
                     <td colspan="5">Các môn bắt buộc</td>
                 </tr>
+                {% for hp in hpbb %}
                 <tr>
-                    <td>1</td>
-                    <td>ENT13111</td>
-                    <td>Tiếng Anh nâng cao 1.1</td>
-                    <td>5</td>
-                    <td><button class="register-btn">Đăng ký</button></td>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ hp.mahp }}</td>
+                    <td>{{ hp.tenhp }}</td>
+                    <td>{{ hp.sotc }}</td>
+                    <td><button class="register-btn" data-ma-hoc-phan="{{ hp.mahp }}">Đăng ký</button></td>
                 </tr>
+                {% endfor %}
                 <tr>
-                    <td>2</td>
-                    <td>MAT101</td>
-                    <td>Toán cao cấp</td>
-                    <td>3</td>
-                    <td><button class="register-btn">Đăng ký</button></td>
-                </tr>
 
                 <!-- Các môn tự chọn -->
                 <tr class="section-header">
                     <td colspan="5">Các môn tự chọn</td>
                 </tr>
+                {% for hp in hptc %}
                 <tr>
-                    <td>1</td>
-                    <td>GDT0821</td>
-                    <td>Bóng rổ</td>
-                    <td>1</td>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ hp.mahp }}</td>
+                    <td>{{ hp.tenhp }}</td>
+                    <td>{{ hp.sotc }}</td>
                     <td><button class="register-btn">Đăng ký</button></td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>ART101</td>
-                    <td>Mỹ thuật cơ bản</td>
-                    <td>2</td>
-                    <td><button class="register-btn">Đăng ký</button></td>
-                </tr>
+                {% endfor %}
 
                 <!-- Các môn cần học lại -->
                 <tr class="section-header">
                     <td colspan="5">Các môn cần học lại</td>
                 </tr>
+                {% for hp in hphl %}
                 <tr>
-                    <td>1</td>
-                    <td>PHY101</td>
-                    <td>Vật lý đại cương</td>
-                    <td>3</td>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ hp.mahp }}</td>
+                    <td>{{ hp.tenhp }}</td>
+                    <td>{{ hp.sotc }}</td>
                     <td><button class="register-btn">Đăng ký</button></td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>CHE101</td>
-                    <td>Hóa học đại cương</td>
-                    <td>3</td>
-                    <td><button class="register-btn">Đăng ký</button></td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
@@ -88,7 +75,7 @@
     <!-- Bảng 2 -->
     <div class="table-container">
         <h2>Kết quả đăng ký</h2>
-        <table class="custom-table">
+        <table class="custom-table" id="result-table">
             <thead>
                 <tr>
                     <th>STT</th>
@@ -96,35 +83,22 @@
                     <th>Tên học phần</th>
                     <th>STC</th>
                     <th>Giảng viên</th>
-                    <th>Phòng học</th> <!-- Thêm cột Phòng học -->
+                    <th>Phòng học</th>
                     <th>Thao tác</th>
                 </tr>
             </thead>
             <tbody>
+                {% for hp in kqdk %}
                 <tr>
-                    <td>1</td>
-                    <td>ENT13111</td>
-                    <td>Tiếng Anh nâng cao 1.1</td>
-                    <td>5</td>
-                    <td>Nguyễn Văn A</td>
-                    <td>A2.01</td>
-                    <td>
-                        <button class="cancel-btn">Hủy</button>
-                        <button class="change-class-btn" onclick="showSelectClassForm('ENT13111')">Chuyển lớp</button>
-                    </td>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ hp.mahp.mahp }}</td>
+                    <td>{{ hp.mahp.tenhp }}</td>
+                    <td>{{ hp.mahp.sotc }}</td>                    
+                    <td>{{ hp.malhp.giangvien }}</td>
+                    <td>{{ hp.malhp.phonghoc }}</td>
+                    <td><button class="register-btn">Đăng ký</button></td>
                 </tr>
-                <tr>
-                    <td>2</td>
-                    <td>MAT101</td>
-                    <td>Toán cao cấp</td>
-                    <td>3</td>
-                    <td>Trần Thị B</td>
-                    <td>B1.02</td>
-                    <td>
-                        <button class="cancel-btn">Hủy</button>
-                        <button class="change-class-btn" onclick="showSelectClassForm('MAT101')">Chuyển lớp</button>
-                    </td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
@@ -150,25 +124,13 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Dữ liệu mẫu -->
-                <tr>
-                    <td>1</td>
-                    <td>L01</td>
-                    <td>Nguyễn Văn A</td>
-                    <td>50</td>
-                    <td>Thứ 2 (1-3)</td>
-                    <td>A2.01</td>
-                    <td><button class="select-btn">Đăng ký</button></td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>L02</td>
-                    <td>Trần Thị B</td>
-                    <td>45</td>
-                    <td>Thứ 3 (4-6)</td>
-                    <td>A2.02</td>
-                    <td><button class="select-btn">Đăng ký</button></td>
-                </tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ hp.mahp.mahp }}</td>
+                <td>{{ hp.mahp.tenhp }}</td>
+                <td>{{ hp.mahp.sotc }}</td>
+                <td>{{ hp.malhp.giangvien }}</td>
+                <td>{{ hp.malhp.phonghoc }}</td>
+                <td><button class="btn-action btn-huy" data-mahp="{{ hp.mahp.mahp }}">Hủy</button></td>
             </tbody>
         </table>
         <div class="form-actions">

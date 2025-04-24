@@ -16,46 +16,103 @@ class CustomUser(models.Model):
     def __str__(self):
         return self.username
 
-class Students(models.Model):
-    masv = models.CharField(max_length=10, primary_key=True)  # map với cột 'masinhvien' trong DB
-    hoten = models.CharField(max_length=50)
-    sdt = models.CharField(max_length=10)
-    ngaysinh = models.DateField()
-    nganhhoc = models.CharField(max_length=50)
-    lop = models.CharField(max_length=10)
+class TaiKhoan(models.Model):
+    matk = models.CharField(primary_key=True, max_length=9)
+    matkhau = models.CharField(max_length=100)
+    tendangnhap = models.CharField(max_length=50, unique=True)
+    vaitro = models.CharField(max_length=20)
 
+    class Meta:
+        db_table = 'taikhoan'
+        managed = False
+
+class LHP(models.Model):
+    malhp = models.CharField(primary_key=True, max_length=10)
+    mahp = models.ForeignKey('HP', on_delete=models.SET_NULL, db_column='mahp', null=True, blank=True)
+    giangvien = models.CharField(max_length=100, null=True, blank=True)
+    sosvtoida = models.IntegerField(null=True, blank=True)
+    lichhoc = models.TextField(null=True, blank=True)
+    phonghoc = models.CharField(max_length=50, null=True, blank=True)
+
+    class Meta:
+        db_table = 'lophocphan'
+        managed = False
+
+
+class TTSV(models.Model):
+    masv = models.CharField(primary_key=True, max_length=9)
+    manganh = models.ForeignKey('NH', on_delete=models.SET_NULL, null=True, blank=True, db_column='manganh')
+    matk = models.ForeignKey('TaiKhoan', on_delete=models.SET_NULL, null=True, blank=True, db_column='matk')
+    hoten_sv = models.CharField(max_length=100)
+    cccd_sv = models.CharField(max_length=12)
+    lop = models.CharField(max_length=20)
 
     class Meta:
         db_table = 'sinhvien'
-        managed = False  # Django không quản lý bảng này
+        managed = False
 
-class HP(models.Model):
-    mahp = models.CharField(max_length=12, primary_key=True)
-    tenhp = models.CharField(max_length=50)
-    sotc = models.IntegerField()
+class TTNS(models.Model):
+    manv = models.CharField(primary_key=True, max_length=9)
+    matk = models.ForeignKey('TaiKhoan', on_delete=models.SET_NULL, null=True, blank=True, db_column='matk')
+    hoten_nv = models.CharField(max_length=100)
+    cccd_nv = models.CharField(max_length=12)
 
     class Meta:
-        db_table = 'hocphan'
-        managed = False  # Django không quản lý bảng này
+        db_table = 'nhanvien'
+        managed = False
 
-class HPGhiDanh(models.Model):
-    id = models.AutoField(primary_key=True)
-    mahp = models.ForeignKey(HP, on_delete=models.CASCADE, db_column='mahp')
-    tgbdgd = models.DateField()
-    tgktgd = models.DateField()
+class HP(models.Model):
+    mahp = models.CharField(max_length=8, primary_key=True)
+    tenhp = models.CharField(max_length=10)
+    sotc = models.IntegerField()
+    loai = models.CharField(max_length=20)
+    manganh = models.ForeignKey('NH', on_delete=models.SET_NULL, null=True, blank=True, db_column='manganh')
 
     class Meta:
         # tên bảng tương ứng trong cơ sở dữ liệu
-        db_table = 'ds_hpghidanh'
+        db_table = 'hocphan'
         managed = False  # Django không quản lý bảng này
 
-class KQGhidanh(models.Model):
+class TTHT(models.Model):
     id = models.AutoField(primary_key=True)
-    mahp = models.ForeignKey(HP, on_delete=models.CASCADE, db_column='mahp')
-    masv = models.ForeignKey(Students, on_delete=models.CASCADE, db_column='masv')
-    thaotac = models.CharField(max_length=4)
-    tgthaotac = models.DateTimeField()
+    masv = models.ForeignKey('TTSV', on_delete=models.CASCADE, db_column='masv')
+    mahp = models.ForeignKey('HP', on_delete=models.CASCADE, db_column='mahp')
+    tinhtrang = models.CharField(max_length=20)
 
     class Meta:
-        db_table = 'kq_ghidanh'
-        managed = False  # Django không quản lý bảng này
+        db_table = 'tinhtranghoctap'
+        managed = False
+        unique_together = (('masv', 'mahp'),)
+
+class LS(models.Model):
+    mals = models.CharField(primary_key=True, max_length=9)
+    hoatdong = models.CharField(max_length=20)
+    masv = models.ForeignKey('TTSV', on_delete=models.CASCADE, db_column='masv')
+    mahp = models.ForeignKey('HP', on_delete=models.CASCADE, db_column='mahp')
+    malhp = models.ForeignKey('LHP', on_delete=models.CASCADE, db_column='malhp')
+    trangthai = models.CharField(max_length=20)
+    thoigian = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'lichsu'
+        managed = False
+
+class LH(models.Model):
+    malich = models.CharField(primary_key=True, max_length=9)
+    loaidangky = models.CharField(max_length=20)
+    namhoc = models.IntegerField()
+    hocky = models.IntegerField()
+    batdau = models.DateTimeField()
+    ketthuc = models.DateTimeField()
+
+    class Meta:
+        db_table = 'lichhen'
+        managed = False
+
+class NH(models.Model):
+    manganh = models.CharField(primary_key=True, max_length=4)
+    tennganh = models.CharField(max_length=100)
+
+    class Meta:
+        db_table = 'nganhhoc'
+        managed = False

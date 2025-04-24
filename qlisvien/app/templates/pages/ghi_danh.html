@@ -9,6 +9,7 @@
 {% endblock %}
 
 {% block content %}
+    {% csrf_token %}
     <div class="ghidanh-box">
         <h2>Đăng ký ghi danh</h2>
         <table class="table-hocphan">
@@ -23,17 +24,16 @@
                 </tr>
             </thead>
             <tbody>
-                {% for hp in hpghidanh %}
-        <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ forloop.counter }}</td>
-            <td>{{ hp.mahp.mahp }}</td>
-            <td>{{ hp.mahp.tenhp }}</td>
-            <td>{{ hp.mahp.sotc }}</td>
-            <td><button class="btn-action">Chọn</button></td>
-        </tr>
+                {% for hp in hptc %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ hp.loai }}</td>
+                    <td>{{ hp.mahp }}</td>
+                    <td>{{ hp.tenhp }}</td>
+                    <td>{{ hp.sotc }}</td>
+                    <td><button class="btn-action" id="btn-chon">Chọn</button></td>
+                </tr>
                 {% endfor %}
-                <!-- Thêm dòng khác nếu cần -->
             </tbody>
         </table>    
     
@@ -46,22 +46,21 @@
                     <th>Mã học phần</th>
                     <th>Tên học phần</th>
                     <th>STC</th>
-                    <th>Thao tác</th> <!-- Cột không tên -->
+                    <th>Thao tác</th>
                 </tr>
             </thead>
             <tbody>
                 <tr>
-                    {% for kq in kqghidanh %}
+                    {% for hp in kqdk %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ kq.mahp.mahp }}</td>
-                        <td>{{ kq.mahp.tenhp }}</td>
-                        <td>{{ kq.mahp.sotc }}</td>
-                        <td><button class="btn-action">Hủy</button></td>
+                        <td>{{ hp.mahp.loai }}</td>
+                        <td>{{ hp.mahp.mahp }}</td>
+                        <td>{{ hp.mahp.tenhp }}</td>
+                        <td>{{ hp.mahp.sotc }}</td>
+                        <td><button class="btn-action btn-huy" data-mahp="{{ hp.mahp.mahp }}">Hủy</button></td>
                     </tr>
                     {% endfor %}
-                <!-- Thêm dòng khác nếu cần -->
             </tbody>
         </table>   
         <div class="confirm-box">

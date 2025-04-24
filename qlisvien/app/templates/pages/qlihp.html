@@ -39,24 +39,22 @@
                 </tr>
             </thead>
             <tbody id="hocphanTableBody">
+                {% for hp in hp %}
                 <tr>
-                    <td>1</td>
-                    <td>CN001</td>
-                    <td>HP001</td>
-                    <td>LHP001</td>
-                    <td>3</td>
-                    <td>Bắt buộc</td>
-                    <td>Nguyễn Văn A</td>
-                    <td>
-                        Học kỳ: HK01<br>
-                        Lịch học: Thứ 2, Thứ 4<br>
-                        Số SV tối đa: 50
-                    </td>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ hp.mahp.manganh }}</td>
+                    <td>{{ hp.mahp.mahp }}</td>
+                    <td>{{ hp.malhp }}</td>
+                    <td>{{ hp.mahp.sotc }}</td>
+                    <td>{{ hp.mahp.loai }}</td>
+                    <td>{{ hp.giangvien }}</td>                    
+                    <td>___</td>
                     <td>
                         <button class="edit-btn">Sửa</button>
                         <button class="delete-btn">Xóa</button>
                     </td>
                 </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>
