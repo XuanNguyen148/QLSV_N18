@@ -1,5 +1,8 @@
 # QLSV_N18
 
+pip freeze > requirements.txt
+pip install -r requirements.txt
+
 git checkout feature-branch -- abc.py
 mv abc.py app/scripts/abc.py
 git add app/scripts/abc.py
