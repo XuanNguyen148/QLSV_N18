@@ -55,28 +55,19 @@
                 </tr>
             </thead>
             <tbody id="historyTableBody">
+                {% for ls in ls %}
                 <tr style="background-color: #ff6600; color: white;"> <!-- Dòng màu cam -->
-                    <td>1</td>
-                    <td>Đăng ký</td> <!-- Nội dung cột "Hành động" -->
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ ls.hoatdong }}</td> <!-- Nội dung cột "Hành động" -->
                     <td>Hủy đăng ký</td>
-                    <td>242_BMKT3811_08</td>
-                    <td>Hành vi khách hàng</td>
-                    <td>242_BMKT3811_08_32</td>
-                    <td>3</td>
-                    <td>23D190145</td>
-                    <td>2025-01-07 13:38:30</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>Ghi danh</td> <!-- Nội dung cột "Hành động" -->
-                    <td>Đăng ký</td>
-                    <td>242_BMKT3811_08</td>
-                    <td>Hành vi khách hàng</td>
-                    <td>242_BMKT3811_08_32</td>
-                    <td>3</td>
-                    <td>23D190145</td>
-                    <td>2024-12-05 07:42:50</td>
-                </tr>
+                    <td>{{ ls.mahp.mahp }}</td>
+                    <td>{{ ls.mahp.tenhp }}</td>
+                    <td>{{ ls.malhp.malhp }}</td>
+                    <td>{{ ls.mahp.sotc }}</td>
+                    <td>{{ ls.masv.masv }}</td>
+                    <td>{{ ls.thoigian }}</td>
+                </tr>                
+                {% endfor %}
             </tbody>
         </table>
     </div>

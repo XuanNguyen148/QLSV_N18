@@ -6,11 +6,6 @@ function search() {
     // Thêm logic tìm kiếm ở đây (gửi request đến server hoặc lọc dữ liệu trên client)
 }
 
-function addHocPhan() {
-    alert('Chức năng thêm học phần!');
-    // Thêm logic hiển thị form thêm học phần ở đây
-}
-
 document.addEventListener('DOMContentLoaded', function () {
     // Hiển thị form thêm học phần
     function showAddForm() {
@@ -64,6 +59,133 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
+    // Xử lý gửi form thêm học phần
+    const addForm = document.getElementById('addForm');
+    if (addForm) {
+        addForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            
+            // Thu thập dữ liệu từ form
+            const formData = {
+                manganh: document.getElementById('maNganh').value,
+                mahp: document.getElementById('maHP').value,
+                malhp: document.getElementById('lopHP').value,
+                sotc: document.getElementById('stc').value,
+                loai: document.getElementById('loai').value,
+                giangvien: document.getElementById('giangVien').value,
+                hocky: document.getElementById('hocKy').value,
+                lichhoc: document.getElementById('lichHoc').value,
+                sosvtoida: document.getElementById('soSVToiDa').value
+            };
+            
+            // Gửi dữ liệu đến server
+            fetch('/qlihp/?action=add', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message);
+                    // Tải lại trang để hiển thị học phần mới
+                    window.location.reload();
+                } else {
+                    alert('Lỗi: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Đã xảy ra lỗi khi thêm học phần');
+            });
+            
+            // Ẩn form sau khi gửi
+            hideAddForm();
+        });
+    }
+
+    // Xử lý gửi form sửa học phần
+    const editForm = document.getElementById('editForm');
+    if (editForm) {
+        editForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+            
+            // Thu thập dữ liệu từ form
+            const formData = {
+                manganh: document.getElementById('editMaNganh').value,
+                mahp: document.getElementById('editMaHP').value,
+                malhp: document.getElementById('editLopHP').value,
+                sotc: document.getElementById('editSTC').value,
+                loai: document.getElementById('editLoai').value,
+                giangvien: document.getElementById('editGiangVien').value,
+                hocky: document.getElementById('editHocKy').value,
+                lichhoc: document.getElementById('editLichHoc').value,
+                sosvtoida: document.getElementById('editSoSVToiDa').value
+            };
+            
+            // Gửi dữ liệu đến server
+            fetch('/qlihp/?action=edit', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    alert(data.message);
+                    // Tải lại trang để hiển thị học phần đã cập nhật
+                    window.location.reload();
+                } else {
+                    alert('Lỗi: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Đã xảy ra lỗi khi cập nhật học phần');
+            });
+            
+            // Ẩn form sau khi gửi
+            hideEditForm();
+        });
+    }
+
+    // Xử lý nút xóa học phần
+    document.querySelectorAll('.delete-btn').forEach((button) => {
+        button.addEventListener('click', function () {
+            const row = this.closest('tr');
+            const maHP = row.children[2].textContent.trim();
+            
+            if (confirm('Bạn có chắc chắn muốn xóa học phần này?')) {
+                fetch(`/qlihp/?action=delete&mahp=${maHP}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken')
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        alert(data.message);
+                        // Xóa dòng khỏi bảng
+                        row.remove();
+                    } else {
+                        alert('Lỗi: ' + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Đã xảy ra lỗi khi xóa học phần');
+                });
+            }
+        });
+    });
+
     // Gắn sự kiện cho nút "Sửa"
     document.querySelectorAll('.edit-btn').forEach((button) => {
         button.addEventListener('click', function () {
@@ -75,13 +197,51 @@ document.addEventListener('DOMContentLoaded', function () {
                 stc: row.children[4].textContent.trim(),
                 loai: row.children[5].textContent.trim() === 'Bắt buộc' ? 'bat_buoc' : 'tu_chon',
                 giangVien: row.children[6].textContent.trim(),
-                hocKy: row.children[7].innerHTML.split('<br>')[0].split(': ')[1].trim(),
-                lichHoc: row.children[7].innerHTML.split('<br>')[1].split(': ')[1].trim(),
-                soSVToiDa: row.children[7].innerHTML.split('<br>')[2].split(': ')[1].trim(),
+                hocKy: "", // Default values if not available
+                lichHoc: "",
+                soSVToiDa: ""
             };
+            
+            // Extract additional info if available
+            const infoCell = row.children[7];
+            if (infoCell && infoCell.innerHTML.includes('<br>')) {
+                const infoParts = infoCell.innerHTML.split('<br>');
+                if (infoParts.length >= 1 && infoParts[0].includes(':')) {
+                    rowData.hocKy = infoParts[0].split(':')[1].trim();
+                }
+                if (infoParts.length >= 2 && infoParts[1].includes(':')) {
+                    rowData.lichHoc = infoParts[1].split(':')[1].trim();
+                }
+                if (infoParts.length >= 3 && infoParts[2].includes(':')) {
+                    rowData.soSVToiDa = infoParts[2].split(':')[1].trim();
+                }
+            }
+            
             showEditForm(rowData);
         });
     });
+
+    // Gắn sự kiện cho nút tìm kiếm
+    const searchBtn = document.querySelector('.search-btn');
+    if (searchBtn) {
+        searchBtn.addEventListener('click', search);
+    }
+
+    // Hàm lấy CSRF token từ cookie
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
 
     // Gắn hàm vào window để sử dụng trong HTML
     window.showAddForm = showAddForm;

@@ -39,15 +39,15 @@
                 </tr>
             </thead>
             <tbody id="hocphanTableBody">
-                {% for hp in hp %}
+                {% for lhp in lhp %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ hp.mahp.manganh }}</td>
-                    <td>{{ hp.mahp.mahp }}</td>
-                    <td>{{ hp.malhp }}</td>
-                    <td>{{ hp.mahp.sotc }}</td>
-                    <td>{{ hp.mahp.loai }}</td>
-                    <td>{{ hp.giangvien }}</td>                    
+                    <td>{{ lhp.mahp.manganh.manganh }}</td>
+                    <td>{{ lhp.mahp.mahp }}</td>
+                    <td>{{ lhp.malhp }}</td>
+                    <td>{{ lhp.mahp.sotc }}</td>
+                    <td>{{ lhp.mahp.loai }}</td>
+                    <td>{{ lhp.giangvien }}</td>                    
                     <td>___</td>
                     <td>
                         <button class="edit-btn">Sửa</button>
@@ -58,10 +58,10 @@
             </tbody>
         </table>
     </div>
-
     <!-- Form thêm học phần -->
     <div class="add-form-container" id="addFormContainer" style="display: none;">
         <form id="addForm" class="add-form">
+            {% csrf_token %}
             <h2>Thêm học phần</h2>
             <label for="maNganh">Mã ngành:</label>
             <input type="text" id="maNganh" name="maNganh" required>
@@ -73,25 +73,32 @@
             <input type="text" id="lopHP" name="lopHP" required>
 
             <label for="stc">Số tín chỉ:</label>
-            <input type="number" id="stc" name="stc" required>
+            <input type="number" id="stc" name="stc" required min="1" max="10">
 
             <label for="loai">Loại:</label>
             <select id="loai" name="loai" required>
-                <option value="bat_buoc">Bắt buộc</option>
-                <option value="tu_chon">Tự chọn</option>
+                <option value="Bắt buộc">Bắt buộc</option>
+                <option value="Tự chọn">Tự chọn</option>
             </select>
 
             <label for="giangVien">Tên giảng viên:</label>
             <input type="text" id="giangVien" name="giangVien" required>
 
             <label for="hocKy">Học kỳ:</label>
-            <input type="text" id="hocKy" name="hocKy" required>
+            <select id="hocKy" name="hocKy" required>
+                <option value="HK1">Học kỳ 1</option>
+                <option value="HK2">Học kỳ 2</option>
+                <option value="HK3">Học kỳ 3</option>
+            </select>
 
             <label for="lichHoc">Lịch học:</label>
-            <input type="text" id="lichHoc" name="lichHoc" required>
+            <input type="text" id="lichHoc" name="lichHoc" required placeholder="Ví dụ: T2(1-3), T5(7-9)">
 
             <label for="soSVToiDa">Số sinh viên tối đa:</label>
-            <input type="number" id="soSVToiDa" name="soSVToiDa" required>
+            <input type="number" id="soSVToiDa" name="soSVToiDa" required min="1" max="200">
+
+            <label for="phonghoc">Phòng học:</label>
+            <input type="text" id="phonghoc" name="phonghoc" placeholder="Ví dụ: A.101">
 
             <div class="form-actions">
                 <button type="button" class="cancel-btn" onclick="hideAddForm()">Hủy</button>
@@ -99,7 +106,6 @@
             </div>
         </form>
     </div>
-
     <!-- Form sửa học phần -->
     <div class="edit-form-container" id="editFormContainer" style="display: none;">
         <form id="editForm" class="add-form">

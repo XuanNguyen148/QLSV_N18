@@ -51,7 +51,7 @@
                     <td>{{ hp.mahp }}</td>
                     <td>{{ hp.tenhp }}</td>
                     <td>{{ hp.sotc }}</td>
-                    <td><button class="register-btn">Đăng ký</button></td>
+                    <td><button class="register-btn" data-ma-hoc-phan="{{ hp.mahp }}">Đăng ký</button></td>
                 </tr>
                 {% endfor %}
 
@@ -65,7 +65,7 @@
                     <td>{{ hp.mahp }}</td>
                     <td>{{ hp.tenhp }}</td>
                     <td>{{ hp.sotc }}</td>
-                    <td><button class="register-btn">Đăng ký</button></td>
+                    <td><button class="register-btn" data-ma-hoc-phan="{{ hp.mahp }}">Đăng ký</button></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -93,15 +93,19 @@
                     <td>{{ forloop.counter }}</td>
                     <td>{{ hp.mahp.mahp }}</td>
                     <td>{{ hp.mahp.tenhp }}</td>
-                    <td>{{ hp.mahp.sotc }}</td>                    
+                    <td>{{ hp.mahp.sotc }}</td>
                     <td>{{ hp.malhp.giangvien }}</td>
                     <td>{{ hp.malhp.phonghoc }}</td>
-                    <td><button class="register-btn">Đăng ký</button></td>
+                    <td>
+                        <button class="cancel-btn btn-huy" data-mahp="{{ hp.mahp.mahp }}">Hủy</button>
+                        <button class="register-btn" data-ma-hoc-phan="{{ hp.mahp.mahp }}">Chuyển lớp</button>
+                    </td>
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
+    <!-- bỏ nút xác nhận cuối -->
     <div class="confirm-box">
         <button class="btn-confirm" onclick="confirmRegistration()">Xác nhận</button>
     </div>
@@ -124,13 +128,17 @@
                 </tr>
             </thead>
             <tbody>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ hp.mahp.mahp }}</td>
-                <td>{{ hp.mahp.tenhp }}</td>
-                <td>{{ hp.mahp.sotc }}</td>
-                <td>{{ hp.malhp.giangvien }}</td>
-                <td>{{ hp.malhp.phonghoc }}</td>
-                <td><button class="btn-action btn-huy" data-mahp="{{ hp.mahp.mahp }}">Hủy</button></td>
+                {% for lhp in lhp %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ lhp.malhp }}</td>
+                    <td>{{ lhp.giangvien }}</td>
+                    <td>{{ lhp.sosvtoida }}</td>
+                    <td>{{ lhp.lichhoc }}</td>
+                    <td>{{ lhp.phonghoc }}</td>
+                    <td><button class="select-btn">Đăng ký</button></td>
+                </tr>
+                {% endfor %}
             </tbody>
         </table>
         <div class="form-actions">

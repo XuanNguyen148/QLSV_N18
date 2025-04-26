@@ -1,69 +1,146 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.contrib.auth import login, logout
 from django.http import JsonResponse
 from . import models
-from django.views.decorators.http import require_http_methods
 from django.utils import timezone
-import uuid
-import json
-
-# Create your views here.
-# def hocphan(request):
-#     ghidanh = models.KQGhidanh.objects.select_related('mahp', 'masv').all()  # Lấy dữ liệu từ bảng liên quan
-#     dangky = models.HPGhiDanh.objects.select_related('mahp').all()  # Lấy dữ liệu từ bảng liên quan
-#     context = {
-#         'hpghidanh': hpghidanh,
-#         'kqghidanh': kqghidanh
-#     }
-
-#     return render(request, 'pages/ghi_danh.html', context)
-
 
 def ghi_danh(request):
-    hptc = models.HP.objects.filter(loai='Tự chọn')
-    kqdk = models.LS.objects.all()
-    context = {
-        'hptc': hptc,
-        'kqdk': kqdk
-    }
-    return render(request, 'pages/ghi_danh.html', context)
-
-@require_http_methods(["DELETE"])
-def xoa_hoc_phan(request, mahp):
-    try:
-        # Thay đổi từ get() thành filter().delete()
-        ls = models.LS.objects.filter(mahp__mahp=mahp).delete()
-        return JsonResponse({
-            'status': 'success',
-            'message': 'Đã xóa học phần thành công'
-        })
-    except Exception as e:
+    # Xử lý các request khác nhau dựa vào method và query parameters
+    
+    # Lấy mã tài khoản từ session
+    matk = request.session.get('user_id')
+    if not matk and request.method != 'GET':
         return JsonResponse({
             'status': 'error',
-            'message': str(e)
-        }, status=500)
-
-def dang_ky(request):    
-    hpbb = models.HP.objects.filter(loai='Bắt buộc')
-    hptc = models.HP.objects.filter(
-        ttht__tinhtrang__in=['Qua môn','Trượt môn'],
-        loai='Tự chọn'
-    ).values('mahp', 'tenhp', 'sotc', 'loai').distinct()
-    hphl = models.HP.objects.filter(
-        ttht__tinhtrang='Trượt môn',
-        loai='Bắt buộc'
-    ).values('mahp', 'tenhp', 'sotc', 'loai').distinct()
-    kqdk = models.LS.objects.all()
-
-    context = {
-        'hpbb': hpbb,
-        'hptc': hptc,
-        'hphl': hphl,
-        'kqdk': kqdk
-    }
-
-    return render(request, 'pages/register.html', context)
+            'message': 'Chưa đăng nhập'
+        }, status=401)
+    
+    # Lấy sinh viên nếu đã đăng nhập
+    sinh_vien = None
+    if matk:
+        try:
+            sinh_vien = models.TTSV.objects.get(matk=matk)
+        except models.TTSV.DoesNotExist:
+            if request.method != 'GET' or 'action' in request.GET:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Không tìm thấy thông tin sinh viên'
+                }, status=404)
+    
+    # XỬ LÝ THÊM HỌC PHẦN (POST with action=add)
+    if request.method == 'POST' and request.GET.get('action') == 'add':
+        mahp = request.GET.get('mahp')
+        if not mahp:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Thiếu mã học phần'
+            }, status=400)
+        
+        try:
+            # Lấy thông tin học phần
+            hp = models.HP.objects.get(mahp=mahp)
+            
+            # Kiểm tra xem đã đăng ký học phần này chưa
+            if models.LS.objects.filter(masv=sinh_vien, mahp=hp).exists():
+                return JsonResponse({
+                    'status': 'error', 
+                    'message': 'Bạn đã đăng ký học phần này rồi'
+                }, status=400)
+            
+            # Xử lý lớp học phần - lấy lớp đầu tiên
+            lhp = models.LHP.objects.filter(mahp=hp).first()
+            if not lhp:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Không tìm thấy lớp học phần'
+                }, status=404)
+            
+            # Tạo mã LS mới
+            import uuid
+            mals = f"LS{str(uuid.uuid4())[:6].upper()}"
+            
+            # Tạo bản ghi mới trong LS
+            ls = models.LS.objects.create(
+                mals=mals,
+                hoatdong='Ghi danh',
+                masv=sinh_vien,
+                mahp=hp,
+                malhp=lhp,
+                trangthai='Chờ duyệt',
+                thoigian=timezone.now()
+            )
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Đã thêm học phần thành công',
+                'data': {
+                    'mahp': hp.mahp,
+                    'tenhp': hp.tenhp,
+                    'sotc': hp.sotc,
+                    'loai': hp.loai,
+                    'giangvien': lhp.giangvien,
+                    'lichhoc': lhp.lichhoc,
+                    'phonghoc': lhp.phonghoc if hasattr(lhp, 'phonghoc') else None
+                }
+            })
+            
+        except models.HP.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Không tìm thấy học phần'
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': str(e)
+            }, status=500)
+    
+    # XỬ LÝ XÓA HỌC PHẦN (DELETE with action=delete)
+    elif request.method == 'DELETE' and request.GET.get('action') == 'delete':
+        mahp = request.GET.get('mahp')
+        if not mahp:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Thiếu mã học phần'
+            }, status=400)
+        
+        try:
+            # Xóa bản ghi LS của sinh viên hiện tại
+            ls = models.LS.objects.filter(masv=sinh_vien, mahp__mahp=mahp).delete()
+            
+            if ls[0] > 0:  # Kiểm tra xem có bản ghi nào bị xóa không
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Đã xóa học phần thành công'
+                })
+            else:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Không tìm thấy học phần để xóa'
+                }, status=404)
+                
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': str(e)
+            }, status=500)
+    
+    # HIỂN THỊ TRANG GHI DANH (GET without action)
+    elif request.method == 'GET' and 'action' not in request.GET:
+        hptc = models.HP.objects.filter(loai='Tự chọn')
+        kqdk = models.LS.objects.all()
+        context = {
+            'hptc': hptc,
+            'kqdk': kqdk
+        }
+        return render(request, 'pages/ghi_danh.html', context)
+    
+    # Xử lý các request không hợp lệ
+    else:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Phương thức không được hỗ trợ'
+        }, status=405)
 
 def get_lophocphan(request):
     mahp = request.GET.get('mahp')
@@ -77,10 +154,6 @@ def get_lophocphan(request):
 
 def index(request):
     return render(request, 'pages/login.html')
-    # response = HttpResponse()
-    # response.write('<h1>Welcome to Qlisvien</h1>')
-    # response.write('<p>This is the index page.</p>')
-    # return response
 
 def dashboard(request):
     # Kiểm tra session
@@ -187,19 +260,257 @@ def change_password(request):
     
     return render(request, 'pages/change_password.html')
 
+def dang_ky(request):
+    # Xử lý các request khác nhau dựa vào method và query parameters
+    
+    # Lấy mã tài khoản từ session
+    matk = request.session.get('user_id')
+    if not matk and request.method != 'GET':
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Chưa đăng nhập'
+        }, status=401)
+    
+    # Lấy sinh viên nếu đã đăng nhập
+    sinh_vien = None
+    if matk:
+        try:
+            sinh_vien = models.TTSV.objects.get(matk=matk)
+        except models.TTSV.DoesNotExist:
+            if request.method != 'GET' or 'action' in request.GET:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Không tìm thấy thông tin sinh viên'
+                }, status=404)
+    
+    # XỬ LÝ THÊM LỚP HỌC PHẦN (POST with action=add)
+    if request.method == 'POST' and request.GET.get('action') == 'add':
+        malhp = request.GET.get('malhp')
+        if not malhp:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Thiếu mã lớp học phần'
+            }, status=400)
+        
+        try:
+            # Lấy thông tin
+            lhp = models.LHP.objects.get(malhp=malhp)
+            hp = lhp.mahp
+
+            # cần đổi tên biến này
+            # Kiểm tra xem sinh viên đã đăng ký học phần này hay chưa
+            existing_registration = models.LS.objects.filter(masv=sinh_vien, mahp=hp)
+            
+            # Kiểm tra lhp đã đăng ký chưa
+            if existing_registration.exists():
+                if existing_registration.filter(malhp=lhp).exists():
+                    return JsonResponse({
+                        'status': 'error', 
+                        'message': 'Bạn đã đăng ký học phần này rồi'
+                    }, status=400)
+                
+                # Xóa đăng ký lớp cũ
+                existing_registration.delete()
+                message_prefix = "Đã chuyển lớp học phần thành công"
+            else:
+                message_prefix = "Đã đăng ký học phần thành công"
+
+            if not lhp:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Không tìm thấy lớp học phần'
+                }, status=404)
+            
+            # Tạo mã LS mới
+            import uuid
+            mals = f"LS{str(uuid.uuid4())[:6].upper()}"
+            
+            # Tạo bản ghi mới trong LS
+            ls = models.LS.objects.create(
+                mals=mals,
+                hoatdong='Đăng ký',
+                masv=sinh_vien,
+                mahp=hp,
+                malhp=lhp,
+                trangthai='Chờ duyệt',
+                thoigian=timezone.now()
+            )
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': message_prefix ,
+                'data': {
+                    'mahp': hp.mahp,
+                    'tenhp': hp.tenhp,
+                    'sotc': hp.sotc,
+                    'loai': hp.loai,
+                    'giangvien': lhp.giangvien,
+                    'lichhoc': lhp.lichhoc,
+                    'phonghoc': lhp.phonghoc if hasattr(lhp, 'phonghoc') else None
+                }
+            })
+            
+        except models.LHP.DoesNotExist:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Không tìm thấy lớp học phần'
+            }, status=404)
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': str(e)
+            }, status=500)
+    
+    # XỬ LÝ XÓA LỚP HỌC PHẦN (DELETE with action=delete)
+    elif request.method == 'DELETE' and request.GET.get('action') == 'delete':
+        mahp = request.GET.get('mahp')
+        if not mahp:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Thiếu mã lớp học phần'
+            }, status=400)
+        
+        try:
+            # Xóa bản ghi LS của sinh viên hiện tại
+            # Xóa bản ghi LS của sinh viên hiện tại theo mã học phần
+            deleted_count = models.LS.objects.filter(masv=sinh_vien, mahp__mahp=mahp).delete()[0]
+            
+            if deleted_count  > 0:  # Kiểm tra xem có bản ghi nào bị xóa không
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Đã xóa lớp học phần thành công'
+                })
+            else:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Không tìm thấy lớp học phần để xóa'
+                }, status=404)
+                
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': str(e)
+            }, status=500)
+    
+    # HIỂN THỊ TRANG ĐĂNG KÝ (GET without action)
+    elif request.method == 'GET' and 'action' not in request.GET:
+        hpbb = models.HP.objects.filter(loai='Bắt buộc')
+        hptc = models.HP.objects.filter(loai='Tự chọn')
+        hphl = models.HP.objects.filter(loai='Bắt buộc')
+        lhp = models.LHP.objects.all()
+        kqdk = models.LS.objects.all()
+        context = {
+            'hpbb': hpbb,
+            'hptc': hptc,
+            'hphl': hphl,
+            'lhp': lhp,
+            'kqdk': kqdk
+        }
+        return render(request, 'pages/register.html', context)
+    
+    # Xử lý các request không hợp lệ
+    else:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Phương thức không được hỗ trợ'
+        }, status=405)
+
 def qlihp(request):
-    hp = models.LHP.objects.all()
-    context = {
-        'hp': hp
-    }
+    # XỬ LÝ THÊM LỚP HỌC PHẦN (POST with action=add)
+    if request.method == 'POST' and request.GET.get('action') == 'add':
+        import json
+        try:
+            # Lấy dữ liệu từ request
+            data = json.loads(request.body)
+            
+            # Kiểm tra dữ liệu bắt buộc
+            if not data.get('manganh') or not data.get('mahp') or not data.get('malhp'):
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Thiếu thông tin bắt buộc'
+                }, status=400)
+            
+            # Kiểm tra học phần đã tồn tại chưa
+            try:
+                hp = models.HP.objects.get(mahp=data.get('mahp'))
+            except models.HP.DoesNotExist:
+                # Tạo học phần mới nếu chưa tồn tại
+                try:
+                    nganh = models.NH.objects.get(manganh=data.get('manganh'))
+                except models.NH.DoesNotExist:
+                    return JsonResponse({
+                        'status': 'error',
+                        'message': 'Mã ngành không tồn tại'
+                    }, status=404)
+                
+                hp = models.HP.objects.create(
+                    mahp=data.get('mahp'),
+                    tenhp=data.get('tenhp', f"Học phần {data.get('mahp')}"),
+                    sotc=data.get('sotc', 0),
+                    loai=data.get('loai', 'Bắt buộc'),
+                    manganh=nganh
+                )
+            
+            # Kiểm tra lớp học phần đã tồn tại chưa
+            if models.LHP.objects.filter(malhp=data.get('malhp')).exists():
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Mã lớp học phần đã tồn tại'
+                }, status=400)
+            
+            # Tạo lớp học phần mới
+            lhp = models.LHP.objects.create(
+                malhp=data.get('malhp'),
+                mahp=hp,
+                giangvien=data.get('giangvien', ''),
+                sosvtoida=data.get('sosvtoida', 0),
+                lichhoc=data.get('lichhoc', ''),
+                phonghoc=data.get('phonghoc', '')
+            )
+            
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Đã thêm học phần thành công',
+                'data': {
+                    'malhp': lhp.malhp,
+                    'mahp': hp.mahp,
+                    'tenhp': hp.tenhp,
+                    'sotc': hp.sotc,
+                    'loai': hp.loai,
+                    'giangvien': lhp.giangvien
+                }
+            })
+            
+        except json.JSONDecodeError:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Dữ liệu không hợp lệ'
+            }, status=400)
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': str(e)
+            }, status=500)
+        
+    # HIỂN THỊ TRANG QLHP (GET without action)
+    elif request.method == 'GET' and 'action' not in request.GET:
+        lhp = models.LHP.objects.all()
+        context = {
+            'lhp': lhp
+        }        
+        return render(request, 'pages/qlihp.html', context)
+    
+    # Xử lý các request không hợp lệ
+    else:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Phương thức không được hỗ trợ'
+        }, status=405)
 
-    return render(request, 'pages/qlihp.html', context)
-
-###
 def history(request):
-    kqgd = models.LS.objects.select_related('mahp', 'masv').all()
+    ls = models.LS.objects.all()
     context = {
-        'kqgd': kqgd
+        'ls': ls
     }
     
     return render(request, 'pages/history.html', context)
@@ -210,157 +521,3 @@ def timing(request):
 
 def author(request):
     return render(request, 'pages/author.html')
-
-@require_http_methods(["POST"])
-def them_hoc_phan(request, mahp):
-    try:
-        # Lấy thông tin học phần
-        hp = models.HP.objects.get(mahp=mahp)
-        
-        # Lấy mã tài khoản từ session
-        matk = request.session.get('user_id')
-        
-        # Kiểm tra sinh viên có tồn tại không
-        try:
-            sinh_vien = models.TTSV.objects.get(matk=matk)
-        except models.TTSV.DoesNotExist:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Không tìm thấy thông tin sinh viên'
-            }, status=404)
-
-        # Kiểm tra xem đã đăng ký học phần này chưa
-        if models.LS.objects.filter(masv=sinh_vien, mahp=hp).exists():
-            return JsonResponse({
-                'status': 'error', 
-                'message': 'Bạn đã đăng ký học phần này rồi'
-            }, status=400)
-
-        # Tạo mã LS mới
-        import uuid
-        mals = f"LS{str(uuid.uuid4())[:6].upper()}"
-        
-        # Lấy lớp học phần đầu tiên của học phần này
-        lhp = models.LHP.objects.filter(mahp=hp).first()
-        if not lhp:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Không tìm thấy lớp học phần'
-            }, status=404)
-
-        # Tạo bản ghi mới trong LS
-        ls = models.LS.objects.create(
-            mals=mals,
-            hoatdong='Đăng ký',
-            masv=sinh_vien,
-            mahp=hp,
-            malhp=lhp,
-            trangthai='Chờ duyệt',
-            thoigian=timezone.now()
-        )
-        
-        return JsonResponse({
-            'status': 'success',
-            'message': 'Đã thêm học phần thành công',
-            'data': {
-                'mahp': hp.mahp,
-                'tenhp': hp.tenhp,
-                'sotc': hp.sotc,
-                'loai': hp.loai,
-                'giangvien': lhp.giangvien if lhp else None,
-                'lichhoc': lhp.lichhoc if lhp else None
-            }
-        })
-
-    except models.HP.DoesNotExist:
-        return JsonResponse({
-            'status': 'error',
-            'message': 'Không tìm thấy học phần'
-        }, status=404)
-    except Exception as e:
-        return JsonResponse({
-            'status': 'error',
-            'message': str(e)
-        }, status=500)
-    
-@require_http_methods(["POST"])
-def dang_ky_hoc_phan(request, mahp):
-    try:
-        # Parse dữ liệu JSON từ body của yêu cầu
-        data = json.loads(request.body)
-        malhp = data.get('malhp')
-        if not malhp:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Thiếu mã lớp học phần'
-            }, status=400)
-
-        # Lấy thông tin học phần
-        hp = models.HP.objects.get(mahp=mahp)
-
-        # Lấy thông tin lớp học phần dựa trên malhp
-        lhp = models.LHP.objects.get(malhp=malhp, mahp=hp)
-
-        # Lấy mã tài khoản từ session
-        matk = request.session.get('user_id')
-
-        # Kiểm tra sinh viên có tồn tại không
-        try:
-            sinh_vien = models.TTSV.objects.get(matk=matk)
-        except models.TTSV.DoesNotExist:
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Không tìm thấy thông tin sinh viên'
-            }, status=404)
-
-        # Kiểm tra xem đã đăng ký học phần này chưa
-        if models.LS.objects.filter(masv=sinh_vien, mahp=hp).exists():
-            return JsonResponse({
-                'status': 'error',
-                'message': 'Bạn đã đăng ký học phần này rồi'
-            }, status=400)
-
-        # Tạo mã LS mới
-        mals = f"LS{str(uuid.uuid4())[:6].upper()}"
-
-        # Tạo bản ghi mới trong LS
-        ls = models.LS.objects.create(
-            mals=mals,
-            hoatdong='Đăng ký',
-            masv=sinh_vien,
-            mahp=hp,
-            malhp=lhp,
-            trangthai='Chờ duyệt',
-            thoigian=timezone.now()
-        )
-
-        # Trả về phản hồi thành công
-        return JsonResponse({
-            'status': 'success',
-            'message': 'Đã đăng ký học phần thành công',
-            'data': {
-                'mahp': hp.mahp,
-                'tenhp': hp.tenhp,
-                'sotc': hp.sotc,
-                'loai': hp.loai,
-                'giangvien': lhp.giangvien,
-                'lichhoc': lhp.lichhoc,
-                'phonghoc': lhp.phonghoc
-            }
-        })
-
-    except models.HP.DoesNotExist:
-        return JsonResponse({
-            'status': 'error',
-            'message': 'Không tìm thấy học phần'
-        }, status=404)
-    except models.LHP.DoesNotExist:
-        return JsonResponse({
-            'status': 'error',
-            'message': 'Không tìm thấy lớp học phần'
-        }, status=404)
-    except Exception as e:
-        return JsonResponse({
-            'status': 'error',
-            'message': str(e)
-        }, status=500)
