@@ -1,12 +1,20 @@
-function search() {
-    const searchType = document.getElementById('searchType').value;
-    const searchInput = document.getElementById('searchInput').value;
-
-    alert(`Tìm kiếm theo ${searchType} với từ khóa: ${searchInput}`);
-    // Thêm logic tìm kiếm ở đây (gửi request đến server hoặc lọc dữ liệu trên client)
-}
+let originalTableData = [];
 
 document.addEventListener('DOMContentLoaded', function () {
+    // Store the original table data for filtering
+    const tableRows = Array.from(document.querySelectorAll('#hocphanTableBody tr'));
+    
+    // Save all the original rows to our global variable
+    originalTableData = tableRows.map(row => {
+        const columns = row.querySelectorAll('td');
+        if (columns.length < 9) return null;
+        
+        return {
+            element: row.cloneNode(true),
+            giangvien: columns[5].textContent
+        };
+    }).filter(item => item !== null);
+    
     // Hiển thị form thêm học phần
     function showAddForm() {
         const formContainer = document.getElementById('addFormContainer');
@@ -224,7 +232,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Gắn sự kiện cho nút tìm kiếm
     const searchBtn = document.querySelector('.search-btn');
     if (searchBtn) {
-        searchBtn.addEventListener('click', search);
+        searchBtn.addEventListener('click', filterData);
     }
 
     // Hàm lấy CSRF token từ cookie
@@ -249,3 +257,66 @@ document.addEventListener('DOMContentLoaded', function () {
     window.showEditForm = showEditForm;
     window.hideEditForm = hideEditForm;
 });
+
+
+function filterData() {
+    const searchType = document.getElementById('searchType').value; // Lấy loại tìm kiếm
+    const keywordValue = document.getElementById('searchInput').value.toLowerCase().trim();
+    const tableBody = document.getElementById('hocphanTableBody');
+    
+    // Xóa nội dung bảng hiện tại
+    tableBody.innerHTML = '';
+    
+    // Đếm số thứ tự
+    let counter = 1;
+    
+    // Lọc dữ liệu từ originalTableData
+    const filteredRows = originalTableData.filter(row => {
+        let match = false;
+        if (searchType === 'ma_hp') {
+            const maHP = row.element.querySelectorAll('td')[2].textContent.toLowerCase(); // Cột mã HP
+            match = maHP.includes(keywordValue);
+        } else if (searchType === 'ten_hp') {
+            const tenHP = row.element.querySelectorAll('td')[3].textContent.toLowerCase(); // Cột lớp HP (giả sử là tên HP)
+            match = tenHP.includes(keywordValue);
+        } else if (searchType === 'giang_vien') {
+            const giangVien = row.element.querySelectorAll('td')[6].textContent.toLowerCase(); // Cột Giảng viên
+            match = giangVien.includes(keywordValue);
+        }
+        return keywordValue === '' || match;
+    });
+    
+    // Thêm các hàng đã lọc vào bảng
+    filteredRows.forEach(row => {
+        const newRow = row.element.cloneNode(true);
+        newRow.querySelectorAll('td')[0].textContent = counter++;
+        tableBody.appendChild(newRow);
+    });
+    
+    // Hiển thị thông báo nếu không tìm thấy kết quả
+    if (filteredRows.length === 0) {
+        const noResultsRow = document.createElement('tr');
+        noResultsRow.innerHTML = '<td colspan="10" style="text-align: center;">Không tìm thấy kết quả phù hợp</td>';
+        tableBody.appendChild(noResultsRow);
+    }
+}
+
+function resetFilters() {
+    document.getElementById('searchInput').value = '';
+    filterData();
+}
+
+function showAllData() {
+    document.getElementById('searchInput').value = '';
+    
+    const tableBody = document.getElementById('hocphanTableBody');
+    tableBody.innerHTML = '';
+    
+    let counter = 1;
+    
+    originalTableData.forEach(row => {
+        const newRow = row.element.cloneNode(true);
+        newRow.querySelectorAll('td')[0].textContent = counter++;
+        tableBody.appendChild(newRow);
+    });
+}

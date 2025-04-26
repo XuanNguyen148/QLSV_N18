@@ -127,11 +127,13 @@ def ghi_danh(request):
     
     # HIỂN THỊ TRANG GHI DANH (GET without action)
     elif request.method == 'GET' and 'action' not in request.GET:
+        # is_student = phanquyen(request)
         hptc = models.HP.objects.filter(loai='Tự chọn')
         kqdk = models.LS.objects.all()
         context = {
             'hptc': hptc,
-            'kqdk': kqdk
+            'kqdk': kqdk,
+            # 'is_student': is_student,
         }
         return render(request, 'pages/ghi_danh.html', context)
     
@@ -152,17 +154,38 @@ def get_lophocphan(request):
         return JsonResponse(list(lophocphans), safe=False)
     return JsonResponse({'error': 'Không có mã học phần'}, status=400)
 
-def index(request):
-    return render(request, 'pages/login.html')
-
 def dashboard(request):
     # Kiểm tra session
     if not request.session.get('user_id'):
         return redirect('login')
+    
+    # Lấy mã tài khoản từ session
+    matk = request.session.get('user_id')
+    if not matk and request.method != 'GET':
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Chưa đăng nhập'
+        }, status=401)
+    
+    # Lấy sinh viên nếu đã đăng nhập
+    taikhoan = None
+    if matk:
+        try:
+            taikhoan = models.TaiKhoan.objects.get(matk=matk)
+        except models.TaiKhoan.DoesNotExist:
+            if request.method != 'GET' or 'action' in request.GET:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Không tìm thấy thông tin'
+                }, status=404)
+
+    is_student = taikhoan.vaitro == 'Người dùng' if taikhoan else False
+
         
     context = {
         'username': request.session.get('username'),
-        'show_notification': request.session.get('show_welcome', False)
+        'show_notification': request.session.get('show_welcome', False),
+        'is_student': is_student,
     }
     
     if 'show_welcome' in request.session:
@@ -204,7 +227,7 @@ def login_view(request):
             request.session['username'] = user.username
             request.session['show_welcome'] = True
             
-            return redirect('dashboard')
+            return redirect('ghi_danh')
             
         except models.CustomUser.DoesNotExist:
             debug_info['last_query'] = "Không tìm thấy tài khoản"
@@ -227,6 +250,12 @@ def logout_view(request):
     return redirect('login')
 
 def change_password(request):
+    
+    is_student = phanquyen(request)
+
+    context = {
+        'is_student': is_student
+    }
     if not request.session.get('user_id'):
         return redirect('login')
         
@@ -258,7 +287,7 @@ def change_password(request):
         except Exception as e:
             messages.error(request, f'Có lỗi xảy ra: {str(e)}')
     
-    return render(request, 'pages/change_password.html')
+    return render(request, 'pages/change_password.html', context)
 
 def dang_ky(request):
     # Xử lý các request khác nhau dựa vào method và query parameters
@@ -394,6 +423,7 @@ def dang_ky(request):
     
     # HIỂN THỊ TRANG ĐĂNG KÝ (GET without action)
     elif request.method == 'GET' and 'action' not in request.GET:
+        is_student = phanquyen(request)
         hpbb = models.HP.objects.filter(loai='Bắt buộc')
         hptc = models.HP.objects.filter(loai='Tự chọn')
         hphl = models.HP.objects.filter(loai='Bắt buộc')
@@ -404,7 +434,8 @@ def dang_ky(request):
             'hptc': hptc,
             'hphl': hphl,
             'lhp': lhp,
-            'kqdk': kqdk
+            'kqdk': kqdk,
+            'is_student': is_student,
         }
         return render(request, 'pages/register.html', context)
     
@@ -494,9 +525,11 @@ def qlihp(request):
         
     # HIỂN THỊ TRANG QLHP (GET without action)
     elif request.method == 'GET' and 'action' not in request.GET:
+        is_student = phanquyen(request)
         lhp = models.LHP.objects.all()
         context = {
-            'lhp': lhp
+            'lhp': lhp,
+            'is_student': is_student,
         }        
         return render(request, 'pages/qlihp.html', context)
     
@@ -508,16 +541,57 @@ def qlihp(request):
         }, status=405)
 
 def history(request):
+
     ls = models.LS.objects.all()
+    is_student = phanquyen(request)
+
     context = {
-        'ls': ls
+        'ls': ls,
+        'is_student': is_student
     }
-    
     return render(request, 'pages/history.html', context)
 
 def timing(request):
     # Xử lý logic cho trang Hẹn giờ đăng ký (nếu cần)
-    return render(request, 'pages/timing.html')
+    is_student = phanquyen(request)
+
+    context = {
+
+        'is_student': is_student,
+    }
+    return render(request, 'pages/timing.html', context)
 
 def author(request):
-    return render(request, 'pages/author.html')
+    is_student = phanquyen(request)
+
+    context = {
+        'is_student': is_student
+    }
+    return render(request, 'pages/author.html', context)
+
+def phanquyen(request):
+    
+    # Lấy mã tài khoản từ session
+    matk = request.session.get('user_id')
+    if not matk and request.method != 'GET':
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Chưa đăng nhập'
+        }, status=401)
+    
+    # Lấy sinh viên nếu đã đăng nhập
+    taikhoan = None
+    if matk:
+        try:
+            taikhoan = models.TaiKhoan.objects.get(matk=matk)
+        except models.TaiKhoan.DoesNotExist:
+            if request.method != 'GET' or 'action' in request.GET:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Không tìm thấy thông tin'
+                }, status=404)
+
+    is_student = taikhoan.vaitro == 'Người dùng' if taikhoan else False
+
+    return is_student
+
