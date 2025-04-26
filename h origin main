@@ -1,0 +1,264 @@
+[33mcommit 56b883bd2c80e52b3c2a97a4c4301df479ab18de[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Merge: 8b74737 a629475
+Author: Xuan <sonxuan2005@gmail.com>
+Date:   Sat Apr 26 23:59:08 2025 +0700
+
+    con lai hen gio, phan quyen
+
+[33mcommit 8b747377a2ff90a3be9ecd0d310a3bdc0fdf027c[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: Xuan <sonxuan2005@gmail.com>
+Date:   Sat Apr 26 23:52:17 2025 +0700
+
+    cap nhat thu vien
+
+[33mcommit a629475b2f442ddca422335456a2a02a735d7d9a[m[33m ([m[1;31morigin/phu2[m[33m, [m[1;32mphu2[m[33m)[m
+Author: Xuan <sonxuan2005@gmail.com>
+Date:   Sat Apr 26 23:48:32 2025 +0700
+
+    26/4 con lai hen gio, phan quyen
+
+[33mcommit bbc5b77f47d54b3a14c6bbc31e5dc77ba0e20721[m
+Author: Xuan <sonxuan2005@gmail.com>
+Date:   Sat Apr 26 19:04:02 2025 +0700
+
+    - phan quyen, hen gio
+
+[33mcommit e5ac4acd86f88636b7f0ffe1840de566f8b29d69[m
+Author: Xuan <sonxuan2005@gmail.com>
+Date:   Sat Apr 26 15:30:16 2025 +0700
+
+    va
+
+[33mcommit c269432346978574f895efae1d82502289599cfb[m
+Author: XuanNguyentimrp <sonxuan2005@gmail.com>
+Date:   Thu Apr 24 22:00:30 2025 +0700
+
+    Update README.md
+
+[33mcommit bb3bc1a270d5511ca7e7a7450cf2272eeb4ee08d[m
+Author: Xuan <sonxuan2005@gmail.com>
+Date:   Thu Apr 24 21:54:48 2025 +0700
+
+    full
+
+[33mcommit 4f9fa89ca8cdcc9c84c2e59033379c7bb67294f5[m
+Author: Xuan <sonxuan2005@gmail.com>
+Date:   Thu Apr 24 21:53:02 2025 +0700
+
+    gd, dk, qlhp, ls
+
+[33mcommit 5b8b7d41f46017b8b6ba9a900fe735b4b9c8bd38[m
+Merge: c71a1c3 8ed7b74
+Author: Xuan <sonxuan2005@gmail.com>
+Date:   Sun Apr 20 00:45:38 2025 +0700
+
+    gop voi ban chinh sua moi
+
+[33mcommit c71a1c3262747a58e9718501d79743dcbc2d1ee8[m
+Author: Nguyen X <waitnerminute1412@gmail.com>
+Date:   Sun Apr 20 00:27:58 2025 +0700
+
+    thay doi #
+
+[33mcommit 8ed7b749599074c79f8751178618f067ee500c50[m[33m ([m[1;31morigin/nhanhphu[m[33m)[m
+Author: NGUYENDIEUVY <151431391+NGUYENDIEUVY@users.noreply.github.com>
+Date:   Sat Apr 19 00:44:44 2025 +0700
+
+    update phan quyen
+
+[33mcommit 79b1e78518167d8579edd92a640fab0b8c1182a3[m
+Merge: ecea3c9 39b81a2
+Author: NGUYENDIEUVY <151431391+NGUYENDIEUVY@users.noreply.github.com>
+Date:   Sat Apr 19 00:11:53 2025 +0700
+
+    Merge branch 'main' of https://github.com/XuanNguyen148/QLSV_N18
+    :wq
+
+[33mcommit ecea3c9aceab75faca5c8b5d226ea79aae1d0a51[m
+Author: NGUYENDIEUVY <151431391+NGUYENDIEUVY@users.noreply.github.com>
+Date:   Sat Apr 19 00:11:30 2025 +0700
+
+    update frontend
+
+[33mcommit 39b81a2fdd5ac8bcb65c75f2dc9c88a1a0411597[m
+Author: Nguyen X <waitnerminute1412@gmail.com>
+Date:   Sat Apr 12 12:01:57 2025 +0700
+
+    ****
+
+[33mcommit 90d765db790e8cb95d343b9d815ca747b53eacde[m
+Merge: 8eba59a 203f8b4
+Author: Nguyen X <waitnerminute1412@gmail.com>
+Date:   Sat Apr 12 11:49:52 2025 +0700
+
+    Merge branch 'main' of https://github.com/nguyencmplx/QLSV_N18
+    ****
+
+[33mcommit 8eba59a16f625257df943a10c3f784b87f93f1cc[m
+Author: Nguyen X <waitnerminute1412@gmail.com>
+Date:   Sat Apr 12 11:48:32 2025 +0700
+
+    ****
+
+[33mcommit 203f8b41cc7504c74909b845d508286aeb20ad62[m
+Author: XuanNguyentimrp <sonxuan2005@gmail.com>
+Date:   Sat Apr 12 11:47:47 2025 +0700
+
+    ####
+
+[33mcommit d3f61163c808fecc517ed8d8eb0ca950ee095512[m
+Author: NGUYENDIEUVY <151431391+NGUYENDIEUVY@users.noreply.github.com>
+Date:   Sat Apr 12 06:41:51 2025 +0700
+
+    them cac chuc nang
+
+[33mcommit e4a31acb4d2f03d9e38b31f8f6afba0b85a2f964[m
+Author: NGUYENDIEUVY <151431391+NGUYENDIEUVY@users.noreply.github.com>
+Date:   Sat Apr 12 05:00:58 2025 +0700
+
+    them cac chuc nang
+
+[33mcommit 5393668d4fad496ea169fe1ce52b5add8dbb1052[m
+Author: Nguyen X <waitnerminute1412@gmail.com>
+Date:   Fri Apr 11 02:43:40 2025 +0700
+
+    pas
+
+[33mcommit a059b063df6c92302fb4845c6474c6cc43e84da9[m
+Author: Nguyen X <waitnerminute1412@gmail.com>
+Date:   Fri Apr 11 02:20:03 2025 +0700
+
+    dang xuat, quen mk
+
+[33mcommit 400a7e60e7690a6c465acff507617ca1010634c0[m
+Author: Nguyen X <waitnerminute1412@gmail.com>
+Date:   Thu Apr 10 23:49:53 2025 +0700
+
+    sua duong dan csdl
+
+[33mcommit 4ff89dacfaf3740ccc8b2683e82929796cc3a87d[m
+Merge: 37a8c44 850a499
+Author: NGUYENDIEUVY <151431391+NGUYENDIEUVY@users.noreply.github.com>
+Date:   Thu Apr 10 23:22:29 2025 +0700
+
+    Merge branch 'main' of https://github.com/XuanNguyen148/QLSV_N18
+    gop 1
+
+[33mcommit 37a8c44177ed675736628d8e9e6de7c800e2d91b[m
+Author: NGUYENDIEUVY <151431391+NGUYENDIEUVY@users.noreply.github.com>
+Date:   Thu Apr 10 23:22:01 2025 +0700
+
+    abcababc
+
+[33mcommit 850a49925837f6ce48375a697a8e15ec03ee0fcc[m
+Merge: ce9f24f 5ebc68d
+Author: Nguyen X <waitnerminute1412@gmail.com>
+Date:   Thu Apr 10 22:51:00 2025 +0700
+
+    Merge branch 'main' of https://github.com/nguyencmplx/QLSV_N18
+    merge
+
+[33mcommit ce9f24fe8dbcd295349b72b45c6b7c1aace261c5[m
+Author: Nguyen X <waitnerminute1412@gmail.com>
+Date:   Thu Apr 10 22:50:31 2025 +0700
+
+    doi csdl
+
+[33mcommit 5ebc68d3f2d854ff4108ef3a0c944b279a6b02e9[m
+Author: XuanNguyentimrp <sonxuan2005@gmail.com>
+Date:   Thu Apr 10 22:41:24 2025 +0700
+
+    CSDL
+
+[33mcommit ee2969a7c4fb2f5d23e05692267aaeb6d7577326[m
+Author: NGUYENDIEUVY <151431391+NGUYENDIEUVY@users.noreply.github.com>
+Date:   Thu Apr 10 15:22:49 2025 +0700
+
+    v2
+
+[33mcommit 508e9970ef3f32ca41d89d4f908e6d95e6751d3d[m
+Author: XuanNguyentimrp <sonxuan2005@gmail.com>
+Date:   Thu Apr 10 15:16:03 2025 +0700
+
+    Delete
+
+[33mcommit cd40513083781de302ffce0f5e86da8546b322b8[m
+Merge: ff8f2b4 1e452df
+Author: XVTintetioal <waitnerminute1412@gmail.com>
+Date:   Thu Apr 10 14:58:25 2025 +0700
+
+    Merge pull request #1 from XuanNguyen148/phu
+    
+    Phu
+
+[33mcommit 1e452dfb1440147b6cf05e120138c4ad61c767db[m[33m ([m[1;31morigin/phu[m[33m, [m[1;32mphu[m[33m)[m
+Author: Nguyen X <waitnerminute1412@gmail.com>
+Date:   Thu Apr 10 14:54:53 2025 +0700
+
+    v1
+
+[33mcommit 011f790c84a790145a6d25a2a4b063a7141ce6b8[m
+Author: Nguyen X <waitnerminute1412@gmail.com>
+Date:   Thu Apr 10 14:50:40 2025 +0700
+
+    v1
+
+[33mcommit f9a665d2c93bb4b1a1038ba48d98960f18bf63da[m
+Author: XuanNguyentimrp <sonxuan2005@gmail.com>
+Date:   Thu Apr 10 14:45:35 2025 +0700
+
+    .
+
+[33mcommit 7cbd64a0b8e2f6ea51407a1678522a7f6cd76bb4[m
+Author: XuanNguyentimrp <sonxuan2005@gmail.com>
+Date:   Thu Apr 10 14:45:24 2025 +0700
+
+    .
+
+[33mcommit 5324fd2528b4a92c992365952761c01e00a7fb76[m
+Author: XuanNguyentimrp <sonxuan2005@gmail.com>
+Date:   Thu Apr 10 14:45:13 2025 +0700
+
+    .
+
+[33mcommit ab89108ab352e5ba95f368f52b0b5f63f7489969[m
+Author: XuanNguyentimrp <sonxuan2005@gmail.com>
+Date:   Thu Apr 10 14:44:50 2025 +0700
+
+    ,
+
+[33mcommit ff8f2b44810c542c82127cf5f44f45af2685a44f[m
+Author: XuanNguyentimrp <sonxuan2005@gmail.com>
+Date:   Thu Apr 10 14:43:40 2025 +0700
+
+    Delete
+
+[33mcommit 5ec065691363ff5f12048f06b440842e6583ac19[m
+Author: NGUYENDIEUVY <151431391+NGUYENDIEUVY@users.noreply.github.com>
+Date:   Thu Apr 10 14:18:23 2025 +0700
+
+    Add files via upload
+
+[33mcommit f868c30c867405ecd0c5858b12550327bb6de093[m
+Author: NGUYENDIEUVY <151431391+NGUYENDIEUVY@users.noreply.github.com>
+Date:   Thu Apr 10 14:17:36 2025 +0700
+
+    Add files via upload
+
+[33mcommit 837dc63a7780f574645bc3153dc5b58ecaebaa14[m
+Author: Nguyen X <waitnerminute1412@gmail.com>
+Date:   Thu Apr 10 07:56:57 2025 +0700
+
+    may 1
+
+[33mcommit 74df66f1f13bb96fd434548c4a7f955e6dc29bd7[m
+Author: XuanNguyentimrp <sonxuan2005@gmail.com>
+Date:   Thu Apr 10 07:44:22 2025 +0700
+
+    xuan libs
+
+[33mcommit 7601b2446be92174465df217fcdd266d11c5b1d0[m
+Author: XuanNguyentimrp <sonxuan2005@gmail.com>
+Date:   Thu Apr 10 05:53:43 2025 +0700
+
+    Initial commit
