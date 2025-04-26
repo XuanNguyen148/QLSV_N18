@@ -26,14 +26,15 @@
                 <option value="2021-2022">2021-2022</option>
             </select>
             <select id="semesterSelect" class="search-select">
-                <option value="1">Học kỳ 1</option>
-                <option value="2">Học kỳ 2</option>
-                <option value="3">Học kỳ 3</option>
-                <option value="4">Học kỳ 4</option>
-                <option value="5">Học kỳ 5</option>
-                <option value="6">Học kỳ 6</option>
-                <option value="7">Học kỳ 7</option>
-                <option value="8">Học kỳ 8</option>
+                <option value="">Tất cả</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
             </select>
             <input type="text" id="keywordInput" class="search-input" placeholder="Nhập từ khóa (Tên/Mã HP)...">
             <button class="search-btn" onclick="filterData()">Tìm kiếm</button>
@@ -45,6 +46,7 @@
                 <tr>
                     <th>STT</th>
                     <th>Hành động</th> <!-- Thêm cột "Hành động" -->
+                    <th>Học kỳ</th>
                     <th>Trạng thái</th>
                     <th>Mã HP</th>
                     <th>Tên HP</th>
@@ -59,6 +61,7 @@
                 <tr style="background-color: #ff6600; color: white;"> <!-- Dòng màu cam -->
                     <td>{{ forloop.counter }}</td>
                     <td>{{ ls.hoatdong }}</td> <!-- Nội dung cột "Hành động" -->
+                    <td>{{ ls.mahp.hocky }}</th>
                     <td>Hủy đăng ký</td>
                     <td>{{ ls.mahp.mahp }}</td>
                     <td>{{ ls.mahp.tenhp }}</td>

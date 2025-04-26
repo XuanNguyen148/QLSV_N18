@@ -66,6 +66,7 @@ class HP(models.Model):
     tenhp = models.CharField(max_length=10)
     sotc = models.IntegerField()
     loai = models.CharField(max_length=20)
+    hocky = models.IntegerField()
     manganh = models.ForeignKey('NH', on_delete=models.SET_NULL, null=True, blank=True, db_column='manganh')
 
     class Meta:
