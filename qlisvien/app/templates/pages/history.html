@@ -45,31 +45,35 @@
             <thead>
                 <tr>
                     <th>STT</th>
-                    <th>Hành động</th> <!-- Thêm cột "Hành động" -->
+                    <th>Hành động</th>
                     <th>Học kỳ</th>
                     <th>Trạng thái</th>
                     <th>Mã HP</th>
                     <th>Tên HP</th>
                     <th>Mã LHP</th>
                     <th>Số TC</th>
+                    {% if not is_student %}
                     <th>Thao tác bởi</th>
+                    {% endif %}
                     <th>Thời gian</th>
                 </tr>
             </thead>
             <tbody id="historyTableBody">
                 {% for ls in ls %}
-                <tr style="background-color: #ff6600; color: white;"> <!-- Dòng màu cam -->
+                <tr style="background-color: #ff6600; color: white;">
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ ls.hoatdong }}</td> <!-- Nội dung cột "Hành động" -->
-                    <td>{{ ls.mahp.hocky }}</th>
+                    <td>{{ ls.hoatdong }}</td>
+                    <td>{{ ls.mahp.hocky }}</td>
                     <td>Hủy đăng ký</td>
                     <td>{{ ls.mahp.mahp }}</td>
                     <td>{{ ls.mahp.tenhp }}</td>
                     <td>{{ ls.malhp.malhp }}</td>
                     <td>{{ ls.mahp.sotc }}</td>
+                    {% if not is_student %}
                     <td>{{ ls.masv.masv }}</td>
+                    {% endif %}
                     <td>{{ ls.thoigian }}</td>
-                </tr>                
+                </tr>
                 {% endfor %}
             </tbody>
         </table>

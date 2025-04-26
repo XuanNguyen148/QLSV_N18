@@ -7,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // Save all the original rows to our global variable
     originalTableData = tableRows.map(row => {
         const columns = row.querySelectorAll('td');
-        if (columns.length < 10) return null;
         
         return {
             element: row.cloneNode(true),
@@ -45,6 +44,11 @@ function filterData() {
     // Add filtered rows to the table
     filteredRows.forEach(row => {
         const newRow = row.element.cloneNode(true);
+        const actionCell = newRow.querySelector('.action-column');
+        if (actionCell) {
+            // Kiểm tra điều kiện của bạn ở đây
+            actionCell.style.display = shouldShowAction ? '' : 'none';
+        }
         newRow.querySelectorAll('td')[0].textContent = counter++;
         tableBody.appendChild(newRow);
     });

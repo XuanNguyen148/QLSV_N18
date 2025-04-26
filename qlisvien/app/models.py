@@ -117,3 +117,4 @@ class NH(models.Model):
     class Meta:
         db_table = 'nganhhoc'
         managed = False
+
