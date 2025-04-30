@@ -29,7 +29,6 @@
                 <tr>
                     <th>STT</th>
                     <th>Mã ngành</th>
-                    <th>Mã HP</th>
                     <th>Lớp HP</th>
                     <th>STC</th>
                     <th>Loại</th>
@@ -43,7 +42,6 @@
                 <tr>
                     <td>{{ forloop.counter }}</td>
                     <td>{{ lhp.mahp.manganh.manganh }}</td>
-                    <td>{{ lhp.mahp.mahp }}</td>
                     <td>{{ lhp.malhp }}</td>
                     <td>{{ lhp.mahp.sotc }}</td>
                     <td>{{ lhp.mahp.loai }}</td>
@@ -116,10 +114,7 @@
             <h2>Sửa học phần</h2>
             <label for="editMaNganh">Mã ngành:</label>
             <input type="text" id="editMaNganh" name="maNganh" required>
-
-            <label for="editMaHP">Mã học phần:</label>
-            <input type="text" id="editMaHP" name="maHP" required>
-
+            
             <label for="editLopHP">Lớp học phần:</label>
             <input type="text" id="editLopHP" name="lopHP" required>
 

@@ -15,16 +15,6 @@
     <div class="search-and-table-box">
         <!-- Thanh lọc -->
         <div class="search-bar">
-            <select id="yearSelect" class="search-select">
-                <option value="2028-2029">2028-2029</option>
-                <option value="2027-2028">2027-2028</option>
-                <option value="2026-2027">2026-2027</option>
-                <option value="2025-2026">2025-2026</option>
-                <option value="2024-2025" selected>2024-2025</option> <!-- Năm hiện tại được chọn mặc định -->
-                <option value="2023-2024">2023-2024</option>
-                <option value="2022-2023">2022-2023</option>
-                <option value="2021-2022">2021-2022</option>
-            </select>
             <select id="semesterSelect" class="search-select">
                 <option value="">Tất cả</option>
                 <option value="1">1</option>
@@ -48,7 +38,6 @@
                     <th>Hành động</th>
                     <th>Học kỳ</th>
                     <th>Trạng thái</th>
-                    <th>Mã HP</th>
                     <th>Tên HP</th>
                     <th>Mã LHP</th>
                     <th>Số TC</th>
@@ -65,7 +54,6 @@
                     <td>{{ ls.hoatdong }}</td>
                     <td>{{ ls.mahp.hocky }}</td>
                     <td>Hủy đăng ký</td>
-                    <td>{{ ls.mahp.mahp }}</td>
                     <td>{{ ls.mahp.tenhp }}</td>
                     <td>{{ ls.malhp.malhp }}</td>
                     <td>{{ ls.mahp.sotc }}</td>

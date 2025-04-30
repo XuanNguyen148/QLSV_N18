@@ -533,6 +533,12 @@ def qlihp(request):
         }        
         return render(request, 'pages/qlihp.html', context)
     
+    elif request.method == 'DELETE':
+        malhp = request.GET.get('malhp')
+        lhp = models.LHP.objects.filter(malhp=malhp)
+        lhp.delete()
+        return JsonResponse({'status': 'success', 'message': 'Học phần đã được xóa'})
+    
     # Xử lý các request không hợp lệ
     else:
         return JsonResponse({

@@ -79,7 +79,7 @@
             <thead>
                 <tr>
                     <th>STT</th>
-                    <th>Mã học phần</th>
+                    <th>Mã lớp học phần</th>
                     <th>Tên học phần</th>
                     <th>STC</th>
                     <th>Giảng viên</th>
@@ -91,7 +91,7 @@
                 {% for hp in kqdk %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ hp.mahp.mahp }}</td>
+                    <td>{{ hp.malhp.malhp }}</td>
                     <td>{{ hp.mahp.tenhp }}</td>
                     <td>{{ hp.mahp.sotc }}</td>
                     <td>{{ hp.malhp.giangvien }}</td>

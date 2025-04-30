@@ -70,10 +70,12 @@ CREATE TABLE hocphan (
 CREATE TABLE lophocphan (
     malhp VARCHAR(10) PRIMARY KEY,
     mahp VARCHAR(8),
+    manganh VARCHAR(4),
     giangvien VARCHAR(100),
     sosvtoida INT,
     lichhoc TEXT,
-    phonghoc varchar(50),
+    phonghoc varchar(50),    
+    FOREIGN KEY (manganh) REFERENCES nganhhoc(manganh),
     FOREIGN KEY (mahp) REFERENCES hocphan(mahp)
 );
 
