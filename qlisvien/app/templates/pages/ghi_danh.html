@@ -51,14 +51,14 @@
             </thead>
             <tbody>
                 <tr>
-                    {% for hp in kqdk %}
+                    {% for item in kqdk %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ hp.mahp.loai }}</td>
-                        <td>{{ hp.mahp.mahp }}</td>
-                        <td>{{ hp.mahp.tenhp }}</td>
-                        <td>{{ hp.mahp.sotc }}</td>
-                        <td><button class="btn-action btn-huy" data-mahp="{{ hp.mahp.mahp }}">Hủy</button></td>
+                        <td>{{ item.hp.loai }}</td>
+                        <td>{{ item.ttdk.mamh }}</td>
+                        <td>{{ item.hp.tenhp }}</td>
+                        <td>{{ item.hp.sotc }}</td>
+                        <td><button class="btn-action btn-huy" data-mahp="{{ item.ttdk.mamh }}">Hủy</button></td>
                     </tr>
                     {% endfor %}
             </tbody>

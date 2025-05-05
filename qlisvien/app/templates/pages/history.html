@@ -35,9 +35,9 @@
             <thead>
                 <tr>
                     <th>STT</th>
+                    <th>Trạng thái</th>
                     <th>Hành động</th>
                     <th>Học kỳ</th>
-                    <th>Trạng thái</th>
                     <th>Tên HP</th>
                     <th>Mã LHP</th>
                     <th>Số TC</th>
@@ -48,19 +48,19 @@
                 </tr>
             </thead>
             <tbody id="historyTableBody">
-                {% for ls in ls %}
+                {% for item in kqdk %}
                 <tr style="background-color: #ff6600; color: white;">
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ ls.hoatdong }}</td>
-                    <td>{{ ls.mahp.hocky }}</td>
-                    <td>Hủy đăng ký</td>
-                    <td>{{ ls.mahp.tenhp }}</td>
-                    <td>{{ ls.malhp.malhp }}</td>
-                    <td>{{ ls.mahp.sotc }}</td>
+                    <td>{{ item.ls.hoatdong }}</td>
+                    <td>{{ item.ls.trangthai }}</td>
+                    <td>{{ item.lhp.mahp.hocky }}</td>
+                    <td>{{ item.lhp.mahp.tenhp }}</td>
+                    <td>{{ item.lhp.malhp }}</td>
+                    <td>{{ item.lhp.mahp.sotc }}</td>
                     {% if not is_student %}
-                    <td>{{ ls.masv.masv }}</td>
+                    <td>{{ item.ls.masv.masv }}</td>
                     {% endif %}
-                    <td>{{ ls.thoigian }}</td>
+                    <td>{{ item.ls.thoigian }}</td>
                 </tr>
                 {% endfor %}
             </tbody>

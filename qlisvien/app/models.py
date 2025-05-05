@@ -89,8 +89,7 @@ class LS(models.Model):
     mals = models.CharField(primary_key=True, max_length=9)
     hoatdong = models.CharField(max_length=20)
     masv = models.ForeignKey('TTSV', on_delete=models.CASCADE, db_column='masv')
-    mahp = models.ForeignKey('HP', on_delete=models.CASCADE, db_column='mahp')
-    malhp = models.ForeignKey('LHP', on_delete=models.CASCADE, db_column='malhp')
+    mamh = models.CharField(max_length=10)
     trangthai = models.CharField(max_length=20)
     thoigian = models.DateTimeField(auto_now_add=True)
 
@@ -118,3 +117,24 @@ class NH(models.Model):
         db_table = 'nganhhoc'
         managed = False
 
+class TTDK(models.Model):
+    id = models.AutoField(primary_key=True)
+    masv = models.ForeignKey('TTSV', on_delete=models.DO_NOTHING, db_column='masv')
+    mamh = models.CharField(max_length=10)
+    hoatdong = models.CharField(max_length=10)
+    trangthai = models.CharField(max_length=20)
+    mals = models.ForeignKey('LS', on_delete=models.DO_NOTHING, db_column='mals')
+
+    class Meta:
+        db_table = 'trangthaidk'
+        managed = False
+
+class TM(models.Model):
+    malich = models.CharField(max_length=9, primary_key=True)
+    batdau = models.DateTimeField()
+    ketthuc = models.DateTimeField()
+    loaidangky = models.CharField(max_length=20)
+
+    class Meta:
+        db_table = 'lichhen'
+        managed = False

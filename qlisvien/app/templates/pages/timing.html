@@ -3,10 +3,6 @@
 
 {% block title %}Hẹn giờ đăng ký{% endblock %}
 
-{% block add_css %}
-    <link rel="stylesheet" href="{% static 'css/timing.css' %}">
-{% endblock %}
-
 {% block content %}
 <div class="content">
     <h1>Hẹn giờ đăng ký</h1>
@@ -15,44 +11,147 @@
         <!-- Đăng ký học phần -->
         <div class="timing-box">
             <h2>Đăng ký học phần</h2>
-            <div class="timing-controls">
-                <div class="time-input">
-                    <label>Thời gian bắt đầu:</label>
-                    <input type="datetime-local" id="startTimeHP" name="startTimeHP">
+            <form class="timing-form" data-type="register">
+                <div class="timing-controls">
+                    <div class="time-input">
+                        <label>Thời gian bắt đầu:</label>
+                        <input type="datetime-local" name="start_time" required
+                               value="{{ timings.register.start_time|date:'Y-m-d\TH:i' }}">
+                    </div>
+                    <div class="time-input">
+                        <label>Thời gian kết thúc:</label>
+                        <input type="datetime-local" name="end_time" required
+                               value="{{ timings.register.end_time|date:'Y-m-d\TH:i' }}">
+                    </div>
+                    <div class="status">
+                        Trạng thái: <span class="status-badge {% if timings.register.is_active %}active{% else %}inactive{% endif %}">
+                            {{ timings.register.is_active|yesno:"Đang hoạt động,Chưa kích hoạt" }}
+                        </span>
+                    </div>
+                    <button type="submit" class="save-btn">Lưu thay đổi</button>
                 </div>
-                <div class="time-input">
-                    <label>Thời gian kết thúc:</label>
-                    <input type="datetime-local" id="endTimeHP" name="endTimeHP">
-                </div>
-                <div class="status">
-                    Trạng thái: <span class="status-badge inactive">Chưa kích hoạt</span>
-                </div>
-                <button class="save-btn" onclick="saveTimingHP()">Lưu thay đổi</button>
-            </div>
+            </form>
         </div>
 
         <!-- Đăng ký ghi danh -->
         <div class="timing-box">
             <h2>Đăng ký ghi danh</h2>
-            <div class="timing-controls">
-                <div class="time-input">
-                    <label>Thời gian bắt đầu:</label>
-                    <input type="datetime-local" id="startTimeGD" name="startTimeGD">
+            <form class="timing-form" data-type="enrollment">
+                <div class="timing-controls">
+                    <div class="time-input">
+                        <label>Thời gian bắt đầu:</label>
+                        <input type="datetime-local" name="start_time" required
+                               value="{{ timings.enrollment.start_time|date:'Y-m-d\TH:i' }}">
+                    </div>
+                    <div class="time-input">
+                        <label>Thời gian kết thúc:</label>
+                        <input type="datetime-local" name="end_time" required
+                               value="{{ timings.enrollment.end_time|date:'Y-m-d\TH:i' }}">
+                    </div>
+                    <div class="status">
+                        Trạng thái: <span class="status-badge {% if timings.enrollment.is_active %}active{% else %}inactive{% endif %}">
+                            {{ timings.enrollment.is_active|yesno:"Đang hoạt động,Chưa kích hoạt" }}
+                        </span>
+                    </div>
+                    <button type="submit" class="save-btn">Lưu thay đổi</button>
                 </div>
-                <div class="time-input">
-                    <label>Thời gian kết thúc:</label>
-                    <input type="datetime-local" id="endTimeGD" name="endTimeGD">
-                </div>
-                <div class="status">
-                    Trạng thái: <span class="status-badge inactive">Chưa kích hoạt</span>
-                </div>
-                <button class="save-btn" onclick="saveTimingGD()">Lưu thay đổi</button>
-            </div>
+            </form>
         </div>
     </div>
 </div>
+
+<script>
+document.querySelectorAll('.timing-form').forEach(form => {
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData();
+        formData.append('type', this.dataset.type);
+        formData.append('start_time', this.querySelector('[name="start_time"]').value);
+        formData.append('end_time', this.querySelector('[name="end_time"]').value);
+        
+        fetch('{% url "timing" %}', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert('Đã lưu thời gian thành công');
+                location.reload();
+            } else {
+                alert('Lỗi: ' + data.message);
+            }
+        })
+        .catch(error => {
+            alert('Đã xảy ra lỗi: ' + error);
+        });
+    });
+});
+</script>
 {% endblock %}
 
-{% block add_js %}
-    <script src="{% static 'js/timing.js' %}"></script>
+{% block add_css %}
+<style>
+.timing-container {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.timing-box {
+    background: #fff;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.timing-controls {
+    display: grid;
+    gap: 15px;
+}
+
+.time-input {
+    display: grid;
+    gap: 5px;
+}
+
+.time-input input {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.status-badge.active {
+    background: #4CAF50;
+    color: white;
+}
+
+.status-badge.inactive {
+    background: #f44336;
+    color: white;
+}
+
+.save-btn {
+    background: #2196F3;
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.save-btn:hover {
+    background: #1976D2;
+}
+</style>
 {% endblock %}

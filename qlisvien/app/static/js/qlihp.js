@@ -7,45 +7,9 @@ document.addEventListener('DOMContentLoaded', function () {
         const columns = row.querySelectorAll('td');
         return {
             element: row.cloneNode(true),
-            giangvien: columns[5].textContent
+            giangvien: columns[6].textContent
         };
     }).filter(item => item !== null);
-
-    const tableBody = document.getElementById('hocphanTableBody');
-
-    // Gắn sự kiện click cho tableBody (delegation sự kiện)
-    tableBody.addEventListener('click', function (event) {
-        if (event.target.classList.contains('edit-btn')) {
-            const row = event.target.closest('tr'); // Lấy dòng chứa nút "Sửa"
-            const rowData = {
-                maNganh: row.children[1].textContent.trim(),
-                lopHP: row.children[2].textContent.trim(),
-                stc: row.children[3].textContent.trim(),
-                loai: row.children[4].textContent.trim() === 'Bắt buộc' ? 'bat_buoc' : 'tu_chon',
-                giangVien: row.children[5].textContent.trim(),
-                hocKy: "",
-                lichHoc: "",
-                soSVToiDa: ""
-            };
-
-            // Trích xuất thông tin từ cột "Thông tin"
-            const infoCell = row.children[6];
-            if (infoCell) {
-                const infoParts = infoCell.innerHTML.split('<p>');
-                if (infoParts.length > 1) {
-                    rowData.soSVToiDa = infoParts[1].replace('Tối đa: ', '').replace(' sinh viên</p>', '').trim();
-                }
-                if (infoParts.length > 2) {
-                    rowData.lichHoc = infoParts[2].replace('Lịch học: ', '').replace('</p>', '').trim();
-                }
-                if (infoParts.length > 3) {
-                    rowData.phongHoc = infoParts[3].replace('Phòng học: ', '').replace('</p>', '').trim();
-                }
-            }
-
-            showEditForm(rowData);
-        }
-    });
 });
     
 // Hiển thị form thêm học phần
@@ -262,16 +226,16 @@ document.querySelectorAll('.edit-btn').forEach((button) => {
         const rowData = {
             maNganh: row.children[1].textContent.trim(),
             lopHP: row.children[2].textContent.trim(),
-            stc: row.children[3].textContent.trim(),
-            loai: row.children[4].textContent.trim() === 'Bắt buộc' ? 'bat_buoc' : 'tu_chon',
-            giangVien: row.children[5].textContent.trim(),
+            stc: row.children[4].textContent.trim(),
+            loai: row.children[5].textContent.trim() === 'Bắt buộc' ? 'bat_buoc' : 'tu_chon',
+            giangVien: row.children[6].textContent.trim(),
             hocKy: "", // Default values if not available
             lichHoc: "",
             soSVToiDa: ""
         };
         
         // Trích xuất thông tin từ cột "Thông tin"
-        const infoCell = row.children[6];
+        const infoCell = row.children[7];
         if (infoCell) {
             const infoParts = infoCell.innerHTML.split('<p>');
             if (infoParts.length > 1) {
@@ -307,13 +271,13 @@ function filterData() {
     const filteredRows = originalTableData.filter(row => {
         let match = false;
         if (searchType === 'ma_hp') {
-            const maHP = row.element.querySelectorAll('td')[2].textContent.toLowerCase(); // Cột mã HP
-            match = maHP.includes(keywordValue);
+            const maLHP = row.element.querySelectorAll('td')[2].textContent.toLowerCase(); // Cột mã LHP
+            match = maLHP.includes(keywordValue);
         } else if (searchType === 'ten_hp') {
-            const tenHP = row.element.querySelectorAll('td')[3].textContent.toLowerCase(); // Cột lớp HP (giả sử là tên HP)
+            const tenHP = row.element.querySelectorAll('td')[3].textContent.toLowerCase(); // Cột lớp HP
             match = tenHP.includes(keywordValue);
         } else if (searchType === 'giang_vien') {
-            const giangVien = row.element.querySelectorAll('td')[5].textContent.toLowerCase(); // Cột Giảng viên
+            const giangVien = row.element.querySelectorAll('td')[6].textContent.toLowerCase(); // Cột Giảng viên
             match = giangVien.includes(keywordValue);
         }
         return keywordValue === '' || match;

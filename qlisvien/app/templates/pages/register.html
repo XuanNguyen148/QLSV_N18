@@ -88,17 +88,17 @@
                 </tr>
             </thead>
             <tbody>
-                {% for hp in kqdk %}
+                {% for item in kqdk %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ hp.malhp.malhp }}</td>
-                    <td>{{ hp.mahp.tenhp }}</td>
-                    <td>{{ hp.mahp.sotc }}</td>
-                    <td>{{ hp.malhp.giangvien }}</td>
-                    <td>{{ hp.malhp.phonghoc }}</td>
+                    <td>{{ item.ttdk.mamh }}</td>
+                    <td>{{ item.lhp.mahp.tenhp }}</td>
+                    <td>{{ item.lhp.mahp.sotc }}</td>
+                    <td>{{ item.lhp.giangvien }}</td>
+                    <td>{{ item.lhp.phonghoc }}</td>
                     <td>
-                        <button class="cancel-btn btn-huy" data-mahp="{{ hp.mahp.mahp }}">Hủy</button>
-                        <button class="register-btn" data-ma-hoc-phan="{{ hp.mahp.mahp }}">Chuyển lớp</button>
+                        <button class="cancel-btn btn-huy" data-mahp="{{ item.ttdk.mamh }}">Hủy</button>
+                        <button class="register-btn" data-ma-hoc-phan="{{ item.lhp.mahp.mahp }}">Chuyển lớp</button>
                     </td>
                 </tr>
                 {% endfor %}

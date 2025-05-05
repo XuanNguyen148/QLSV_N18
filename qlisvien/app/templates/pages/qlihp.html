@@ -14,7 +14,7 @@
         <!-- Thanh tìm kiếm -->
         <div class="search-bar">
             <select id="searchType" class="search-select">
-                <option value="ma_hp">Mã học phần</option>
+                <option value="ma_hp">Mã lớp học phần</option>
                 <option value="ten_hp">Tên học phần</option>
                 <option value="giang_vien">Giảng viên</option>
             </select>
@@ -29,7 +29,8 @@
                 <tr>
                     <th>STT</th>
                     <th>Mã ngành</th>
-                    <th>Lớp HP</th>
+                    <th>LHP</th>
+                    <th>Tên HP</th>
                     <th>STC</th>
                     <th>Loại</th>
                     <th>Giảng viên</th>
@@ -43,6 +44,7 @@
                     <td>{{ forloop.counter }}</td>
                     <td>{{ lhp.mahp.manganh.manganh }}</td>
                     <td>{{ lhp.malhp }}</td>
+                    <td>{{ lhp.mahp.tenhp }}</td>
                     <td>{{ lhp.mahp.sotc }}</td>
                     <td>{{ lhp.mahp.loai }}</td>
                     <td>{{ lhp.giangvien }}</td>                    

@@ -1,8 +1,7 @@
 from django.shortcuts import redirect
-from django.urls import reverse
 from django.http import HttpResponseForbidden
 from django.utils import timezone
-from datetime import datetime, time
+from . import models
 
 # Middleware xác thực người dùng
 class AuthMiddleware:
@@ -17,17 +16,7 @@ class AuthMiddleware:
             return redirect('login')
         return self.get_response(request)
 
-ALLOWED_PERIODS = [
-    {
-        'start': datetime(2025, 4, 26, 15, 0, tzinfo=timezone.get_current_timezone()),
-        'end':   datetime(2025, 4, 26, 17, 0, tzinfo=timezone.get_current_timezone()),
-    },
-    {
-        'start': datetime(2025, 4, 21, 14, 0, tzinfo=timezone.get_current_timezone()),
-        'end':   datetime(2025, 4, 21, 18, 30, tzinfo=timezone.get_current_timezone()),
-    },
-]
-
+ 
 class TimeRestrictionMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
@@ -36,19 +25,27 @@ class TimeRestrictionMiddleware:
         now = timezone.now().astimezone(timezone.get_fixed_timezone(7 * 60))
         path = request.path
 
-        exempt_paths_periods = {
-            '/author/': ALLOWED_PERIODS[0],
-            '/dang_ky/': ALLOWED_PERIODS[1],
+        # Lấy thông tin lịch từ cơ sở dữ liệu
+        path_to_malich = {
+            '/ghi_danh/': models.TM.objects.get(loaidangky='ghi_danh').malich,  # Mã lịch cho ghi danh
+            '/register/': models.TM.objects.get(loaidangky='dang_ky').malich,   # Mã lịch cho đăng ký
         }
 
-        for paths, time in exempt_paths_periods.items():
-            if path.startswith(paths):
-                if not (time['start'] <= now <= time['end']):
-                    s = time['start'].strftime('%d/%m/%Y %H:%M %Z (UTC%z)')
-                    e = time['end'].strftime('%d/%m/%Y %H:%M %Z (UTC%z)')
-                    n = now.strftime('%d/%m/%Y %H:%M %Z (UTC%z)')
-                    return HttpResponseForbidden(
-                        f"Thời gian hiện tại: {n}.\nThời gian hoạt động: {s} đến {e}."
-                    )
+        for path_prefix, malich in path_to_malich.items():
+            if path.startswith(path_prefix):
+                try:
+                    lich = models.TM.objects.get(malich=malich)
+                    if not (lich.batdau <= now <= lich.ketthuc):
+                        s = lich.batdau.strftime('%d/%m/%Y %H:%M %Z (UTC%z)')
+                        e = lich.ketthuc.strftime('%d/%m/%Y %H:%M %Z (UTC%z)')
+                        n = now.strftime('%d/%m/%Y %H:%M %Z (UTC%z)')
+                        return HttpResponseForbidden(
+                            f"Thời gian hiện tại: {n}.\nThời gian hoạt động: {s} đến {e}."
+                        )
+                except models.TM.DoesNotExist:
+                    # Nếu không tìm thấy lịch, có thể trả về lỗi hoặc cho phép truy cập
+                    pass
                 break
         return self.get_response(request)
+
+
