@@ -33,6 +33,7 @@
                     <th>Tên HP</th>
                     <th>STC</th>
                     <th>Loại</th>
+                    <th>Học kỳ</th>
                     <th>Giảng viên</th>
                     <th>Thông tin</th>
                     <th>Hành động</th>
@@ -47,6 +48,7 @@
                     <td>{{ lhp.mahp.tenhp }}</td>
                     <td>{{ lhp.mahp.sotc }}</td>
                     <td>{{ lhp.mahp.loai }}</td>
+                    <td>{{ lhp.mahp.hocky }}</td>
                     <td>{{ lhp.giangvien }}</td>                    
                     <td>
                         <p>Tối đa: {{ lhp.sosvtoida }} sinh viên</p>
@@ -79,12 +81,6 @@
             <label for="stc">Số tín chỉ:</label>
             <input type="number" id="stc" name="stc" required min="1" max="10">
 
-            <label for="loai">Loại:</label>
-            <select id="loai" name="loai" required>
-                <option value="Bắt buộc">Bắt buộc</option>
-                <option value="Tự chọn">Tự chọn</option>
-            </select>
-
             <label for="giangVien">Tên giảng viên:</label>
             <input type="text" id="giangVien" name="giangVien" required>
 
@@ -115,7 +111,7 @@
         <form id="editForm" class="add-form">
             <h2>Sửa học phần</h2>
             <label for="editMaNganh">Mã ngành:</label>
-            <input type="text" id="editMaNganh" name="maNganh" required>
+            <input type="text" id="editMaNganh" name="maNganh" readonly required>
             
             <label for="editLopHP">Lớp học phần:</label>
             <input type="text" id="editLopHP" name="lopHP" required>
@@ -124,22 +120,22 @@
             <input type="number" id="editSTC" name="stc" required>
 
             <label for="editLoai">Loại:</label>
-            <select id="editLoai" name="loai" required>
-                <option value="bat_buoc">Bắt buộc</option>
-                <option value="tu_chon">Tự chọn</option>
-            </select>
+            <input type="text" id="editLoai" name="loai" readonly required>
 
             <label for="editGiangVien">Tên giảng viên:</label>
             <input type="text" id="editGiangVien" name="giangVien" required>
 
             <label for="editHocKy">Học kỳ:</label>
-            <input type="text" id="editHocKy" name="hocKy" required>
+            <input type="text" id="editHocKy" name="hocKy" readonly required>
 
             <label for="editLichHoc">Lịch học:</label>
             <input type="text" id="editLichHoc" name="lichHoc" required>
 
             <label for="editSoSVToiDa">Số sinh viên tối đa:</label>
             <input type="number" id="editSoSVToiDa" name="soSVToiDa" required>
+            
+            <label for="editPhongHoc">Phòng học:</label>
+            <input type="text" id="editPhongHoc" name="phongHoc" required>
 
             <div class="form-actions">
                 <button type="button" class="cancel-btn" onclick="hideEditForm()">Hủy</button>

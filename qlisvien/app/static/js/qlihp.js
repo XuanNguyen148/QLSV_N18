@@ -49,6 +49,7 @@ function showEditForm(rowData) {
         document.getElementById('editHocKy').value = rowData.hocKy;
         document.getElementById('editLichHoc').value = rowData.lichHoc;
         document.getElementById('editSoSVToiDa').value = rowData.soSVToiDa;
+        document.getElementById('editPhongHoc').value = rowData.phongHoc;
     }
 }
 
@@ -126,7 +127,8 @@ if (editForm) {
             giangvien: document.getElementById('editGiangVien').value,
             hocky: document.getElementById('editHocKy').value,
             lichhoc: document.getElementById('editLichHoc').value,
-            sosvtoida: document.getElementById('editSoSVToiDa').value
+            sosvtoida: document.getElementById('editSoSVToiDa').value,
+            phonghoc: document.getElementById('editPhongHoc').value, // Thêm dòng này
         };
         
         // Gửi dữ liệu đến server
@@ -188,8 +190,9 @@ window.hideEditForm = hideEditForm;
 
 // Xử lý nút xóa học phần
 document.getElementById('hocphanTableBody').addEventListener('click', function (event) {
+    const row = event.target.closest('tr');
+
     if (event.target.classList.contains('delete-btn')) {
-        const row = event.target.closest('tr');
         const maLHP = row.children[2].textContent.trim();
         
         if (confirm('Bạn có chắc chắn muốn xóa học phần này?')) {
@@ -217,41 +220,30 @@ document.getElementById('hocphanTableBody').addEventListener('click', function (
                 alert('Đã xảy ra lỗi khi xóa học phần');
             });
         }
-    }
-});
-// Gắn sự kiện cho nút "Sửa"
-document.querySelectorAll('.edit-btn').forEach((button) => {
-    button.addEventListener('click', function () {
-        const row = this.closest('tr'); // Lấy dòng chứa nút "Sửa"
+    }// Xử lý nút "Sửa"
+    else if (event.target.classList.contains('edit-btn')) {
+        const infoCell = row.children[8]; // Cột "Thông tin"
+        const infoParagraphs = infoCell.querySelectorAll('p');
+        const soSVToiDaText = infoParagraphs[0].textContent.trim();
+        const lichHocText = infoParagraphs[1].textContent.trim();
+        const phongHocText = infoParagraphs[2].textContent.trim();
+
         const rowData = {
             maNganh: row.children[1].textContent.trim(),
             lopHP: row.children[2].textContent.trim(),
             stc: row.children[4].textContent.trim(),
-            loai: row.children[5].textContent.trim() === 'Bắt buộc' ? 'bat_buoc' : 'tu_chon',
-            giangVien: row.children[6].textContent.trim(),
-            hocKy: "", // Default values if not available
-            lichHoc: "",
-            soSVToiDa: ""
+            loai: row.children[5].textContent.trim() === 'Bắt buộc' ? 'Bắt buộc' : 'Tự chọn',
+            giangVien: row.children[7].textContent.trim(), // Cột "Giảng viên"
+            hocKy: row.children[6].textContent.trim(),    // Cột "Học kỳ"
+            lichHoc: lichHocText.replace('Lịch học: ', '').trim(),
+            soSVToiDa: soSVToiDaText.replace('Tối đa: ', '').replace(' sinh viên', '').trim(),
+            phongHoc: phongHocText.replace('Phòng học: ', '').trim()
         };
-        
-        // Trích xuất thông tin từ cột "Thông tin"
-        const infoCell = row.children[7];
-        if (infoCell) {
-            const infoParts = infoCell.innerHTML.split('<p>');
-            if (infoParts.length > 1) {
-                rowData.soSVToiDa = infoParts[1].replace('Tối đa: ', '').replace(' sinh viên</p>', '').trim();
-            }
-            if (infoParts.length > 2) {
-                rowData.lichHoc = infoParts[2].replace('Lịch học: ', '').replace('</p>', '').trim();
-            }
-            if (infoParts.length > 3) {
-                rowData.phongHoc = infoParts[3].replace('Phòng học: ', '').replace('</p>', '').trim();
-            }
-        }
-        
+
         showEditForm(rowData);
-    });
+    }
 });
+
 
 // Gắn sự kiện cho nút tìm kiếm
 document.querySelector('.search-btn')?.addEventListener('click', filterData);

@@ -1,12 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
-from django.http import JsonResponse, HttpResponseForbidden
+from django.http import JsonResponse
 from . import models
 from django.utils import timezone
 from datetime import datetime
-import pytz
-from django.conf import settings
-
 
 def ghi_danh(request):
     # Xử lý các request khác nhau dựa vào method và query parameters
@@ -579,23 +576,12 @@ def qlihp(request):
             # Kiểm tra học phần đã tồn tại chưa
             try:
                 hp = models.HP.objects.get(mahp=data.get('mahp'))
-            except models.HP.DoesNotExist:
-                # Tạo học phần mới nếu chưa tồn tại
-                try:
-                    nganh = models.NH.objects.get(manganh=data.get('manganh'))
-                except models.NH.DoesNotExist:
-                    return JsonResponse({
-                        'status': 'error',
-                        'message': 'Mã ngành không tồn tại'
-                    }, status=404)
-                
-                hp = models.HP.objects.create(
-                    mahp=data.get('mahp'),
-                    tenhp=data.get('tenhp', f"Học phần {data.get('mahp')}"),
-                    sotc=data.get('sotc', 0),
-                    loai=data.get('loai', 'Bắt buộc'),
-                    manganh=nganh
-                )
+                nganh = models.NH.objects.get(manganh=data.get('manganh'))
+            except models.HP.DoesNotExist or models.NH.DoesNotExist:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Lớp học phần/Mã ngành không hợp lệ'
+                }, status=404)
             
             # Kiểm tra lớp học phần đã tồn tại chưa
             if models.LHP.objects.filter(malhp=data.get('malhp')).exists():
@@ -637,7 +623,65 @@ def qlihp(request):
                 'status': 'error',
                 'message': str(e)
             }, status=500)
-        
+
+
+    # XỬ LÝ CHỈNH SỬA LỚP HỌC PHẦN (PUT with action=edit)
+    elif request.method == 'PUT' and request.GET.get('action') == 'edit':
+        import json
+        try:
+            # Lấy dữ liệu từ request
+            data = json.loads(request.body)
+            
+            # Kiểm tra dữ liệu bắt buộc
+            if not data.get('malhp'):
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Thiếu mã lớp học phần'
+                }, status=400)
+            
+            # Tìm lớp học phần cần chỉnh sửa
+            try:
+                lhp = models.LHP.objects.get(malhp=data.get('malhp'))
+            except models.LHP.DoesNotExist:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Không tìm thấy lớp học phần'
+                }, status=404)
+
+            try:
+                # Cập nhật thông tin lớp học phần
+                lhp.giangvien = data.get('giangvien', lhp.giangvien)
+                lhp.sosvtoida = data.get('sosvtoida', lhp.sosvtoida)
+                lhp.lichhoc = data.get('lichhoc', lhp.lichhoc)
+                lhp.phonghoc = data.get('phonghoc', lhp.phonghoc)
+                lhp.save()
+            except Exception as e:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': str(e) + ' lỗi edit 3'
+                }, status=500)
+            return JsonResponse({
+                'status': 'success',
+                'message': 'Đã cập nhật học phần thành công',
+                'data': {
+                    'malhp': lhp.malhp,
+                    'giangvien': lhp.giangvien,
+                    'sosvtoida': lhp.sosvtoida,
+                    'lichhoc': lhp.lichhoc,
+                    'phonghoc': lhp.phonghoc
+                }
+            })
+        except json.JSONDecodeError:
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Dữ liệu không hợp lệ lỗi edit'
+            }, status=400)
+        except Exception as e:
+            return JsonResponse({
+                'status': 'error',
+                'message': str(e) + ' lỗi edit 2'
+            }, status=500)
+
     # HIỂN THỊ TRANG QLHP (GET without action)
     elif request.method == 'GET' and 'action' not in request.GET:
         # is_student = phanquyen(request)
