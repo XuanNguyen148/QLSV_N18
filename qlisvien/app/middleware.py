@@ -27,12 +27,24 @@ class TimeRestrictionMiddleware:
 
         # Lấy thông tin lịch từ cơ sở dữ liệu
         path_to_malich = {
-            '/ghi_danh/': models.TM.objects.get(loaidangky='ghi_danh').malich,  # Mã lịch cho ghi danh
-            '/register/': models.TM.objects.get(loaidangky='dang_ky').malich,   # Mã lịch cho đăng ký
+            '/ghi_danh/': None,
+            '/register/': None,
         }
+
+        # Lấy dữ liệu từ cơ sở dữ liệu một cách an toàn
+        ghi_danh_timing = models.TM.objects.filter(loaidangky='ghi_danh').first()
+        if ghi_danh_timing:
+            path_to_malich['/ghi_danh/'] = ghi_danh_timing.malich
+
+        dang_ky_timing = models.TM.objects.filter(loaidangky='dang_ky').first()
+        if dang_ky_timing:
+            path_to_malich['/register/'] = dang_ky_timing.malich
 
         for path_prefix, malich in path_to_malich.items():
             if path.startswith(path_prefix):
+                if malich is None:
+                    # Nếu không có lịch, cho phép truy cập hoặc xử lý theo logic mong muốn
+                    break
                 try:
                     lich = models.TM.objects.get(malich=malich)
                     if not (lich.batdau <= now <= lich.ketthuc):
@@ -44,7 +56,7 @@ class TimeRestrictionMiddleware:
                         )
                 except models.TM.DoesNotExist:
                     # Nếu không tìm thấy lịch, có thể trả về lỗi hoặc cho phép truy cập
-                    pass
+                    break
                 break
         return self.get_response(request)
 

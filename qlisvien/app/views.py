@@ -738,8 +738,12 @@ def timing(request):
                     # Tạo lịch mới
                     # Tạo mã lịch tự động: L + năm hiện tại + số thứ tự
                     current_year = datetime.now().year
-                    malich = f'L{current_year}{models.TM.objects.count() + 1:02d}'
-                    
+                    count = models.TM.objects.count() + 1
+                    while True:
+                        malich = f'L{current_year}{count:02d}'
+                        if not models.TM.objects.filter(malich=malich).exists():
+                            break
+                        count += 1
                     models.TM.objects.create(
                         malich=malich,
                         loaidangky=loai_dk,

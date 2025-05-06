@@ -24,8 +24,12 @@
                                value="{{ timings.register.end_time|date:'Y-m-d\TH:i' }}">
                     </div>
                     <div class="status">
-                        Trạng thái: <span class="status-badge {% if timings.register.is_active %}active{% else %}inactive{% endif %}">
-                            {{ timings.register.is_active|yesno:"Đang hoạt động,Chưa kích hoạt" }}
+                        Trạng thái: <span class="status-badge {% if timings.register.start_time and timings.register.end_time %}active{% else %}inactive{% endif %}">
+                            {% if timings.register.start_time and timings.register.end_time %}
+                                Đang hoạt động
+                            {% else %}
+                                Chưa kích hoạt
+                            {% endif %}
                         </span>
                     </div>
                     <button type="submit" class="save-btn">Lưu thay đổi</button>
@@ -49,8 +53,12 @@
                                value="{{ timings.enrollment.end_time|date:'Y-m-d\TH:i' }}">
                     </div>
                     <div class="status">
-                        Trạng thái: <span class="status-badge {% if timings.enrollment.is_active %}active{% else %}inactive{% endif %}">
-                            {{ timings.enrollment.is_active|yesno:"Đang hoạt động,Chưa kích hoạt" }}
+                        Trạng thái: <span class="status-badge {% if timings.enrollment.start_time and timings.enrollment.end_time %}active{% else %}inactive{% endif %}">
+                            {% if timings.enrollment.start_time and timings.enrollment.end_time %}
+                                Đang hoạt động
+                            {% else %}
+                                Chưa kích hoạt
+                            {% endif %}
                         </span>
                     </div>
                     <button type="submit" class="save-btn">Lưu thay đổi</button>
