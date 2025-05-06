@@ -13,5 +13,6 @@ urlpatterns = [
     path('register/', views.dang_ky, name='register'),
     path('timing/', views.timing, name='timing'), 
     path('author/', views.author, name='author'),
+    path('update_role/', views.update_role, name='update_role'),
     path('get_lophocphan/', views.get_lophocphan, name='get_lophocphan'),
 ]

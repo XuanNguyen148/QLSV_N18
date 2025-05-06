@@ -30,48 +30,56 @@
                         <!-- Xóa cột Email -->
                         <th>Mật khẩu</th>
                         <th>Role hiện tại</th>
+                        {% if is_admin %}
                         <th>Thao tác</th>
+                        {% endif %}
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>23D190145</td>
-                        <td>Nguyễn Văn A</td>
-                        <td>nguyenvana</td>
-                        <!-- Xóa nội dung cột Email -->
-                        <td>••••••••</td>
+                    {% for nv in nv %}
+                    <tr data-id="{{ nv.matk.matk }}">
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ nv.matk.matk }}</td>
+                        <td>{{ nv.hoten_nv }}</td>
+                        <td>{{ nv.matk.tendangnhap }}</td>
+                        <td>{{ nv.matk.matkhau }}</td>
                         <td>
-                            <span class="role-badge user">Người dùng</span>
+                            <span class="role-badge {% if nv.matk.vaitro == 'Người dùng' %}user{% elif nv.matk.vaitro == 'Admin' %}admin{% elif nv.matk.vaitro == 'Unknown' %}unknown{% else %}default{% endif %}">{{ nv.matk.vaitro }}</span>
                         </td>
+                        {% if is_admin %}
                         <td>
-                            <select class="role-select" onchange="changeRole(this, '23D190145')">
-                                <option value="user">Người dùng</option>
-                                <option value="admin">Admin</option>
-                                <option value="unknown">Unknown</option>
+                            <select class="role-select" onchange="changeRole(this, '')">
+                                <option value="Người dùng" {% if nv.matk.vaitro == 'Người dùng' %}selected{% endif %}>Người dùng</option>
+                                <option value="Admin" {% if nv.matk.vaitro == 'Admin' %}selected{% endif %}>Admin</option>
+                                <option value="Unknown" {% if nv.matk.vaitro == 'Unknown' %}selected{% endif %}>Unknown</option>
                             </select>
-                            <button class="save-btn" onclick="saveRole('23D190145')">Lưu</button>
+                            <button class="save-btn" onclick="saveRole('{{ nv.matk.matk }}')">Lưu</button>
                         </td>
+                        {% endif %}
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>23D190146</td>
-                        <td>Trần Thị B</td>
-                        <td>tranthib</td>
-                        <!-- Xóa nội dung cột Email -->
-                        <td>••••••••</td>
+                    {% endfor %}
+                    {% for sv in sv %}
+                    <tr data-id="{{ sv.matk.matk }}">
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ sv.matk.matk }}</td>
+                        <td>{{ sv.hoten_sv }}</td>
+                        <td>{{ sv.matk.tendangnhap }}</td>
+                        <td>{{ sv.matk.matkhau }}</td>
                         <td>
-                            <span class="role-badge admin">Admin</span>
+                            <span class="role-badge {% if sv.matk.vaitro == 'Người dùng' %}user{% elif sv.matk.vaitro == 'Admin' %}admin{% elif sv.matk.vaitro == 'Unknown' %}unknown{% else %}default{% endif %}">{{ sv.matk.vaitro }}</span>
                         </td>
+                        {% if is_admin %}
                         <td>
-                            <select class="role-select" onchange="changeRole(this, '23D190146')">
-                                <option value="user">Người dùng</option>
-                                <option value="admin" selected>Admin</option>
-                                <option value="unknown">Unknown</option>
+                            <select class="role-select" onchange="changeRole(this, '')">
+                                <option value="Người dùng" {% if sv.matk.vaitro == 'Người dùng' %}selected{% endif %}>Người dùng</option>
+                                <option value="Admin" {% if sv.matk.vaitro == 'Admin' %}selected{% endif %}>Admin</option>
+                                <option value="Unknown" {% if sv.matk.vaitro == 'Unknown' %}selected{% endif %}>Unknown</option>
                             </select>
-                            <button class="save-btn" onclick="saveRole('23D190146')">Lưu</button>
+                            <button class="save-btn" onclick="saveRole('{{ sv.matk.matk }}')">Lưu</button>
                         </td>
+                        {% endif %}
                     </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

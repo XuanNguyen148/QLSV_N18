@@ -1,13 +1,13 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.http import JsonResponse
 from . import models
 from django.utils import timezone
 from datetime import datetime
+import json
 
 def ghi_danh(request):
-    # Xử lý các request khác nhau dựa vào method và query parameters
-    
+  
     # Lấy mã tài khoản từ session
     matk = request.session.get('user_id')
     if not matk and request.method != 'GET':
@@ -154,9 +154,8 @@ def ghi_danh(request):
     
     # HIỂN THỊ TRANG GHI DANH (GET without action)
     elif request.method == 'GET' and 'action' not in request.GET:
-        # # is_student = phanquyen(request)
         hptc = models.HP.objects.filter(loai='Tự chọn')
-        kqdk = models.TTDK.objects.filter(trangthai='Đăng ký')
+        kqdk = models.TTDK.objects.filter(trangthai='Đăng ký', masv=sinh_vien)
         kqdk_hp = []
         for ttdk in kqdk:
             try:
@@ -191,44 +190,8 @@ def get_lophocphan(request):
         return JsonResponse(list(lophocphans), safe=False)
     return JsonResponse({'error': 'Không có mã học phần'}, status=400)
 
-def dashboard(request):
-    # Kiểm tra session
-    if not request.session.get('user_id'):
-        return redirect('login')
-    
-    # Lấy mã tài khoản từ session
-    matk = request.session.get('user_id')
-    if not matk and request.method != 'GET':
-        return JsonResponse({
-            'status': 'error',
-            'message': 'Chưa đăng nhập'
-        }, status=401)
-    
-    # Lấy sinh viên nếu đã đăng nhập
-    taikhoan = None
-    if matk:
-        try:
-            taikhoan = models.TaiKhoan.objects.get(matk=matk)
-        except models.TaiKhoan.DoesNotExist:
-            if request.method != 'GET' or 'action' in request.GET:
-                return JsonResponse({
-                    'status': 'error',
-                    'message': 'Không tìm thấy thông tin'
-                }, status=404)
-
-    is_student = taikhoan.vaitro == 'Người dùng' if taikhoan else False
-
-        
-    context = {
-        'username': request.session.get('username'),
-        'show_notification': request.session.get('show_welcome', False),
-        # 'is_student': is_student,
-    }
-    
-    if 'show_welcome' in request.session:
-        del request.session['show_welcome']
-        
-    return render(request, 'pages/dashboard.html', context)
+def dashboard(request):           
+    return render(request, 'pages/dashboard.html')
 
 def login_view(request):
     # Khởi tạo debug info
@@ -287,12 +250,6 @@ def logout_view(request):
     return redirect('login')
 
 def change_password(request):
-    
-    # is_student = phanquyen(request)
-
-    context = {
-        # 'is_student': is_student
-    }
     if not request.session.get('user_id'):
         return redirect('login')
         
@@ -324,11 +281,29 @@ def change_password(request):
         except Exception as e:
             messages.error(request, f'Có lỗi xảy ra: {str(e)}')
     
-    return render(request, 'pages/change_password.html', context)
+    return render(request, 'pages/change_password.html')
 
 def dang_ky(request):
-    # Xử lý các request khác nhau dựa vào method và query parameters
+
+    matk = request.session.get('user_id')
+    if not matk and request.method != 'GET':
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Chưa đăng nhập'
+        }, status=401)
     
+    # Lấy sinh viên nếu đã đăng nhập
+    sinh_vien = None
+    if matk:
+        try:
+            sinh_vien = models.TTSV.objects.get(matk=matk)
+        except models.TTSV.DoesNotExist:
+            if request.method != 'GET' or 'action' in request.GET:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Không tìm thấy thông tin sinh viên'
+                }, status=404)
+      
     # Lấy mã tài khoản từ session
     matk = request.session.get('user_id')
     if not matk and request.method != 'GET':
@@ -525,12 +500,21 @@ def dang_ky(request):
 
     # HIỂN THỊ TRANG ĐĂNG KÝ (GET without action)
     elif request.method == 'GET' and 'action' not in request.GET:
-        # is_student = phanquyen(request)
+        # hptc = models.HP.objects.filter(
+        #     loai='Tự chọn',
+        #     ttht__tinhtrang__in=['Qua môn', 'Cần cải thiện'],
+        #     ttht__masv=sinh_vien
+        # ).distinct()
         hpbb = models.HP.objects.filter(loai='Bắt buộc')
         hptc = models.HP.objects.filter(loai='Tự chọn')
         hphl = models.HP.objects.filter(loai='Bắt buộc')
+        hphl = models.HP.objects.filter(
+            loai='Bắt buộc',
+            ttht__tinhtrang='Rớt môn',
+            ttht__masv=sinh_vien
+        ).distinct()
         lhp = models.LHP.objects.all()
-        kqdk = models.TTDK.objects.filter(trangthai='Đăng ký')
+        kqdk = models.TTDK.objects.filter(trangthai='Đăng ký', masv=sinh_vien)
         kqdk_lhp = []
         for ttdk in kqdk:
             try:
@@ -547,7 +531,6 @@ def dang_ky(request):
             'hphl': hphl,
             'lhp': lhp,
             'kqdk': kqdk_lhp,
-            # 'is_student': is_student,
         }
         return render(request, 'pages/register.html', context)
     
@@ -559,6 +542,12 @@ def dang_ky(request):
         }, status=405)
 
 def qlihp(request):
+    role = phanquyen(request)
+    if role != 'Admin':
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Không được phép truy cập'
+        }, status=404)
     # XỬ LÝ THÊM LỚP HỌC PHẦN (POST with action=add)
     if request.method == 'POST' and request.GET.get('action') == 'add':
         import json
@@ -706,26 +695,29 @@ def qlihp(request):
         }, status=405)
 
 def history(request):
-    # matk = request.session.get('user_id')
-    # if not matk and request.method != 'GET':
-    #     return JsonResponse({
-    #         'status': 'error',
-    #         'message': 'Chưa đăng nhập'
-    #     }, status=401)
+    matk = request.session.get('user_id')
+    if not matk and request.method != 'GET':
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Chưa đăng nhập'
+        }, status=401)
     
-    # # Lấy sinh viên nếu đã đăng nhập
-    # sinh_vien = None
-    # if matk:
-    #     try:
-    #         sinh_vien = models.TTSV.objects.get(matk=matk)
-    #     except models.TTSV.DoesNotExist:
-    #         if request.method != 'GET' or 'action' in request.GET:
-    #             return JsonResponse({
-    #                 'status': 'error',
-    #                 'message': 'Không tìm thấy thông tin sinh viên'
-    #             }, status=404)
+    # Lấy sinh viên nếu đã đăng nhập
+    sinh_vien = None
+    if matk:
+        try:
+            sinh_vien = models.TTSV.objects.get(matk=matk)
+        except models.TTSV.DoesNotExist:
+            if request.method != 'GET' or 'action' in request.GET:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Không tìm thấy thông tin sinh viên'
+                }, status=404)
     
-    kqdk = models.LS.objects.filter(hoatdong='Đăng ký')
+    if sinh_vien.matk.vaitro == 'Admin':
+        kqdk = models.LS.objects.filter(hoatdong='Đăng ký')
+    else:
+        kqdk = models.LS.objects.filter(hoatdong='Đăng ký', masv=sinh_vien)
     kqdk_lhp = []
     for ls in kqdk:
         try:
@@ -736,15 +728,20 @@ def history(request):
             })
         except models.LHP.DoesNotExist:
             continue
-    # is_student = phanquyen(request)
 
     context = {
         'kqdk': kqdk_lhp,
-        # 'is_student': is_student
     }
     return render(request, 'pages/history.html', context)
 
-def timing(request):
+def timing(request):    
+    role = phanquyen(request)
+    if role != 'Admin':
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Không được phép truy cập'
+        }, status=404)
+
     if request.method == 'POST':
         timing_type = request.POST.get('type')
         start_time = request.POST.get('start_time') + ' +0700'
@@ -830,36 +827,50 @@ def timing(request):
         return JsonResponse({'status': 'error', 'message':  ' ' + str(e)})
 
 def author(request):
-    # is_student = phanquyen(request)
+    role = phanquyen(request)
+    if role is None or role == 'Unknown':
+        return redirect('login')
+    nv = models.TTNS.objects.all()
+    sv = models.TTSV.objects.all()
 
     context = {
-        # 'is_student': is_student
+        'nv': nv,
+        'sv': sv,
     }
     return render(request, 'pages/author.html', context)
 
-# def phanquyen(request):
+def update_role(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)  # Phân tích dữ liệu JSON từ request
+            user_id = data['userId']  # ID của tài khoản (matk.id)
+            new_role = data['newRole']  # Vai trò mới
+            allowed_roles = ['Người dùng', 'Admin', 'Unknown']  # Các vai trò hợp lệ
+            if new_role not in allowed_roles:
+                return JsonResponse({'success': False, 'error': 'Vai trò không hợp lệ'})
+            matk = get_object_or_404(models.TaiKhoan, matk=user_id)  # Lấy tài khoản
+            matk.vaitro = new_role  # Cập nhật vai trò
+            matk.save()  # Lưu thay đổi
+            return JsonResponse({'success': True})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+    return JsonResponse({'success': False, 'error': 'Phương thức không hợp lệ'})
+
+def phanquyen(request):
+    # Lấy mã tài khoản từ session
+    matk = request.session.get('user_id')
+    if not matk:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Chưa đăng nhập'
+        }, status=401)
+    # Lấy thông tin tài khoản nếu đã đăng nhập
+    try:
+        taikhoan = models.TaiKhoan.objects.get(matk=matk)
+        return taikhoan.vaitro
+    except models.TaiKhoan.DoesNotExist:
+        return JsonResponse({
+            'status': 'error',
+            'message': 'Tài khoản không tồn tại'
+        }, status=401)
     
-#     # Lấy mã tài khoản từ session
-#     matk = request.session.get('user_id')
-#     if not matk and request.method != 'GET':
-#         return JsonResponse({
-#             'status': 'error',
-#             'message': 'Chưa đăng nhập'
-#         }, status=401)
-    
-#     # Lấy sinh viên nếu đã đăng nhập
-#     taikhoan = None
-#     if matk:
-#         try:
-#             taikhoan = models.TaiKhoan.objects.get(matk=matk)
-#         except models.TaiKhoan.DoesNotExist:
-#             if request.method != 'GET' or 'action' in request.GET:
-#                 return JsonResponse({
-#                     'status': 'error',
-#                     'message': 'Không tìm thấy thông tin'
-#                 }, status=404)
-
-#     is_student = taikhoan.vaitro == 'Người dùng' if taikhoan else False
-
-#     return is_student
-

@@ -1,4 +1,3 @@
-/* filepath: e:\da3 django\QLSV_N18\qlisvien\app\static\js\author.js */
 // Hàm tìm kiếm tài khoản
 document.getElementById('searchInput').addEventListener('input', function(e) {
     const searchValue = e.target.value.toLowerCase();
@@ -10,22 +9,47 @@ document.getElementById('searchInput').addEventListener('input', function(e) {
     });
 });
 
-// Hàm thay đổi role
-function changeRole(select, userId) {
-    const row = select.closest('tr');
-    const roleBadge = row.querySelector('.role-badge');
-    
-    // Cập nhật badge hiển thị
-    roleBadge.textContent = select.options[select.selectedIndex].text;
-    roleBadge.className = `role-badge ${select.value}`;
-}
-
 // Hàm lưu thay đổi role
 function saveRole(userId) {
     const row = document.querySelector(`tr[data-id="${userId}"]`);
     const select = row.querySelector('.role-select');
     const newRole = select.value;
     
-    // TODO: Gửi request API để cập nhật role
-    alert(`Đã cập nhật role cho user ${userId} thành ${select.options[select.selectedIndex].text}`);
+    fetch('/update_role/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')  // Lấy CSRF token
+        },
+        body: JSON.stringify({ userId: userId, newRole: newRole })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Cập nhật role thành công');
+            location.reload();  // Tải lại trang để cập nhật danh sách
+        } else {
+            alert('Có lỗi xảy ra: ' + data.error);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('Có lỗi xảy ra');
+    });
+}
+
+// Hàm lấy CSRF token từ cookie (yêu cầu cho POST trong Django)
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }

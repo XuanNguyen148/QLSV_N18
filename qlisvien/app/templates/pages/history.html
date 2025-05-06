@@ -41,9 +41,7 @@
                     <th>Tên HP</th>
                     <th>Mã LHP</th>
                     <th>Số TC</th>
-                    {% if not is_student %}
                     <th>Thao tác bởi</th>
-                    {% endif %}
                     <th>Thời gian</th>
                 </tr>
             </thead>
@@ -57,9 +55,7 @@
                     <td>{{ item.lhp.mahp.tenhp }}</td>
                     <td>{{ item.lhp.malhp }}</td>
                     <td>{{ item.lhp.mahp.sotc }}</td>
-                    {% if not is_student %}
                     <td>{{ item.ls.masv.masv }}</td>
-                    {% endif %}
                     <td>{{ item.ls.thoigian }}</td>
                 </tr>
                 {% endfor %}

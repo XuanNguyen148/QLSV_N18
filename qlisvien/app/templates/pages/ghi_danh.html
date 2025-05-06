@@ -20,7 +20,9 @@
                     <th>Mã học phần</th>
                     <th>Tên học phần</th>
                     <th>STC</th>
+                    {% if is_admin or is_sinhvien %}
                     <th>Thao tác</th> <!-- Cột không tên -->
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -31,7 +33,9 @@
                     <td>{{ hp.mahp }}</td>
                     <td>{{ hp.tenhp }}</td>
                     <td>{{ hp.sotc }}</td>
+                    {% if is_admin or is_sinhvien %}
                     <td><button class="btn-action" id="btn-chon">Chọn</button></td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -46,7 +50,9 @@
                     <th>Mã học phần</th>
                     <th>Tên học phần</th>
                     <th>STC</th>
+                    {% if is_admin or is_sinhvien %}
                     <th>Thao tác</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -58,7 +64,9 @@
                         <td>{{ item.ttdk.mamh }}</td>
                         <td>{{ item.hp.tenhp }}</td>
                         <td>{{ item.hp.sotc }}</td>
+                        {% if is_admin or is_sinhvien %}
                         <td><button class="btn-action btn-huy" data-mahp="{{ item.ttdk.mamh }}">Hủy</button></td>
+                        {% endif %}
                     </tr>
                     {% endfor %}
             </tbody>

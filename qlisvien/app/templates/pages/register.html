@@ -22,7 +22,9 @@
                     <th>Mã học phần</th>
                     <th>Tên học phần</th>
                     <th>STC</th>
+                    {% if is_admin or is_sinhvien %}
                     <th>Thao tác</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -36,7 +38,9 @@
                     <td>{{ hp.mahp }}</td>
                     <td>{{ hp.tenhp }}</td>
                     <td>{{ hp.sotc }}</td>
+                    {% if is_admin or is_sinhvien %}
                     <td><button class="register-btn" data-ma-hoc-phan="{{ hp.mahp }}">Đăng ký</button></td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
                 <tr>
@@ -51,7 +55,9 @@
                     <td>{{ hp.mahp }}</td>
                     <td>{{ hp.tenhp }}</td>
                     <td>{{ hp.sotc }}</td>
+                    {% if is_admin or is_sinhvien %}
                     <td><button class="register-btn" data-ma-hoc-phan="{{ hp.mahp }}">Đăng ký</button></td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
 
@@ -65,7 +71,9 @@
                     <td>{{ hp.mahp }}</td>
                     <td>{{ hp.tenhp }}</td>
                     <td>{{ hp.sotc }}</td>
+                    {% if is_admin or is_sinhvien %}
                     <td><button class="register-btn" data-ma-hoc-phan="{{ hp.mahp }}">Đăng ký</button></td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
@@ -84,7 +92,9 @@
                     <th>STC</th>
                     <th>Giảng viên</th>
                     <th>Phòng học</th>
+                    {% if is_admin or is_sinhvien %}
                     <th>Thao tác</th>
+                    {% endif %}
                 </tr>
             </thead>
             <tbody>
@@ -96,21 +106,19 @@
                     <td>{{ item.lhp.mahp.sotc }}</td>
                     <td>{{ item.lhp.giangvien }}</td>
                     <td>{{ item.lhp.phonghoc }}</td>
+                    {% if is_admin or is_sinhvien %}
                     <td>
                         <button class="cancel-btn btn-huy" data-mahp="{{ item.ttdk.mamh }}">Hủy</button>
                         <button class="register-btn" data-ma-hoc-phan="{{ item.lhp.mahp.mahp }}">Chuyển lớp</button>
                     </td>
+                    {% endif %}
                 </tr>
                 {% endfor %}
             </tbody>
         </table>
     </div>
-    <!-- bỏ nút xác nhận cuối -->
-    <div class="confirm-box">
-        <button class="btn-confirm" onclick="confirmRegistration()">Xác nhận</button>
-    </div>
 </div>
-
+{% if is_admin or is_sinhvien %}
 <!-- Form chọn lớp học phần -->
 <div class="select-class-container" id="selectClassContainer" style="display: none;">
     <div class="select-class-content">
@@ -146,6 +154,7 @@
         </div>
     </div>
 </div>
+{% endif %}
 {% endblock %}
 
 {% block add_js %}
