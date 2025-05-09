@@ -1,3 +1,4 @@
+<!-- hoanf tac trwoc doan nayf -->
 {% extends 'pages/dashboard.html' %}
 {% load static %}
 
@@ -12,37 +13,7 @@
     {% csrf_token %}
     <div class="ghidanh-box">
         <h2>Đăng ký ghi danh</h2>
-        <table class="table-hocphan">
-            <thead>
-                <tr>
-                    <th>STT</th>
-                    <th>Loại</th>
-                    <th>Mã học phần</th>
-                    <th>Tên học phần</th>
-                    <th>STC</th>
-                    {% if is_admin or is_sinhvien %}
-                    <th>Thao tác</th> <!-- Cột không tên -->
-                    {% endif %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for hp in hptc %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ hp.loai }}</td>
-                    <td>{{ hp.mahp }}</td>
-                    <td>{{ hp.tenhp }}</td>
-                    <td>{{ hp.sotc }}</td>
-                    {% if is_admin or is_sinhvien %}
-                    <td><button class="btn-action" id="btn-chon">Chọn</button></td>
-                    {% endif %}
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>    
-    
-        <h2>Kết quả đăng ký</h2>
-        <table class="table-hocphan">
+        <table class="table-hocphan" id="table-hptc">
             <thead>
                 <tr>
                     <th>STT</th>
@@ -56,19 +27,48 @@
                 </tr>
             </thead>
             <tbody>
+                {% for hp in hptc %}
                 <tr>
-                    {% for item in kqdk %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ item.hp.loai }}</td>
-                        <td>{{ item.ttdk.mamh }}</td>
-                        <td>{{ item.hp.tenhp }}</td>
-                        <td>{{ item.hp.sotc }}</td>
-                        {% if is_admin or is_sinhvien %}
-                        <td><button class="btn-action btn-huy" data-mahp="{{ item.ttdk.mamh }}">Hủy</button></td>
-                        {% endif %}
-                    </tr>
-                    {% endfor %}
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ hp.loai }}</td>
+                    <td>{{ hp.mahp }}</td>
+                    <td>{{ hp.tenhp }}</td>
+                    <td>{{ hp.sotc }}</td>
+                    {% if is_admin or is_sinhvien %}
+                    <td><button class="btn-action btn-chon" data-mahp="{{ hp.mahp }}">Chọn</button></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>    
+    
+        <h2>Kết quả đăng ký</h2>
+        <table class="table-hocphan" id="table-kqdk">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Loại</th>
+                    <th>Mã học phần</th>
+                    <th>Tên học phần</th>
+                    <th>STC</th>
+                    {% if is_admin or is_sinhvien %}
+                    <th>Thao tác</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in kqdk %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ item.hp.loai }}</td>
+                    <td>{{ item.ttdk.mamh }}</td>
+                    <td>{{ item.hp.tenhp }}</td>
+                    <td>{{ item.hp.sotc }}</td>
+                    {% if is_admin or is_sinhvien %}
+                    <td><button class="btn-action btn-huy" data-mahp="{{ item.ttdk.mamh }}">Hủy</button></td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
             </tbody>
         </table>   
         <div class="confirm-box">
