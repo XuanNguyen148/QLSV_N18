@@ -76,7 +76,6 @@ if (addForm) {
             mahp: document.getElementById('maHP').value,
             malhp: document.getElementById('lopHP').value,
             sotc: document.getElementById('stc').value,
-            loai: document.getElementById('loai').value,
             giangvien: document.getElementById('giangVien').value,
             hocky: document.getElementById('hocKy').value,
             lichhoc: document.getElementById('lichHoc').value,

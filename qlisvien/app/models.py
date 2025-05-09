@@ -4,6 +4,7 @@ class CustomUser(models.Model):
     id = models.CharField(max_length=10, db_column='matk', primary_key=True)
     username = models.CharField(max_length=30, db_column='tendangnhap')  # map với cột 'tendangnhap' trong DB
     password = models.CharField(max_length=255, db_column='matkhau')  # map với cột 'pass' trong DB
+    vaitro = models.CharField(max_length=20)
 
     # goi db
     class Meta:

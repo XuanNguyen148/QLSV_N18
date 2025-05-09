@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         return {
             element: row.cloneNode(true),
-            semester: columns[2].textContent,
+            semester: columns[3].textContent,
             courseCode: columns[4].textContent,
             courseName: columns[5].textContent
         };

@@ -73,45 +73,163 @@ function showSelectClassForm(maHocPhan) {
 }
 
 // Hàm đăng ký lớp học phần
+// function registerClass(malhp) {
+//     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+//     if (!csrfToken) {
+//         alert('Không tìm thấy CSRF token');
+//         return;
+//     }
+
+//     if (confirm('Bạn có chắc chắn muốn đăng ký lớp học phần này?')) {
+//         fetch(`/register/?action=add&malhp=${malhp}`, {
+//             method: 'POST',
+//             headers: {
+//                 'X-CSRFToken': csrfToken,
+//                 'Content-Type': 'application/json'
+//             }
+//         })
+//         .then(response => {
+//             // Check if response is JSON
+//             const contentType = response.headers.get("content-type");
+//             if (contentType && contentType.indexOf("application/json") !== -1) {
+//                 return response.json();
+//             } else {
+//                 throw new Error("Received non-JSON response from server");
+//             }
+//         })
+//         .then(data => {
+//             if (data.status === 'success') {
+//                 alert(data.message);
+//                 hideSelectClassForm();
+//                 location.reload(); // Refresh the page to show changes
+//             } else {
+//                 alert(data.message); // Hiển thị lỗi nếu có
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Error:', error);
+//             alert('Có lỗi xảy ra khi đăng ký lớp học phần: ' + error.message);
+//         });
+//     }
+// }
+
+// Mảng tạm để lưu các mã học phần đã chọn
+let selectedClasses = [];
+
 function registerClass(malhp) {
+    // Kiểm tra xem mã học phần đã được chọn chưa
+    if (selectedClasses.includes(malhp)) {
+        alert('Lớp học phần này đã được chọn!');
+        return;
+    }
+
+    // Thêm mã học phần vào mảng tạm
+    selectedClasses.push(malhp);
+
+    // Lấy thông tin học phần từ server để hiển thị
+    fetch(`/get_class_info/?malhp=${malhp}`)
+        .then(response => {
+            if (!response.ok) throw new Error('Không thể lấy thông tin học phần');
+            return response.json();
+        })
+        .then(data => {
+            if (data.status === 'success') {
+                // Cập nhật bảng kết quả đăng ký
+                updateRegistrationTable(data.class_info);
+                alert('Đã thêm học phần vào danh sách đăng ký!');
+                hideSelectClassForm();
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Có lỗi xảy ra khi lấy thông tin học phần: ' + error.message);
+        });
+}
+
+// Hàm cập nhật bảng kết quả đăng ký
+function updateRegistrationTable(classInfo) {
+    const tbody = document.querySelector('.table-hocphan tbody');
+    const row = document.createElement('tr');
+    row.innerHTML = `
+        <td>${selectedClasses.length}</td>
+        <td>${classInfo.loai}</td>
+        <td>${classInfo.mamh}</td>
+        <td>${classInfo.tenhp}</td>
+        <td>${classInfo.sotc}</td>
+        <td><button class="btn-action btn-huy" data-mahp="${classInfo.mamh}">Hủy</button></td>
+    `;
+    tbody.appendChild(row);
+
+    // Thêm sự kiện cho nút Hủy
+    row.querySelector('.btn-huy').addEventListener('click', function () {
+        const mahp = this.getAttribute('data-mahp');
+        removeClass(mahp, row);
+    });
+}
+
+// Hàm xóa học phần khỏi danh sách tạm
+function removeClass(mahp, row) {
+    if (confirm('Bạn có chắc chắn muốn xóa học phần này khỏi danh sách?')) {
+        selectedClasses = selectedClasses.filter(item => item !== mahp);
+        row.remove();
+        alert('Đã xóa học phần khỏi danh sách!');
+    }
+}
+
+function confirmRegistration() {
+    if (selectedClasses.length === 0) {
+        alert('Chưa có học phần nào được chọn!');
+        return;
+    }
+
+    if (!confirm('Bạn có chắc chắn muốn xác nhận đăng ký tất cả học phần này?')) {
+        return;
+    }
+
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
     if (!csrfToken) {
         alert('Không tìm thấy CSRF token');
         return;
     }
 
-    if (confirm('Bạn có chắc chắn muốn đăng ký lớp học phần này?')) {
-        fetch(`/register/?action=add&malhp=${malhp}`, {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': csrfToken,
-                'Content-Type': 'application/json'
-            }
-        })
+    // Gửi request POST với danh sách mã học phần
+    fetch('/register_multiple/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': csrfToken,
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ malhps: selectedClasses })
+    })
         .then(response => {
-            // Check if response is JSON
-            const contentType = response.headers.get("content-type");
-            if (contentType && contentType.indexOf("application/json") !== -1) {
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
                 return response.json();
             } else {
-                throw new Error("Received non-JSON response from server");
+                throw new Error('Received non-JSON response from server');
             }
         })
         .then(data => {
             if (data.status === 'success') {
                 alert(data.message);
-                hideSelectClassForm();
-                location.reload(); // Refresh the page to show changes
+                selectedClasses = []; // Xóa danh sách tạm
+                document.querySelector('.table-hocphan tbody').innerHTML = ''; // Xóa bảng
+                location.reload(); // Refresh trang để cập nhật
             } else {
-                alert(data.message); // Hiển thị lỗi nếu có
+                alert(data.message);
             }
         })
         .catch(error => {
             console.error('Error:', error);
-            alert('Có lỗi xảy ra khi đăng ký lớp học phần: ' + error.message);
+            alert('Có lỗi xảy ra khi xác nhận đăng ký: ' + error.message);
         });
-    }
 }
+
+
+
+
 
 function hideSelectClassForm() {
     const container = document.getElementById('selectClassContainer');
