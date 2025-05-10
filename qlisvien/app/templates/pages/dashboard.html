@@ -44,9 +44,7 @@
             <a href="{% url 'register' %}"><i class="fas fa-book-open"></i> Đăng ký học phần</a>
             {% endif %}
             <a href="{% url 'quan_ly_hoc_phan' %}"><i class="fas fa-tasks"></i> Quản lý học phần</a>
-            {% if not is_admin %}
             <a href="{% url 'history' %}"><i class="fas fa-history"></i> Lịch sử đăng ký</a>
-            {% endif %}
             {% if is_admin %}
             <a href="{% url 'timing' %}"><i class="fas fa-clock"></i> Hẹn giờ đăng ký</a>
             <a href="{% url 'author' %}"><i class="fas fa-user-shield"></i> Phân quyền</a> 

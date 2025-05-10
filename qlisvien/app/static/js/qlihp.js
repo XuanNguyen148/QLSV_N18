@@ -77,9 +77,10 @@ if (addForm) {
             malhp: document.getElementById('lopHP').value,
             sotc: document.getElementById('stc').value,
             giangvien: document.getElementById('giangVien').value,
-            hocky: document.getElementById('hocKy').value,
+            // hocky: document.getElementById('hocKy').value,
             lichhoc: document.getElementById('lichHoc').value,
-            sosvtoida: document.getElementById('soSVToiDa').value
+            sosvtoida: document.getElementById('soSVToiDa').value,
+            phonghoc: document.getElementById('phongHoc').value,
         };
         
         // Gửi dữ liệu đến server

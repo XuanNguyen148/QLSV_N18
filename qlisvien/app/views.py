@@ -6,6 +6,8 @@ from . import models
 from django.utils import timezone
 from datetime import datetime
 import json
+from django.core.cache import cache
+from django.contrib.auth.signals import user_login_failed
 
 
 # def ghi_danh(request):
@@ -469,58 +471,116 @@ def get_lophocphan(request):
 def dashboard(request):           
     return render(request, 'pages/dashboard.html')
 
+# def login_view(request):
+#     # Khởi tạo debug info
+#     debug_info = {
+#         'post_data': None,
+#         'found_users': None,
+#         'last_query': None
+#     }
+    
+#     # Lấy danh sách users
+#     all_users = models.CustomUser.objects.all()
+    
+#     if request.method == 'POST':
+#         username = request.POST.get('username')
+#         password = request.POST.get('password')
+        
+#         # Lưu thông tin POST để debug
+#         debug_info['post_data'] = {
+#             'username': username,
+#             'password': password
+#         }
+        
+#         try:
+#             user = models.CustomUser.objects.get(username=username, password=password)
+#             # Lưu kết quả truy vấn để debug
+#             debug_info['found_users'] = [{
+#                 'id': user.id,
+#                 'username': user.username
+#             }]
+            
+#             # Lưu session và chuyển hướng
+#             request.session['user_id'] = user.id
+#             request.session['username'] = user.username
+#             request.session['show_welcome'] = True
+            
+#             if user.vaitro == 'Admin':
+#                 return redirect('quan_ly_hoc_phan')
+#             return redirect('ghi_danh')
+            
+#         except models.CustomUser.DoesNotExist:
+#             debug_info['last_query'] = "Không tìm thấy tài khoản"
+#             messages.error(request, 'Tài khoản hoặc mật khẩu không chính xác')
+#         except Exception as e:
+#             debug_info['last_query'] = str(e)
+#             messages.error(request, f'Lỗi: {str(e)}')
+    
+#     context = {
+#         'all_users': all_users,
+#         'debug_info': debug_info,
+#         'debug': True  # Bật chế độ debug
+#     }
+    
+#     return render(request, 'pages/login.html', context)
+
 def login_view(request):
-    # Khởi tạo debug info
     debug_info = {
         'post_data': None,
         'found_users': None,
         'last_query': None
     }
-    
-    # Lấy danh sách users
+
     all_users = models.CustomUser.objects.all()
-    
+
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        
-        # Lưu thông tin POST để debug
-        debug_info['post_data'] = {
-            'username': username,
-            'password': password
-        }
-        
+        debug_info['post_data'] = {'username': username, 'password': password}
+
+        # Đếm số lần đăng nhập sai
+        key = f'login_fail_{username}'
+        fail_count = cache.get(key, 0)
+
+        if fail_count >= 3:
+            messages.error(request, 'Bạn đã đăng nhập sai quá nhiều lần. Vui lòng thử lại sau 10 giây.')
+            debug_info['last_query'] = f'Bị chặn do vượt quá {fail_count} lần sai.'
+            return render(request, 'pages/login.html', {
+                'all_users': all_users,
+                'debug_info': debug_info,
+                'debug': True
+            })
+
         try:
             user = models.CustomUser.objects.get(username=username, password=password)
-            # Lưu kết quả truy vấn để debug
-            debug_info['found_users'] = [{
-                'id': user.id,
-                'username': user.username
-            }]
-            
-            # Lưu session và chuyển hướng
+            debug_info['found_users'] = [{'id': user.id, 'username': user.username}]
+
+            # Đăng nhập thành công: reset đếm sai
+            cache.delete(key)
+
             request.session['user_id'] = user.id
             request.session['username'] = user.username
             request.session['show_welcome'] = True
-            
+
             if user.vaitro == 'Admin':
                 return redirect('quan_ly_hoc_phan')
             return redirect('ghi_danh')
-            
+
         except models.CustomUser.DoesNotExist:
+            cache.set(key, fail_count + 1, timeout=10)  # +1 lần sai, giữ trong 1 giờ
+            user_login_failed.send(sender=models.CustomUser, credentials={'username': username}, request=request)
             debug_info['last_query'] = "Không tìm thấy tài khoản"
             messages.error(request, 'Tài khoản hoặc mật khẩu không chính xác')
         except Exception as e:
             debug_info['last_query'] = str(e)
             messages.error(request, f'Lỗi: {str(e)}')
-    
-    context = {
+
+    return render(request, 'pages/login.html', {
         'all_users': all_users,
         'debug_info': debug_info,
-        'debug': True  # Bật chế độ debug
-    }
-    
-    return render(request, 'pages/login.html', context)
+        'debug': True
+    })
+
 
 def logout_view(request):
     # Xóa thông tin session
@@ -603,6 +663,152 @@ def dang_ky(request):
                 }, status=404)
     
     # XỬ LÝ THÊM LỚP HỌC PHẦN (POST with action=add)
+    # if request.method == 'POST' and request.GET.get('action') == 'add':
+    #     malhp = request.GET.get('malhp')
+    #     if not malhp:
+    #         return JsonResponse({
+    #             'status': 'error',
+    #             'message': 'Thiếu mã lớp học phần'
+    #         }, status=400)
+    #     try:
+    #         try:
+    #             # Lấy thông tin lớp học phần từ malhp
+    #             lhp = models.LHP.objects.get(malhp=malhp)
+    #             mamh = lhp.malhp  # mamh is set to malhp for this context
+
+    #             # Kiểm tra xem sinh viên đã đăng ký lớp học phần này chưa
+    #             ttdk_qs = models.TTDK.objects.filter(
+    #                 masv=sinh_vien,
+    #                 # mamh=mamh,
+    #                 trangthai='Đăng ký',
+    #                 hoatdong='Đăng ký'
+    #             )
+    #             malhp_2 = malhp[:-2]
+    #         except Exception as e:
+    #             return JsonResponse({
+    #                 'status': 'error',
+    #                 'message': str(e) + ' chào 4'
+    #             }, status=500)
+    #         try:
+    #             try:
+    #                 registered_lhps = models.TTDK.objects.filter(
+    #                         masv=sinh_vien,
+    #                         trangthai='Đăng ký',
+    #                         hoatdong='Đăng ký'
+    #                     ).values_list('mamh', flat=True)  # Lấy danh sách malhp đã đăng ký
+
+    #                 if models.LHP.objects.filter(
+    #                     malhp__in=registered_lhps,
+    #                     lichhoc=lhp.lichhoc
+    #                 ).exclude(malhp=malhp).exists():
+    #                     return JsonResponse({
+    #                         'status': 'error',
+    #                         'message': 'Trùng lịch: ' + str(models.LHP.objects.filter(malhp__in=registered_lhps, lichhoc=lhp.lichhoc).exclude(malhp=malhp).first().mahp.tenhp)
+    #                     }, status=400)
+    #             except models.LHP.DoesNotExist:
+    #                     return JsonResponse({
+    #                         'status': 'error',
+    #                         'message': 'Lịch sai'
+    #                     }, status=400)
+    #             try:
+    #                 if ttdk_qs.filter(mamh__startswith=malhp_2).exists():
+    #                     try:
+    #                         if ttdk_qs.filter(mamh=mamh).exists():
+    #                             return JsonResponse({
+    #                                 'status': 'error',
+    #                                 'message': 'Bạn đã đăng ký lớp học phần này rồi'
+    #                             }, status=400)
+    #                         else:
+    #                             import uuid
+    #                             mals = f"LS{str(uuid.uuid4())[:6].upper()}"
+    #                             # Tạo bản ghi mới trong LS
+    #                             ls = models.LS.objects.create(
+    #                                 mals=mals,
+    #                                 hoatdong='Đăng ký',
+    #                                 masv=sinh_vien,
+    #                                 mamh = mamh,
+    #                                 trangthai='Đăng ký',
+    #                                 thoigian=timezone.now()
+    #                             )
+    #                             try:
+                                    
+    #                                 ttdk = models.TTDK.objects.get(mamh__startswith=malhp_2, masv=sinh_vien)
+    #                                 if ttdk:
+    #                                     ttdk.mamh = mamh
+    #                                     ttdk.mals = ls
+    #                                     ttdk.save()
+    #                                 else:
+    #                                     print("Không tìm thấy TTDK với mamh =", mamh)
+    #                             except Exception as e:
+    #                                 return JsonResponse({
+    #                                     'status': 'error',
+    #                                     'message': str(e) + ' chào 3.1' + ' ' +str(ttdk)
+    #                                 }, status=500)
+
+    #                             return JsonResponse({
+    #                                 'status': 'success',
+    #                                 'message': 'Đã đổi học phần thành công'
+    #                             })
+    #                     except Exception as e:
+    #                         return JsonResponse({
+    #                             'status': 'error',
+    #                             'message': str(e) + ' chào 3'
+    #                         }, status=500)
+    #                 else:
+    #                     try:
+    #                         # Trường hợp không có bản ghi TTDK nào trùng mamh: Tạo mới TTDK và LS
+    #                         import uuid
+    #                         mals = f"LS{str(uuid.uuid4())[:6].upper()}"
+
+    #                         ls = models.LS.objects.create(
+    #                             mals=mals,
+    #                             hoatdong='Đăng ký',
+    #                             masv=sinh_vien,
+    #                             mamh=mamh,  # Use course code here
+    #                             trangthai='Đăng ký',
+    #                             thoigian=timezone.now()
+    #                         )
+
+    #                         # Tạo bản ghi TTDK mới (remove malhp argument)
+    #                         ttdk = models.TTDK.objects.create(
+    #                             masv=sinh_vien,
+    #                             mamh=mamh,  # mamh is malhp
+    #                             hoatdong='Đăng ký',
+    #                             trangthai='Đăng ký',
+    #                             mals=ls
+    #                         )
+
+    #                         return JsonResponse({
+    #                             'status': 'success',
+    #                             'message': 'Đã thêm học phần thành công'
+    #                         })
+    #                     except Exception as e:
+    #                         return JsonResponse({
+    #                             'status': 'error',
+    #                             'message': str(e) + ' chào 5'
+    #                         }, status=500)
+    #             except Exception as e:
+    #                 return JsonResponse({
+    #                     'status': 'error',
+    #                     'message': str(e) + ' chào 8'
+    #                 }, status=500)
+    #         except Exception as e:
+    #             return JsonResponse({
+    #                 'status': 'error',
+    #                 'message': str(e) + ' chào 6'
+    #             }, status=500)
+    #     except models.LHP.DoesNotExist:
+    #         return JsonResponse({
+    #             'status': 'error',
+    #             'message': 'Không tìm thấy lớp học phần'
+    #         }, status=404)
+    #     except Exception as e:
+    #         return JsonResponse({
+    #             'status': 'error',
+    #             'message': str(e) + ' chào'
+    #         }, status=500)
+
+    # XỬ LÝ THÊM LỚP HỌC PHẦN (POST with action=add)
     if request.method == 'POST' and request.GET.get('action') == 'add':
         malhp = request.GET.get('malhp')
         if not malhp:
@@ -611,132 +817,110 @@ def dang_ky(request):
                 'message': 'Thiếu mã lớp học phần'
             }, status=400)
         try:
-            try:
-                # Lấy thông tin lớp học phần từ malhp
-                lhp = models.LHP.objects.get(malhp=malhp)
-                mamh = lhp.malhp  # mamh is set to malhp for this context
+            # Lấy thông tin lớp học phần từ malhp
+            lhp = models.LHP.objects.get(malhp=malhp)
+            mamh = lhp.malhp  # mamh is set to malhp for this context
 
-                # Kiểm tra xem sinh viên đã đăng ký lớp học phần này chưa
-                ttdk_qs = models.TTDK.objects.filter(
-                    masv=sinh_vien,
-                    # mamh=mamh,
-                    trangthai='Đăng ký',
-                    hoatdong='Đăng ký'
-                )
-                malhp_2 = malhp[:-2]
-            except Exception as e:
+            # Kiểm tra số lượng sinh viên đã đăng ký so với số sinh viên tối đa
+            current_registrations = models.TTDK.objects.filter(
+                mamh=malhp,
+                trangthai='Đăng ký',
+                hoatdong='Đăng ký'
+            ).count()
+            if lhp.sosvtoida is not None and current_registrations >= lhp.sosvtoida:
                 return JsonResponse({
                     'status': 'error',
-                    'message': str(e) + ' chào 4'
-                }, status=500)
-            try:
-                try:
-                    registered_lhps = models.TTDK.objects.filter(
-                            masv=sinh_vien,
-                            trangthai='Đăng ký',
-                            hoatdong='Đăng ký'
-                        ).values_list('mamh', flat=True)  # Lấy danh sách malhp đã đăng ký
+                    'message': 'Lớp học phần đã đủ số lượng sinh viên tối đa'
+                }, status=400)
 
-                    if models.LHP.objects.filter(
-                        malhp__in=registered_lhps,
-                        lichhoc=lhp.lichhoc
-                    ).exclude(malhp=malhp).exists():
-                        return JsonResponse({
-                            'status': 'error',
-                            'message': 'Trùng lịch: ' + str(models.LHP.objects.filter(malhp__in=registered_lhps, lichhoc=lhp.lichhoc).exclude(malhp=malhp).first().mahp.tenhp)
-                        }, status=400)
-                except models.LHP.DoesNotExist:
-                        return JsonResponse({
-                            'status': 'error',
-                            'message': 'Lịch sai'
-                        }, status=400)
-                try:
-                    if ttdk_qs.filter(mamh__startswith=malhp_2).exists():
-                        try:
-                            if ttdk_qs.filter(mamh=mamh).exists():
-                                return JsonResponse({
-                                    'status': 'error',
-                                    'message': 'Bạn đã đăng ký lớp học phần này rồi'
-                                }, status=400)
-                            else:
-                                import uuid
-                                mals = f"LS{str(uuid.uuid4())[:6].upper()}"
-                                # Tạo bản ghi mới trong LS
-                                ls = models.LS.objects.create(
-                                    mals=mals,
-                                    hoatdong='Đăng ký',
-                                    masv=sinh_vien,
-                                    mamh = mamh,
-                                    trangthai='Đăng ký',
-                                    thoigian=timezone.now()
-                                )
-                                try:
-                                    
-                                    ttdk = models.TTDK.objects.get(mamh__startswith=malhp_2, masv=sinh_vien)
-                                    if ttdk:
-                                        ttdk.mamh = mamh
-                                        ttdk.mals = ls
-                                        ttdk.save()
-                                    else:
-                                        print("Không tìm thấy TTDK với mamh =", mamh)
-                                except Exception as e:
-                                    return JsonResponse({
-                                        'status': 'error',
-                                        'message': str(e) + ' chào 3.1' + ' ' +str(ttdk)
-                                    }, status=500)
+            # Kiểm tra xem sinh viên đã đăng ký lớp học phần này chưa
+            ttdk_qs = models.TTDK.objects.filter(
+                masv=sinh_vien,
+                trangthai='Đăng ký',
+                hoatdong='Đăng ký'
+            )
+            malhp_2 = malhp[:-2]
 
-                                return JsonResponse({
-                                    'status': 'success',
-                                    'message': 'Đã đổi học phần thành công'
-                                })
-                        except Exception as e:
-                            return JsonResponse({
-                                'status': 'error',
-                                'message': str(e) + ' chào 3'
-                            }, status=500)
-                    else:
-                        try:
-                            # Trường hợp không có bản ghi TTDK nào trùng mamh: Tạo mới TTDK và LS
-                            import uuid
-                            mals = f"LS{str(uuid.uuid4())[:6].upper()}"
+            # Kiểm tra trùng lịch
+            registered_lhps = models.TTDK.objects.filter(
+                masv=sinh_vien,
+                trangthai='Đăng ký',
+                hoatdong='Đăng ký'
+            ).values_list('mamh', flat=True)  # Lấy danh sách malhp đã đăng ký
 
-                            ls = models.LS.objects.create(
-                                mals=mals,
-                                hoatdong='Đăng ký',
-                                masv=sinh_vien,
-                                mamh=mamh,  # Use course code here
-                                trangthai='Đăng ký',
-                                thoigian=timezone.now()
-                            )
+            if models.LHP.objects.filter(
+                malhp__in=registered_lhps,
+                lichhoc=lhp.lichhoc
+            ).exclude(malhp=malhp).exists():
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'Trùng lịch: ' + str(models.LHP.objects.filter(malhp__in=registered_lhps, lichhoc=lhp.lichhoc).exclude(malhp=malhp).first().mahp.tenhp)
+                }, status=400)
 
-                            # Tạo bản ghi TTDK mới (remove malhp argument)
-                            ttdk = models.TTDK.objects.create(
-                                masv=sinh_vien,
-                                mamh=mamh,  # mamh is malhp
-                                hoatdong='Đăng ký',
-                                trangthai='Đăng ký',
-                                mals=ls
-                            )
-
-                            return JsonResponse({
-                                'status': 'success',
-                                'message': 'Đã thêm học phần thành công'
-                            })
-                        except Exception as e:
-                            return JsonResponse({
-                                'status': 'error',
-                                'message': str(e) + ' chào 5'
-                            }, status=500)
-                except Exception as e:
+            if ttdk_qs.filter(mamh__startswith=malhp_2).exists():
+                if ttdk_qs.filter(mamh=mamh).exists():
                     return JsonResponse({
                         'status': 'error',
-                        'message': str(e) + ' chào 8'
-                    }, status=500)
-            except Exception as e:
+                        'message': 'Bạn đã đăng ký lớp học phần này rồi'
+                    }, status=400)
+                else:
+                    import uuid
+                    mals = f"LS{str(uuid.uuid4())[:6].upper()}"
+                    # Tạo bản ghi mới trong LS
+                    ls = models.LS.objects.create(
+                        mals=mals,
+                        hoatdong='Đăng ký',
+                        masv=sinh_vien,
+                        mamh=mamh,
+                        trangthai='Đăng ký',
+                        thoigian=timezone.now()
+                    )
+                    try:
+                        ttdk = models.TTDK.objects.get(mamh__startswith=malhp_2, masv=sinh_vien)
+                        if ttdk:
+                            ttdk.mamh = mamh
+                            ttdk.mals = ls
+                            ttdk.save()
+                        else:
+                            print("Không tìm thấy TTDK với mamh =", mamh)
+                    except Exception as e:
+                        return JsonResponse({
+                            'status': 'error',
+                            'message': str(e) + ' chào 3.1' + ' ' + str(ttdk)
+                        }, status=500)
+
+                    return JsonResponse({
+                        'status': 'success',
+                        'message': 'Đã đổi học phần thành công'
+                    })
+            else:
+                # Trường hợp không có bản ghi TTDK nào trùng mamh: Tạo mới TTDK và LS
+                import uuid
+                mals = f"LS{str(uuid.uuid4())[:6].upper()}"
+
+                ls = models.LS.objects.create(
+                    mals=mals,
+                    hoatdong='Đăng ký',
+                    masv=sinh_vien,
+                    mamh=mamh,  # Use course code here
+                    trangthai='Đăng ký',
+                    thoigian=timezone.now()
+                )
+
+                # Tạo bản ghi TTDK mới
+                ttdk = models.TTDK.objects.create(
+                    masv=sinh_vien,
+                    mamh=mamh,  # mamh is malhp
+                    hoatdong='Đăng ký',
+                    trangthai='Đăng ký',
+                    mals=ls
+                )
+
                 return JsonResponse({
-                    'status': 'error',
-                    'message': str(e) + ' chào 6'
-                }, status=500)
+                    'status': 'success',
+                    'message': 'Đã thêm học phần thành công'
+                })
+
         except models.LHP.DoesNotExist:
             return JsonResponse({
                 'status': 'error',
@@ -747,7 +931,8 @@ def dang_ky(request):
                 'status': 'error',
                 'message': str(e) + ' chào'
             }, status=500)
-    
+
+
     # XỬ LÝ XÓA LỚP HỌC PHẦN (DELETE with action=delete)
     elif request.method == 'DELETE' and request.GET.get('action') == 'delete':
         mahp = request.GET.get('mahp')
@@ -1021,6 +1206,7 @@ def history(request):
         try:
             sinh_vien = models.TTSV.objects.get(matk=matk)
         except models.TTSV.DoesNotExist:
+            sinh_vien = models.TTNS.objects.get(matk=matk)
             if request.method != 'GET' or 'action' in request.GET:
                 return JsonResponse({
                     'status': 'error',
