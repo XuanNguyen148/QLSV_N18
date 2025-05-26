@@ -69,7 +69,15 @@
                 {% endfor %}
             </tbody>
         </table>
+
+        <!-- Phân trang -->
+        <div class="pagination">
+            <button onclick="goToPreviousPage()" class="page-btn">Trước</button>
+            <span id="pageInfo"></span>
+            <button onclick="goToNextPage()" class="page-btn">Sau</button>
+        </div>
     </div>
+
     <!-- Form thêm học phần -->
     <div class="add-form-container" id="addFormContainer" style="display: none;">
         <form id="addForm" class="add-form">
@@ -113,10 +121,10 @@
             <input type="text" id="editMaNganh" name="maNganh" readonly required>
             
             <label for="editLopHP">Lớp học phần:</label>
-            <input type="text" id="editLopHP" name="lopHP" required>
+            <input type="text" id="editLopHP" name="lopHP" readonly required>
 
             <label for="editSTC">Số tín chỉ:</label>
-            <input type="number" id="editSTC" name="stc" required>
+            <input type="number" id="editSTC" name="stc" readonly required>
 
             <label for="editLoai">Loại:</label>
             <input type="text" id="editLoai" name="loai" readonly required>

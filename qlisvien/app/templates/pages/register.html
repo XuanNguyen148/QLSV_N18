@@ -1,3 +1,4 @@
+<!-- hoàn tác trước đây 01 -->
 {% extends 'pages/dashboard.html' %}
 {% load static %}
 
@@ -39,7 +40,7 @@
                     <td>{{ hp.tenhp }}</td>
                     <td>{{ hp.sotc }}</td>
                     {% if is_admin or is_sinhvien %}
-                    <td><button class="register-btn" data-ma-hoc-phan="{{ hp.mahp }}">Đăng ký</button></td>
+                    <td><button class="register-btn" data-ma-hoc-phan="{{ hp.mahp }}" data-tenhp="{{ hp.tenhp }}">Đăng ký</button></td>
                     {% endif %}
                 </tr>
                 {% endfor %}
@@ -49,14 +50,14 @@
                 <tr class="section-header">
                     <td colspan="5">Các môn tự chọn</td>
                 </tr>
-                {% for hp in hptc %}
+                {% for item in kqtc_gd %}
                 <tr>
                     <td>{{ forloop.counter }}</td>
-                    <td>{{ hp.mahp }}</td>
-                    <td>{{ hp.tenhp }}</td>
-                    <td>{{ hp.sotc }}</td>
+                    <td>{{ item.tc.mahp }}</td>
+                    <td>{{ item.tc.tenhp }}</td>
+                    <td>{{ item.tc.sotc }}</td>
                     {% if is_admin or is_sinhvien %}
-                    <td><button class="register-btn" data-ma-hoc-phan="{{ hp.mahp }}">Đăng ký</button></td>
+                    <td><button class="register-btn" data-ma-hoc-phan="{{ item.tc.mahp }}" data-tenhp="{{ item.tc.tenhp }}">Đăng ký</button></td>
                     {% endif %}
                 </tr>
                 {% endfor %}
@@ -72,7 +73,7 @@
                     <td>{{ hp.tenhp }}</td>
                     <td>{{ hp.sotc }}</td>
                     {% if is_admin or is_sinhvien %}
-                    <td><button class="register-btn" data-ma-hoc-phan="{{ hp.mahp }}">Đăng ký</button></td>
+                    <td><button class="register-btn" data-ma-hoc-phan="{{ hp.mahp }}" data-tenhp="{{ hp.tenhp }}">Đăng ký</button></td>
                     {% endif %}
                 </tr>
                 {% endfor %}
@@ -108,7 +109,7 @@
                     <td>{{ item.lhp.phonghoc }}</td>
                     {% if is_admin or is_sinhvien %}
                     <td>
-                        <button class="cancel-btn btn-huy" data-mahp="{{ item.ttdk.mamh }}">Hủy</button>
+                        <button class="cancel-btn btn-huy" data-malhp="{{ item.ttdk.mamh }}">Hủy</button>
                         <button class="register-btn" data-ma-hoc-phan="{{ item.lhp.mahp.mahp }}">Chuyển lớp</button>
                     </td>
                     {% endif %}
@@ -116,6 +117,9 @@
                 {% endfor %}
             </tbody>
         </table>
+        <div class="confirm-box">
+            <button class="btn-confirm" onclick="confirmRegistration()">Xác nhận</button>
+        </div>
     </div>
 </div>
 {% if is_admin or is_sinhvien %}
