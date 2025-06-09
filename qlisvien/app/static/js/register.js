@@ -149,6 +149,28 @@ function updateSelectedClassesTable() {
 function handleCancelCourse(btn) {
     const malhp = btn.getAttribute('data-malhp');
     const row = btn.closest('tr');
+    
+    // Kiểm tra số tín chỉ trước khi hủy
+    if (!row.classList.contains('temporary')) {
+    // Kiểm tra học phần bắt buộc trước khi hủy
+        const courseCode = row.querySelector('td:nth-child(2)').textContent?.trim().split('.')[0];
+        const requiredCourses = getRequiredCourses();
+        
+        if (requiredCourses.includes(courseCode)) {
+            alert('Không thể hủy học phần bắt buộc!');
+            return;
+        }
+
+        const currentCredits = calculateTotalCredits();
+        const courseCredits = parseInt(row.querySelector('td:nth-child(4)').textContent || 0);
+        const remainingCredits = currentCredits - courseCredits;
+        
+        if (remainingCredits < 15) {
+            alert(`Không thể hủy đăng ký lớp học phần!\nSố tín chỉ sau khi hủy (${remainingCredits}). Mức tín chỉ tối thiểu tối thiểu (15 tín chỉ).`);
+            return;
+        }
+    }
+
     if (row.classList.contains('temporary')) {
         // Xóa trực tiếp không cần xác nhận cho bảng tạm
         selectedClasses = selectedClasses.filter(item => item.malhp !== malhp);

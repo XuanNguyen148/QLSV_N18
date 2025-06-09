@@ -73,6 +73,9 @@ if (addForm) {
         const formData = {
             manganh: document.getElementById('maNganh').value,
             mahp: document.getElementById('maHP').value,
+            tenhp: document.getElementById('tenHP').value,
+            loai: document.getElementById('loai').value,
+            hocky: document.getElementById('hocKy').value,
             malhp: document.getElementById('lopHP').value,
             sotc: document.getElementById('stc').value,
             giangvien: document.getElementById('giangVien').value,
@@ -95,7 +98,7 @@ if (addForm) {
                 alert(data.message);
                 window.location.reload();
             } else {
-                alert('Lỗi: ' + data.message);
+                alert('Lỗi j3625a: ' + data.message);
             }
         })
         .catch(error => {

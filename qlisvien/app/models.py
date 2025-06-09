@@ -57,9 +57,8 @@ class HP(models.Model):
     manganh = models.ForeignKey('NH', on_delete=models.SET_NULL, null=True, blank=True, db_column='manganh')
 
     class Meta:
-        # tên bảng tương ứng trong cơ sở dữ liệu
         db_table = 'hocphan'
-        managed = False  # Django không quản lý bảng này
+        managed = False
 
 class TTHT(models.Model):
     id = models.AutoField(primary_key=True)

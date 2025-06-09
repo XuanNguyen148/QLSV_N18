@@ -137,7 +137,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# Thêm cấu hình Messages
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 LOGGING = {
@@ -153,7 +152,7 @@ LOGGING = {
         },
     },
     'loggers': {
-        'app': {  # app là tên app của bạn
+        'app': {
             'handlers': ['console', 'file'],
             'level': 'DEBUG',
         },

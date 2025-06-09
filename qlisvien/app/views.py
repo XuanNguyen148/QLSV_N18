@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from . import models
 from django.utils import timezone
@@ -9,7 +8,6 @@ import json
 from django.core.cache import cache
 from django.contrib.auth.signals import user_login_failed
 import uuid
-from .models import TTSV, HP, LS, TTDK
 
 def ghi_danh(request):
     matk = request.session.get('user_id')
@@ -22,8 +20,8 @@ def ghi_danh(request):
     sinh_vien = None
     if matk:
         try:
-            sinh_vien = TTSV.objects.get(matk=matk)
-        except TTSV.DoesNotExist:
+            sinh_vien = models.TTSV.objects.get(matk=matk)
+        except models.TTSV.DoesNotExist:
             if request.method != 'GET' or 'action' in request.GET:
                 return JsonResponse({
                     'status': 'error',
@@ -39,7 +37,7 @@ def ghi_danh(request):
             }, status=400)
         
         try:
-            if TTDK.objects.filter(masv=sinh_vien, mamh=mahp, trangthai='Đăng ký', hoatdong='Ghi danh').exists():
+            if models.TTDK.objects.filter(masv=sinh_vien, mamh=mahp, trangthai='Đăng ký', hoatdong='Ghi danh').exists():
                 return JsonResponse({
                     'status': 'error', 
                     'message': 'Bạn đã đăng ký học phần này rồi'
@@ -47,7 +45,7 @@ def ghi_danh(request):
             
             mals = f"LS{str(uuid.uuid4())[:6].upper()}"
             
-            ls = LS.objects.create(
+            ls = models.LS.objects.create(
                 mals=mals,
                 hoatdong='Ghi danh',
                 masv=sinh_vien,
@@ -57,7 +55,7 @@ def ghi_danh(request):
             )
 
             try:
-                ttdk = TTDK.objects.get(
+                ttdk = models.TTDK.objects.get(
                     masv=sinh_vien,
                     mamh=mahp,
                     hoatdong='Ghi danh'
@@ -65,8 +63,8 @@ def ghi_danh(request):
                 ttdk.trangthai = 'Đăng ký'
                 ttdk.mals = ls
                 ttdk.save()
-            except TTDK.DoesNotExist:
-                ttdk = TTDK.objects.create(
+            except models.TTDK.DoesNotExist:
+                ttdk = models.TTDK.objects.create(
                     masv=sinh_vien,
                     mamh=mahp,
                     hoatdong='Ghi danh',
@@ -79,7 +77,7 @@ def ghi_danh(request):
                 'message': 'Đã thêm học phần thành công'
             })
             
-        except HP.DoesNotExist:
+        except models.HP.DoesNotExist:
             return JsonResponse({
                 'status': 'error',
                 'message': 'Không tìm thấy học phần'
@@ -102,15 +100,15 @@ def ghi_danh(request):
             
             errors = []
             for mahp in courses:
-                if TTDK.objects.filter(masv=sinh_vien, mamh=mahp, trangthai='Đăng ký', hoatdong='Ghi danh').exists():
+                if models.TTDK.objects.filter(masv=sinh_vien, mamh=mahp, trangthai='Đăng ký', hoatdong='Ghi danh').exists():
                     errors.append(f"Học phần {mahp} đã được đăng ký")
                     continue
                 
                 try:
-                    HP.objects.get(mahp=mahp)
+                    models.HP.objects.get(mahp=mahp)
                     mals = f"LS{str(uuid.uuid4())[:6].upper()}"
 
-                    ls = LS.objects.create(
+                    ls = models.LS.objects.create(
                         mals=mals,
                         hoatdong='Ghi danh',
                         masv=sinh_vien,
@@ -120,7 +118,7 @@ def ghi_danh(request):
                     )
 
                     try:
-                        ttdk = TTDK.objects.get(
+                        ttdk = models.TTDK.objects.get(
                             masv=sinh_vien,
                             mamh=mahp,
                             hoatdong='Ghi danh'
@@ -128,8 +126,8 @@ def ghi_danh(request):
                         ttdk.trangthai = 'Đăng ký'
                         ttdk.mals = ls
                         ttdk.save()
-                    except TTDK.DoesNotExist:
-                        ttdk = TTDK.objects.create(
+                    except models.TTDK.DoesNotExist:
+                        ttdk = models.TTDK.objects.create(
                             masv=sinh_vien,
                             mamh=mahp,
                             hoatdong='Ghi danh',
@@ -137,7 +135,7 @@ def ghi_danh(request):
                             mals=ls
                         )
                 
-                except HP.DoesNotExist:
+                except models.HP.DoesNotExist:
                     errors.append(f"Học phần {mahp} không tồn tại")
                     continue
                 except Exception as e:
@@ -178,7 +176,7 @@ def ghi_danh(request):
         try:
             mals = f"LS{str(uuid.uuid4())[:6].upper()}"
             
-            ls = LS.objects.create(
+            ls = models.LS.objects.create(
                 mals=mals,
                 hoatdong='Ghi danh',
                 masv=sinh_vien,
@@ -188,7 +186,7 @@ def ghi_danh(request):
             )
 
             try:
-                ttdk = TTDK.objects.get(
+                ttdk = models.TTDK.objects.get(
                     masv=sinh_vien,
                     mamh=mahp,
                     hoatdong='Ghi danh'
@@ -196,13 +194,12 @@ def ghi_danh(request):
                 ttdk.trangthai = 'Hủy đăng ký'
                 ttdk.mals = ls
                 ttdk.save()
-
                 return JsonResponse({
                     'status': 'success',
                     'message': 'Đã xóa học phần thành công'
                 })
 
-            except TTDK.DoesNotExist:
+            except models.TTDK.DoesNotExist:
                 return JsonResponse({
                     'status': 'error',
                     'message': 'Không tìm thấy học phần cần xóa'
@@ -219,22 +216,22 @@ def ghi_danh(request):
         lophc = sinh_vien.lop
         khoa = lophc[:3]
         if khoa == 'K59':
-            hptc = HP.objects.filter(loai='Tự chọn', hocky=4, manganh = sinh_vien.manganh)
+            hptc = models.HP.objects.filter(loai='Tự chọn', hocky=4, manganh = sinh_vien.manganh)
         elif khoa == 'K60':
-            hptc = HP.objects.filter(loai='Tự chọn', hocky=2, manganh = sinh_vien.manganh)
+            hptc = models.HP.objects.filter(loai='Tự chọn', hocky=2, manganh = sinh_vien.manganh)
         else:
-            hptc = HP.objects.filter(loai='Tự chọn', manganh = sinh_vien.manganh)
+            hptc = models.HP.objects.filter(loai='Tự chọn', manganh = sinh_vien.manganh)
             
-        kqdk = TTDK.objects.filter(trangthai='Đăng ký', masv=sinh_vien)
+        kqdk = models.TTDK.objects.filter(trangthai='Đăng ký', masv=sinh_vien)
         kqdk_hp = []
         for ttdk in kqdk:
             try:
-                hp = HP.objects.get(mahp=ttdk.mamh)
+                hp = models.HP.objects.get(mahp=ttdk.mamh)
                 kqdk_hp.append({
                     'ttdk': ttdk,
                     'hp': hp
                 })
-            except HP.DoesNotExist:
+            except models.HP.DoesNotExist:
                 continue
 
         context = {
@@ -248,10 +245,9 @@ def ghi_danh(request):
             'message': 'Phương thức không được hỗ trợ'
         }, status=405)
 
-# hoàn tác trước đây 01
 def get_lophocphan(request):
     mahp = request.GET.get('mahp')
-    lophocphan = models.LHP.objects.filter(mahp=mahp).select_related('mahp')  # Lấy thông tin từ HP
+    lophocphan = models.LHP.objects.filter(mahp=mahp).select_related('mahp')
     data = [
         {
             'malhp': lhp.malhp,
@@ -260,7 +256,7 @@ def get_lophocphan(request):
             'sosvtoida': lhp.sosvtoida,
             'lichhoc': lhp.lichhoc,
             'phonghoc': lhp.phonghoc,
-            'sotc': lhp.mahp.sotc  # Thêm sotc từ HP
+            'sotc': lhp.mahp.sotc
         }
         for lhp in lophocphan
     ]
@@ -347,12 +343,12 @@ def change_password(request):
                 messages.error(request, 'Mật khẩu mới và xác nhận mật khẩu không khớp')
                 return redirect('change_password')
             
-            user.password = new_password
+            user.matkhau = new_password
             user.save()
             
             messages.success(request, 'Đổi mật khẩu thành công')
             
-        except models.CustomUser.DoesNotExist:
+        except models.TaiKhoan.DoesNotExist:
             messages.error(request, 'Mật khẩu hiện tại không đúng')
         except Exception as e:
             messages.error(request, f'Có lỗi xảy ra: {str(e)}')
@@ -530,7 +526,7 @@ def dang_ky(request):
                         mals=mals,
                         hoatdong='Đăng ký',
                         masv=sinh_vien,
-                        mamh=mamh,  # Use course code here
+                        mamh=mamh,
                         trangthai='Đăng ký',
                         thoigian=timezone.now()
                     )
@@ -564,7 +560,6 @@ def dang_ky(request):
                 'message': str(e) + ' chào z'
             }, status=500)
         
-    # hoàn tác trước đây 01
     # THÊM NHIỀU
     elif request.method == 'POST' and request.GET.get('action') == 'add_multiple':
         try:
@@ -585,9 +580,10 @@ def dang_ky(request):
                             hoatdong='Đăng ký'
                         ).count()
                         if lhp.sosvtoida is not None and current_registrations >= lhp.sosvtoida:
-                            errors.append(f"Lớp học phần {malhp} đã đủ số lượng sinh viên tối đa")
-                            continue
-
+                            return JsonResponse({
+                                'status': 'error',
+                                'message': 'Lớp học phần ' + malhp +' đã đủ số lượng sinh viên tối đa'
+                            }, status=400)
                         # Kiểm tra trùng lịch
                         registered_lhps = models.TTDK.objects.filter(
                             masv=sinh_vien,
@@ -623,8 +619,10 @@ def dang_ky(request):
                         if ttdk_qs2.filter(mamh=malhp).exists():
                             try:
                                 if ttdk_qs2.filter(mamh=malhp, trangthai='Đăng ký').exists():
-                                    errors.append(f"Bạn đã đăng ký lớp học phần {malhp} rồi")
-                                    continue
+                                    return JsonResponse({
+                                        'status': 'error',
+                                        'message': 'Bạn đã đăng ký lớp học phần ' + malhp + ' rồi'
+                                    }, status=400)
                                 else:
                                     mals = f"LS{str(uuid.uuid4())[:6].upper()}"
                                     ls = models.LS.objects.create(
@@ -704,6 +702,11 @@ def dang_ky(request):
                 'status': 'error',
                 'message': 'Thiếu mã lớp học phần'
             }, status=400)
+        if models.LHP.objects.get(malhp=mahp).mahp.loai == 'Bắt buộc':
+            return JsonResponse({
+                'status': 'error',
+                'message': 'Bạn cần đăng ký đủ các học phần bắt buộc'
+            }, status=400)
         try:
             import uuid
             mals = f"LS{str(uuid.uuid4())[:6].upper()}"
@@ -776,6 +779,7 @@ def dang_ky(request):
             ttht__masv=sinh_vien
         ).distinct()
         lhp = models.LHP.objects.all()
+        abc = models.LHP.objects.order_by('mahp').distinct('mahp')
         kqdk = models.TTDK.objects.filter(trangthai='Đăng ký', masv=sinh_vien)
         kqdk_lhp = []
         for ttdk in kqdk:
@@ -793,6 +797,7 @@ def dang_ky(request):
             'hphl': hphl,
             'lhp': lhp,
             'kqdk': kqdk_lhp,
+            'abc': abc,
             'kqtc_gd': kqtc_gd,
         }
         return render(request, 'pages/register.html', context)
@@ -816,19 +821,18 @@ def qlihp(request):
         try:
             data = json.loads(request.body)
             
-            if not data.get('manganh') or not data.get('mahp') or not data.get('malhp'):
+            if not data.get('manganh') or not data.get('mahp'):
                 return JsonResponse({
                     'status': 'error',
-                    'message': 'Thiếu thông tin bắt buộc'
+                    'message': '3625d Thiếu thông tin bắt buộc'
                 }, status=400)
             
             try:
-                hp = models.HP.objects.get(mahp=data.get('mahp'))
                 nganh = models.NH.objects.get(manganh=data.get('manganh'))
             except models.HP.DoesNotExist or models.NH.DoesNotExist:
                 return JsonResponse({
                     'status': 'error',
-                    'message': 'Lớp học phần/Mã ngành không hợp lệ'
+                    'message': 'Mã ngành không hợp lệ'
                 }, status=404)
             
             if models.LHP.objects.filter(malhp=data.get('malhp')).exists():
@@ -836,27 +840,50 @@ def qlihp(request):
                     'status': 'error',
                     'message': 'Mã lớp học phần đã tồn tại'
                 }, status=400)
-            
-            lhp = models.LHP.objects.create(
-                malhp=data.get('malhp'),
-                mahp=hp,
-                giangvien=data.get('giangvien', ''),
-                sosvtoida=data.get('sosvtoida', 0),
-                lichhoc=data.get('lichhoc', ''),
-                phonghoc=data.get('phonghoc', '')
-            )
+                                    
+            if not models.HP.objects.filter(mahp=data.get('mahp')).exists():
+                try:
+                    hp = models.HP.objects.create(  
+                        mahp=data.get('mahp'),
+                        manganh=nganh,
+                        tenhp=data.get('tenhp'),
+                        sotc=data.get('sotc'),
+                        loai=data.get('loai'),
+                        hocky=data.get('hocky')
+                    )
+                except Exception as e:
+                    return JsonResponse({
+                        'status': 'error',
+                        'message': str(e) + ' lỗi thêm học phần 3625'
+                    }, status=500)
+
+            try:
+                try:
+                    hp = models.HP.objects.get(mahp=data.get('mahp'))
+                except models.HP.DoesNotExist:
+                    return JsonResponse({
+                        'status': 'error',
+                        'message': '3625a Không tìm thấy mã học phần'
+                    }, status=404)
+                malhp = data.get('malhp')
+                if malhp and not models.LHP.objects.filter(malhp=malhp).exists():
+                    lhp = models.LHP.objects.create(
+                        malhp=data.get('malhp'),
+                        mahp=hp,
+                        giangvien=data.get('giangvien'),
+                        sosvtoida=data.get('sosvtoida'),
+                        lichhoc=data.get('lichhoc'),
+                        phonghoc=data.get('phonghoc')
+                    )
+            except Exception as e:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': str(e) + ' lỗi thêm lớp học phần 3625b'
+                }, status=500)               
             
             return JsonResponse({
                 'status': 'success',
-                'message': 'Đã thêm học phần thành công',
-                'data': {
-                    'malhp': lhp.malhp,
-                    'mahp': hp.mahp,
-                    'tenhp': hp.tenhp,
-                    'sotc': hp.sotc,
-                    'loai': hp.loai,
-                    'giangvien': lhp.giangvien
-                }
+                'message': 'Đã thêm thành công\nLưu ý: Mọi thông tin của mã học phần đã tồn tại sẽ không thay đổi'
             })
             
         except json.JSONDecodeError:
@@ -867,7 +894,7 @@ def qlihp(request):
         except Exception as e:
             return JsonResponse({
                 'status': 'error',
-                'message': str(e)
+                'message': str(e) + ' lỗi thêm học phần 3625c'
             }, status=500)
 
 
@@ -926,9 +953,26 @@ def qlihp(request):
 
     # HIỂN THỊ
     elif request.method == 'GET' and 'action' not in request.GET:
-        lhp = models.LHP.objects.all()
+        lhp = models.LHP.objects.order_by('malhp')
+        hp = models.HP.objects.order_by('tenhp')
+        lhp_hp = []
+        a = 0
+        for i in hp:
+            for j in lhp:
+                if i.mahp == j.mahp.mahp:
+                    a += 1
+                    lhp_hp.append({
+                        'lhp': j,
+                        'hp': i
+                    })
+            if a == 0:
+                lhp_hp.append({
+                    'lhp': None,
+                    'hp': i
+                })
         context = {
             'lhp': lhp,
+            'hp': hp,
         }        
         return render(request, 'pages/qlihp.html', context)
     

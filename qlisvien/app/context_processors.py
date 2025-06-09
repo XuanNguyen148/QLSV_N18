@@ -1,11 +1,8 @@
 from . import models
-from django.http import JsonResponse
 
 def user_info(request):
-    # Lấy mã tài khoản từ session
     matk = request.session.get('user_id')
     
-    # Nếu không có matk, trả về context rỗng hoặc giá trị mặc định
     if not matk:
         return {
             'ten': None,
@@ -14,7 +11,6 @@ def user_info(request):
             'is_authenticated': False
         }
     
-    # Lấy thông tin người dùng
     sinh_vien = None
     try:
         sinh_vien = models.TTSV.objects.get(matk=matk)
@@ -28,7 +24,6 @@ def user_info(request):
             id = sinh_vien.manv
             tk = sinh_vien.matk
         except models.TTNS.DoesNotExist:
-            # Nếu không tìm thấy người dùng, trả về giá trị mặc định
             return {
                 'ten': None,
                 'id': None,

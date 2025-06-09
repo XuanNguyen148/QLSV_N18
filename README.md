@@ -291,7 +291,7 @@ INSERT INTO lophocphan VALUES ('MGMT1061_2', 'MGMT1061', 'Kiều Văn Khánh', 1
 
 ####
 
--- Thêm dữ liệu cho sinh viên 24D190001 (K60S1)
+-- Thêm dữ liệu cho sinh viên 23D190001 (K60S1)
 INSERT INTO tinhtranghoctap (masv, mahp, tinhtrang) VALUES
     ('24D190001', 'MLNP0221', 'Qua môn'),     -- Triết học Mác-Lênin (BB)
     ('24D190001', 'TLAW0111', 'Qua môn'),     -- Pháp luật đại cương (BB)

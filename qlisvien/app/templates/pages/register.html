@@ -33,18 +33,21 @@
                 <tr class="section-header">
                     <td colspan="5">Các môn bắt buộc</td>
                 </tr>
-                {% for hp in hpbb %}
-                <tr>
-                    <td>{{ forloop.counter }}</td>
-                    <td>{{ hp.mahp }}</td>
-                    <td>{{ hp.tenhp }}</td>
-                    <td>{{ hp.sotc }}</td>
-                    {% if is_admin or is_sinhvien %}
-                    <td><button class="register-btn" data-ma-hoc-phan="{{ hp.mahp }}" data-tenhp="{{ hp.tenhp }}">Đăng ký</button></td>
-                    {% endif %}
-                </tr>
+                {% for i in hpbb %}
+                    {% for j in abc %}                 
+                        {% if i.mahp == j.mahp.mahp %}
+                            <tr>
+                                <td>{{ forloop.parentloop.counter }}</td>
+                                <td>{{ i.mahp }}</td>
+                                <td>{{ i.tenhp }}</td>
+                                <td>{{ i.sotc }}</td>
+                                {% if is_admin or is_sinhvien %}
+                                <td><button class="register-btn" data-ma-hoc-phan="{{ i.mahp }}" data-tenhp="{{ i.tenhp }}">Đăng ký</button></td>
+                                {% endif %}
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
                 {% endfor %}
-                <tr>
 
                 <!-- Các môn tự chọn -->
                 <tr class="section-header">
